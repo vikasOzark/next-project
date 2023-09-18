@@ -3,7 +3,7 @@ import { NavbarFooter } from "@/components/Navbar";
 import { DepartmentSidenav } from "@/components/SSRComponent/DepartmentSidenav";
 import { SideNavbar } from "@/components/Sidenavbar";
 import { usePathname } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Loading from "@/app/dashboard/loading";
@@ -17,7 +17,8 @@ export default function LayoutPage({ children }) {
   const pathname = usePathname();
   const queryClient = new QueryClient();
   const nonNavbar = ["/singup", "/login"];
-
+  const [menuOpen, setMenuOpen] = useState(false)
+  
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -28,7 +29,7 @@ export default function LayoutPage({ children }) {
                 <>{children}</>
               ) : (
                 <>
-                  <div className="grid grid-cols-12 gap-4  ">
+                  <div className="md:grid lg:grid md:grid-cols-12 lg:grid-cols-12 gap-4  ">
                     <div className="col-span-2">
                       <SideNavbar>
                         <Suspense fallback={<Loading />}>
@@ -38,7 +39,7 @@ export default function LayoutPage({ children }) {
                     </div>
                     <div className="col-span-10 px-4">
                       <Toaster position="top-right" reverseOrder={false} />
-                      <NavbarFooter>{children}</NavbarFooter>
+                      <NavbarFooter menuOpen={menuOpen} setMenuOpen={setMenuOpen}>{children}</NavbarFooter>
                     </div>
                   </div>
                 </>

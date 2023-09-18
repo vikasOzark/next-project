@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { isAuthenticated } from "@/utils/authHelper";
+import { isAuthenticated, userInfo } from "@/utils/authHelper";
 
 export const NavbarFooter = ({ children }) => {
   const navigation = [
@@ -11,10 +11,11 @@ export const NavbarFooter = ({ children }) => {
     // { name: 'Dashoard', href: '/dashboard', current: false }
   ];
 
+  // console.log(userInfo());
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-
+  
   return (
     <>
       <nav>
@@ -26,8 +27,6 @@ export const NavbarFooter = ({ children }) => {
                   <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                     {/* Mobile menu button*/}
                     <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                      <span className="absolute -inset-0.5" />
-                      <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
                           className="block h-6 w-6"
@@ -40,48 +39,6 @@ export const NavbarFooter = ({ children }) => {
                         />
                       )}
                     </Disclosure.Button>
-                  </div>
-                  <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                    <div className="flex flex-shrink-0 items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="hidden sm:ml-6 sm:block">
-                      <div className="flex space-x-4">
-                        {navigation.map((item) => (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                              "rounded-md px-3 py-2 text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
                   </div>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button

@@ -2,15 +2,17 @@
 
 import { Suspense, useState } from "react"
 import Modal from "./Modal"
-import { DepartmentSidenav } from "./SSRComponent/DepartmentSidenav"
-import { useMutation, useQueryClient } from "react-query"
 import { CreateDepartmentForm } from "./Forms/CreateDepartment"
 import { useRouter } from "next/navigation"
 import Loading from "@/app/dashboard/loading"
 import Link from "next/link"
+import { Disclosure } from "@headlessui/react"
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/20/solid"
+import { VscChromeClose } from "react-icons/vsc"
 
-export const SideNavbar = ({children}) => {
+export const SideNavbar = ({children, menuOpen, setMenuOpen}) => {
     const [open, setOpen] = useState(false)
+    
     const router = useRouter()
 
     const dashboardLinks = [
@@ -18,12 +20,19 @@ export const SideNavbar = ({children}) => {
             title: "Dashboard",
             icons: "",
             route: "/dashboard"
+        },
+        {
+            title: "Create Ticket",
+            icons: "",
+            route: "/dashboard/create-ticket"
         }
     ]
 
     return (
         <>
-            <aside className="flex flex-col w-64 h-screen px-5 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+            <Disclosure as="nav" className="">
+            <aside className={`md:flex lg:flex z-20 flex-col w-64 h-screen px-5 fixed ${menuOpen? "" : "hidden"} overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700`}>
+                <div onClick={() => setMenuOpen(false)} className="text-white md:hidden lg:hidden flex justify-end m-2"><VscChromeClose /></div>
                 <div className="flex flex-col justify-between flex-1 mt-6">
                     <nav className="-mx-3 space-y-3 ">
                         {dashboardLinks.map(item => (
@@ -56,6 +65,7 @@ export const SideNavbar = ({children}) => {
                     </div>
                 </div>
             </aside>
+            </Disclosure>
             <Modal open={open} setOpen={setOpen} modalTitle={"Create Department"} >
                 <CreateDepartmentForm router={router} />
             </Modal>

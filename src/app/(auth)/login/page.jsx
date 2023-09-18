@@ -1,9 +1,11 @@
 "use client"
 import Link from 'next/link';
+import { redirect } from 'next/navigation'
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 export default function Login() {
+    const redirect = redirect()
     const [loading, setLoading] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
     const [errorResponseData, setResponseData] = useState({})
@@ -40,6 +42,9 @@ export default function Login() {
 
             if (response.success) {
               toast.success(response.message)
+              setTimeout(() => {
+                redirect("/dashboard")
+              }, 3000)
             }
         })
     }
