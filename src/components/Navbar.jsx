@@ -16,6 +16,7 @@ export const NavbarFooter = ({ children }) => {
     return classes.filter(Boolean).join(" ");
   }
   
+  // TODO trying to make side navbar for mobile
   return (
     <>
       <nav>
