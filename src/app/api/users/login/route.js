@@ -14,12 +14,13 @@ export async function POST(request) {
             const response = await dataResponse.json()
             if (response.success) {
                 const cookieData = response.data
-                cookies().set("token", cookieData.token, {httpOnly:true})
-                cookies().set("email",cookieData.user_data.email)
-                cookies().set("username",cookieData.user_data.username)
-                cookies().set("first_name",cookieData.user_data.first_name)
-                cookies().set("is_superuser",cookieData.user_data.is_superuser)
-                cookies().set("is_staff",cookieData.user_data.is_staff)
+                cookies().set('name', 'lee', { secure: true })
+                // cookies().set("token", cookieData.token, {httpOnly:true})
+                // cookies().set("email",cookieData.user_data?.email || "")
+                // cookies().set("username",cookieData.user_data?.username || "")
+                // cookies().set("first_name",cookieData.user_data?.first_name || "")
+                // cookies().set("is_superuser",cookieData.user_data?.is_superuser || "")
+                // cookies().set("is_staff",cookieData.user_data?.is_staff || "")
                 return NextResponse.json(response, {status: response.status_code})
             } else {
                 return NextResponse.json(response, {status: response.status_code})

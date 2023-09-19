@@ -8,7 +8,7 @@ export default function HeroSection() {
   return (
     <div className="">
       <div className="relative isolate px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+        <div className="mx-auto max-w-2xl py-20 sm:py-48 lg:py-56">
         <div
           className="absolute inset-x-0 -z-10 top-0 transform-gpu overflow-hidden blur-3xl " aria-hidden="true">
           <div

@@ -5,7 +5,6 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 export default function Login() {
-    const redirect = redirect()
     const [loading, setLoading] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
     const [errorResponseData, setResponseData] = useState({})
@@ -22,31 +21,38 @@ export default function Login() {
     const loginHandler = async () => {
         setResponseData({})
         setSuccess(false)
-        await fetch('api/users/login', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Access-Control-Allow-Origin": "*",
-            },
-            body: JSON.stringify(loginData)
-        })
-        .then(response => response.json())
-        .then(response => {
-            setResponseData(response); 
-            setSuccess(true);
-            if (!response.success) {
-                toast.error(response.message)
-                return
-            }
-
-            if (response.success) {
-              toast.success(response.message)
-              setTimeout(() => {
-                redirect("/dashboard")
-              }, 3000)
-            }
-        })
+        try {
+          await fetch('api/users/login', {
+              method: 'POST',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  "Access-Control-Allow-Origin": "*",
+              },
+              body: JSON.stringify(loginData)
+          })
+          .then(response => response.json())
+          .then(response => {
+            console.log(response);
+              setResponseData(response); 
+              setSuccess(true);
+              if (!response.success) {
+                  toast.error(response.message)
+                  return
+              }
+  
+              if (response.success) {
+                toast.success(response.message)
+                setTimeout(() => {
+                  redirect("/dashboard")
+                }, 3000)
+              }
+          })
+         
+        } catch (error) {
+          toast.error("Something went wrong. ")
+          console.log(error);
+        }
     }
 
 

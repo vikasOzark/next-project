@@ -8,7 +8,6 @@ export default function RootLayout({ children }) {
                     position="top-right"
                     reverseOrder={false}
                 />
-                
                 {children}
             </div>
         )

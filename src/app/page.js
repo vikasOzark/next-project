@@ -21,7 +21,7 @@ export default function Home() {
         <section>
             <HeroSection />
         </section>
-      <section>
+      <section className='container mx-auto'>
         <div className="grid grid-cols-1 gap-2 mt-2 md:grid-cols-12 lg:grid-cols-12">
             <div className="p-2 md:col-span-8 lg:col-span-8">
                 <div className="flex items-center justify-between">
