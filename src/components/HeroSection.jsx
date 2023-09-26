@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import {Singin} from "next-auth/react"
 
 export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -38,11 +39,17 @@ export default function HeroSection() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
-                href="#"
+                href="/login"
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Register now
               </a>
+              <div
+                onClick={() => Singin()}
+                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Register now
+              </div>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
                 Learn more <span aria-hidden="true">→</span>
               </a>

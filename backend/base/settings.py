@@ -20,7 +20,12 @@ USER_INSTALLED_PACKAGES = [
 # Application definition
 USER_INSTALLED_APP = [
     "authentication",
-    "department"
+    "department",
+    "tickets"
+]
+
+USER_CREATED_MODELS = [
+    ""
 ]
 
 

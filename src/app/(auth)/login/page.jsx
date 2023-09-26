@@ -1,11 +1,12 @@
 "use client"
 import Link from 'next/link';
-import { redirect } from 'next/navigation'
+// import { redirect } from 'next/navigation'
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
-    const redirect = redirect()
+    // const redirect = redirect()
     const [loading, setLoading] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
     const [errorResponseData, setResponseData] = useState({})
@@ -22,31 +23,47 @@ export default function Login() {
     const loginHandler = async () => {
         setResponseData({})
         setSuccess(false)
-        await fetch('api/users/login', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Access-Control-Allow-Origin": "*",
-            },
-            body: JSON.stringify(loginData)
-        })
-        .then(response => response.json())
-        .then(response => {
-            setResponseData(response); 
-            setSuccess(true);
-            if (!response.success) {
-                toast.error(response.message)
-                return
-            }
 
-            if (response.success) {
-              toast.success(response.message)
-              setTimeout(() => {
-                redirect("/dashboard")
-              }, 3000)
-            }
-        })
+          const email = loginData.email
+          const password = loginData.password
+          await signIn('credentials',
+              {
+                redirect: false,
+                email,
+                password
+              }
+            )
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        // await fetch('api/users/login', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         "Access-Control-Allow-Origin": "*",
+        //     },
+        //     body: JSON.stringify(loginData)
+        // })
+        // .then(response => response.json())
+        // .then(response => {
+        //     setResponseData(response); 
+        //     setSuccess(true);
+        //     if (!response.success) {
+        //         toast.error(response.message)
+        //         return
+        //     }
+
+        //     if (response.success) {
+        //       toast.success(response.message)
+        //       setTimeout(() => {
+        //         redirect("/dashboard")
+        //       }, 3000)
+        //     }
+        // })
     }
 
 

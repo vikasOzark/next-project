@@ -1,23 +1,17 @@
-import axios from "axios";
-import { useEffect, useState } from "react"
+import { LoadingState } from "../Buttons";
+import { useQuery } from "react-query";
+import { ErrorMessage } from "../Messages/NotificationMessage";
 
 export const DepartmentSidenav = () => {
-    const [departments, setDepartments] = useState([]);
-    
-    useEffect(() => {
-        const getDepaartment = async () => {
-            await axios.get(`api/departments`)
-            .then(response => {
-                if (response.status === 200) {
-                    setDepartments(response.data)
-                }
-            })}
-        getDepaartment()
-    }, [])
+    const responseData = useQuery("departments",async () => {
+        const response = await fetch("api/departments")
+        const json_response = await response.json()
+        return json_response
+    })
 
     return (
         <>
-            {departments.map(item => (
+            {responseData.isSuccess && responseData.data.length && responseData.data.map(item => (
                 <button key={item.id} className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-700 transition-colors duration-300 transform bg-gray-100 rounded-lg dark:bg-gray-800 dark:text-gray-200">
                     <div className="flex items-center gap-x-2 ">
                         <span className="w-2 h-2 rounded-full bg-slate-500"></span>
@@ -29,6 +23,8 @@ export const DepartmentSidenav = () => {
                     </svg>
                 </button>
             ))}
+            {responseData.isError && <ErrorMessage message={"Something went wrong."} />}
+            {responseData.isLoading && <><div className="flex justify-center "><LoadingState title={"Loading..."} /></div></>}
         </>
     )
 } 
