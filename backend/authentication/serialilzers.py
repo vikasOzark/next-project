@@ -10,10 +10,10 @@ class TokenSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    def create(self, validated_data):
-        user_serializer = CustomerSerializer(validated_data.get('customer'))
-        user_serializer.save()
-        return User.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     user_serializer = CustomerSerializer(validated_data.get('customer'))
+    #     user_serializer.save()
+    #     return User.objects.create(**validated_data)
     
     class Meta:
         model = User
@@ -51,3 +51,24 @@ class LoginCredencialsSerializers(serializers.Serializer):
     password = serializers.CharField()
 
 
+class PermissionSerializer(serializers.Serializer):
+    user = serializers.IntegerField(error_messages={"blank" : "Please pass user id of the target user."})
+    permission_list = serializers.ListField(error_messages={"blank" : "Please pass the list of permissions."})
+    model_name = serializers.CharField()
+
+
+    def validate_model_name(self, value):
+        if int(value) == 1:
+            return value
+        else :
+            raise serializers.ValidationError("model is not valid.")
+    
+    def validate(self, data):
+        if type(data.get("model_name")) == str():
+            raise serializers.ValidationError("text") 
+        return data
+    
+# class UserSerializerNew(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         exclud = [""]
