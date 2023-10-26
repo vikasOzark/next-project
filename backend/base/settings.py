@@ -15,13 +15,15 @@ ALLOWED_HOSTS = ["*"]
 
 USER_INSTALLED_PACKAGES = [
     "corsheaders",
+    "rest_framework_simplejwt",
+    "django_extensions"
 ]
 
 # Application definition
 USER_INSTALLED_APP = [
     "authentication",
     "department",
-    "tickets"
+    "tickets",
 ]
 
 USER_CREATED_MODELS = [
@@ -145,7 +147,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SIMPLE_JWT = {
-  # It will work instead of the default serializer(TokenObtainPairSerializer).
-  "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.MyTokenObtainPairSerializer",
+# SIMPLE_JWT = {
+#   # It will work instead of the default serializer(TokenObtainPairSerializer).
+#   "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.MyTokenObtainPairSerializer",
+# }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }

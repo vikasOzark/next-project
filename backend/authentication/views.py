@@ -17,10 +17,12 @@ from django.http import JsonResponse
 from django.apps import apps, AppConfig
 import json
 from utils.dict_format import DictFormater
+from utils.permissions import TokenAuthentication
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from pydoc import locate
 from django.db import models
+
    
 class AuthenticationViewset(ViewSet):
 
@@ -31,18 +33,14 @@ class AuthenticationViewset(ViewSet):
         try:
             singup = RegisterSerializers(data=request.data)
             if singup.is_valid():
-
-                instance = User(
+                User.objects.create_user(
                     first_name = singup.validated_data.get("first_name"),
                     last_name = singup.validated_data.get("last_name"),
                     phone_number = singup.validated_data.get("phone"),
                     email = singup.validated_data.get("email"),
                     username = singup.validated_data.get("username"),
+                    password = singup.validated_data.get("password")
                 )
-                instance.set_password(
-                    singup.validated_data.get("password")
-                )
-                instance.save()
                 return Response(
                     response_helper.response_helper(
                         message="Successfully registered, Please login.",
@@ -181,7 +179,7 @@ class PermissionHandlerViewset(ViewSet):
         if serialized_data.is_valid():
             
             
-            User.objects.all()[0].has_perm("add_department")
+            data = UserSerializer(data=User.objects.all, many=True)
             
             return JsonResponse(
                 response_helper.response_helper(
@@ -205,3 +203,21 @@ class PermissionHandlerViewset(ViewSet):
         
 
         return JsonResponse({})
+
+
+class UserManagement(ViewSet):
+    permission_classes = [TokenAuthentication]
+
+    @decorators.action(methods=["GET"], url_name="users_list", url_path="list", detail=False)
+    def get_users(self, request:Request):
+        print(User.objects.all())
+        user_data = UserSerializer(User.objects.all(), many=True)
+        
+        return JsonResponse(
+                response_helper.response_helper(
+                    status=status.HTTP_200_OK,
+                    message="YOOOOOOOOOOOOOOOOO",
+                    success=True,
+                    data=user_data.data
+                )
+            )

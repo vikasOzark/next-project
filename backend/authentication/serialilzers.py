@@ -10,10 +10,10 @@ class TokenSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    def create(self, validated_data):
-        user_serializer = CustomerSerializer(validated_data.get('customer'))
-        user_serializer.save()
-        return User.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     user_serializer = CustomerSerializer(validated_data.get('customer'))
+    #     user_serializer.save()
+    #     return User.objects.create(**validated_data)
     
     class Meta:
         model = User
@@ -67,3 +67,8 @@ class PermissionSerializer(serializers.Serializer):
         if type(data.get("model_name")) == str():
             raise serializers.ValidationError("text") 
         return data
+    
+# class UserSerializerNew(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         exclud = [""]
