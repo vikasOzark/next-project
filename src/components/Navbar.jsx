@@ -3,13 +3,15 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { isAuthenticated, userInfo } from "@/utils/authHelper";
-import { useSession } from "next-auth/react";
+import { isAuthenticated, userInfo } from "@/utils/userByToken";
+import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 
 export const NavbarFooter = ({ children }) => {
-  const {data, status} = useSession()
-  
+  const { data, status } = useSession();
+  console.log(status);
+  console.log(data);
+
   const navigation = [
     // { name: 'Home', href: '/', current: true },
     // { name: 'Dashoard', href: '/dashboard', current: false }
@@ -19,7 +21,7 @@ export const NavbarFooter = ({ children }) => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-  
+
   // TODO trying to make side navbar for mobile
   return (
     <>
@@ -57,19 +59,20 @@ export const NavbarFooter = ({ children }) => {
 
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
-                      {status === "authenticated"? 
-                      <div>
-                        <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                          <span className="absolute -inset-1.5" />
-                          <span className="sr-only">Open user menu</span>
-                          <img
-                            width={8}
-                            className="h-8 w-8 rounded-full"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt=""
-                          />
-                        </Menu.Button>
-                      </div>: null }
+                      {status === "authenticated" ? (
+                        <div>
+                          <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                            <span className="absolute -inset-1.5" />
+                            <span className="sr-only">Open user menu</span>
+                            <img
+                              width={8}
+                              className="h-8 w-8 rounded-full"
+                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              alt=""
+                            />
+                          </Menu.Button>
+                        </div>
+                      ) : null}
                       <Transition
                         as={Fragment}
                         enter="transition ease-out duration-100"
@@ -108,15 +111,29 @@ export const NavbarFooter = ({ children }) => {
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <Link
-                                href="/login"
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
+                              <>
+                                {status === "authenticated" ? (
+                                  <div
+                                    onClick={() => signOut()}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    )}
+                                  >
+                                    Sign out
+                                  </div>
+                                ) : (
+                                  <Link
+                                    href="/login"
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Login
+                                  </Link>
                                 )}
-                              >
-                                Login
-                              </Link>
+                              </>
                             )}
                           </Menu.Item>
                         </Menu.Items>

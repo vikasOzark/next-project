@@ -1,67 +1,75 @@
-import { NextResponse, NextRequest } from 'next/server'
-const  SESSION_TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibGFzdF9sb2dpbiI6bnVsbCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFkbWluIiwiZmlyc3RfbmFtZSI6ImFkbWluIHZpa2FzIiwibGFzdF9uYW1lIjpudWxsLCJwaG9uZV9udW1iZXIiOm51bGwsImlzX3N1cGVydXNlciI6dHJ1ZSwiaXNfc3RhZmYiOnRydWUsImlzX2FjdGl2ZSI6dHJ1ZX0.3aoMAfq7C_tmGF1lYwpn2NfiES5iStBXP_-KFF4YUlQ"
+import { NextResponse, NextRequest } from "next/server";
+import getUserId from "@/utils/userByToken";
+import { PrismaClient } from "@prisma/client";
+import httpStatus from "@/utils/httpStatus";
+const prisma = new PrismaClient();
 
 export async function GET(request) {
-    
-    try {
-        const dataResponse = await fetch("http://127.0.0.1:8000/v1/api/department/",{
-            headers: {
-                "Authentication" :  SESSION_TOKEN
-            }
-        })
-        const response = await dataResponse.json();
-        return NextResponse.json(response, {status: response.status})
+  try {
+    const userObjectId = await getUserId(request);
+    prisma.$connect();
+    const departmentList = await prisma.department.findMany({
+      where: {
+        userId: userObjectId,
+      },
+    });
 
-    } catch (error) {
-        return NextResponse.json({
-            message: "Internal server error, Please try again.",
-            success: false,
-            data: {}
-        }, {status: 500})
-    }
-        
+    return NextResponse.json(
+      {
+        message: "Successfully get the department data.",
+        success: true,
+        data: departmentList,
+      },
+      { status: httpStatus.HTTP_200_OK }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Internal server error, Please try again.",
+        success: false,
+        data: {},
+      },
+      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
+    );
+  }
 }
 
-
 export async function POST(request) {
-    const requestBody = await request.json()
-    try {
-        const dataResponse = await fetch('http://127.0.0.1:8000/v1/api/department/', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    "Authentication" : SESSION_TOKEN
-                },
-                body: JSON.stringify(requestBody)
-            })
-            const response = await dataResponse.json()
-            if (dataResponse.status === 201) {
-                return NextResponse.json({
-                    message: "Department saved successfull.",
-                    success: true,
-                    data: response
-                }, {status: response.status_code})
-            } else if (dataResponse.status >= 500) {
-                return NextResponse.json({
-                    message: "Something went wrong.",
-                    success: false,
-                    data: response
-                }, {status: response.status_code})
-            } else {
-                return NextResponse.json({
-                    message: "Couldn't complete the request.",
-                    success: false,
-                    data: response
-                }, {status: response.status_code})
-            }
-    } catch (error) {
-        return NextResponse.json({
-            message: "Something went wrong.",
-            success: false,
-            data: {}
-        }, {status: 500})
+  const requestBody = await request.json();
+  try {
+    if (!requestBody.department) {
+      throw new Error("Name should not be empty.");
     }
+    prisma.$connect();
+    const userObjectId = await getUserId(request);
 
-        
+    await prisma.department.create({
+      data: {
+        name: requestBody.department,
+        createdById: {
+          connect: {
+            id: userObjectId,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      {
+        message: "Department is created successfully",
+        success: true,
+        data: {},
+      },
+      { status: httpStatus.HTTP_201_CREATED }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: error.message,
+        success: false,
+        data: {},
+      },
+      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
+    );
+  }
 }
