@@ -16,15 +16,58 @@ enum Role {
     Admin
 }
 
-model User {
-    id             String  @id @default(auto()) @map("_id") @db.ObjectId
-    first_name     String
-    last_name      String?
-    email          String  @unique
-    contact_number String?  @unique
-    parent_user    String?
-    role           Role    @default(User)
-    password       String
+enum Status {
+    Pending
+    Close
+    Reject
+    Finish
+    Hold
 }
 
+model User {
+    id             String       @id @default(auto()) @map("_id") @db.ObjectId
+    first_name     String
+    last_name      String?
+    email          String       @unique
+    contact_number String?      @unique
+    parent_user    String?
+    role           Role         @default(User)
+    password       String
+    Department     Department[]
+    Tags           Tags[]
+    Tickets        Tickets[]
+}
 
+model Department {
+    id          String    @id @default(auto()) @map("_id") @db.ObjectId
+    name        String    @unique
+    createdById User      @relation(fields: [userId], references: [id])
+    userId      String    @db.ObjectId
+    updated_at  DateTime  @updatedAt
+    createdAt   DateTime  @default(now())
+    Tickets     Tickets[]
+}
+
+model Tags {
+    id          String    @id @default(auto()) @map("_id") @db.ObjectId
+    title       String    @unique
+    color       String    @default("#a9acb0")
+    createdAt   DateTime  @default(now())
+    createdById User      @relation(fields: [userId], references: [id])
+    userId      String    @db.ObjectId
+    Tickets     Tickets[]
+}
+
+model Tickets {
+    id           String     @id @default(auto()) @map("_id") @db.ObjectId
+    taskTitle    String     @unique
+    ticketDetil  String?
+    status       String     @default("")
+    department   Department @relation(fields: [departmentId], references: [id])
+    createdById  User       @relation(fields: [userId], references: [id])
+    tag          Tags?      @relation(fields: [tagId], references: [id])
+    departmentId String     @db.ObjectId
+    userId       String     @db.ObjectId
+    tagId        String     @db.ObjectId
+    createdAt    DateTime   @default(now())
+}

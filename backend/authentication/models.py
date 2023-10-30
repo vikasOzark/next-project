@@ -99,7 +99,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
 
-
 class AccessTokens(models.Model):
     """This class is used for storing information about JSON web tokens
     being used as access tokens to manage user sessions and access to

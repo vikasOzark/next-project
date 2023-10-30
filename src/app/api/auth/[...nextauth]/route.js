@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 
 const handler = NextAuth({
@@ -30,8 +29,16 @@ const handler = NextAuth({
     }),
   ],
 
-  secret: process.AUTH_SECRET,
-  cookies: cookies,
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
+
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
+
+  // cookies: cookies,
 
   callbacks: {
     async signIn({ user }) {
@@ -42,7 +49,18 @@ const handler = NextAuth({
           )
         );
       }
-      return true;
+      return user;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.userId = user.id;
+        token.userData = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.id = token.userId;
+      return session;
     },
   },
 
