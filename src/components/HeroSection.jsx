@@ -1,13 +1,11 @@
 "use client"
-import { signIn, signOut, useSession } from "next-auth/react"
 
 import { useState } from 'react'
-import {signIn} from "next-auth/react"
+import {signIn, useSession} from "next-auth/react"
 
 export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const data = useSession()
-  console.log(data);
   
   return (
     <div className="">

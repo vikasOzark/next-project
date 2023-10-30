@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 
 const handler = NextAuth({
@@ -30,8 +29,8 @@ const handler = NextAuth({
     }),
   ],
 
-  secret: process.AUTH_SECRET,
-  cookies: cookies,
+  secret: process.env.AUTH_SECRET,
+  // cookies: cookies,
 
   callbacks: {
     async signIn({ user }) {
