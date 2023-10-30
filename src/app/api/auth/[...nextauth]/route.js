@@ -1,45 +1,89 @@
+import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { cookies } from "next/headers";
+import bcrypt from "bcrypt";
 
 const handler = NextAuth({
-    providers: [
-        CredentialsProvider({
-          name: "Credentials",
-          // credentials: {
-          //   email: { label: "Email", type: "text", placeholder: "jsmith" },
-          //   password: { label: "Password", type: "password" }
-          // },
-          async authorize(credentials, req) {
-            const dataResponse = await fetch('http://127.0.0.1:8000/v1/api/auth/login/', {
-              method: 'POST',
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                email: credentials?.email,
-                password : credentials?.password
-              })
-            })
-            const user = await dataResponse.json()
-      
-            if (user) {
-              // Any object returned will be saved in `user` property of the JWT
-              return user
-            } else {
-              // If you return null then an error will be displayed advising the user to check their details.
-              return null
-      
-              // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-            }
-          }
-        })
-      ],
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      async authorize(credentials, req) {
+        const response = await handleAuthentication(credentials, req);
+        if (response.success) {
+          const newData = structuredClone(response.data);
+          delete newData.password;
 
-    // pages: {
-    //     signIn: '/auth/login',
-    //     signOut: '/auth/login',
-    //   }
-})
+          return {
+            id: response.data.id,
+            is_active: true,
+            name: `${response.data.first_name} ${response.data.last_name}`,
+            email: response.data.email,
+            contact_number: response.data.contact_number,
+            parent_user: response.data.parent_user,
+            role: response.data.role,
+          };
+        }
 
-export { handler as GET, handler as POST}
+        return Promise.reject(new Error(response.message));
+      },
+    }),
+  ],
+
+  secret: process.AUTH_SECRET,
+  cookies: cookies,
+
+  callbacks: {
+    async signIn({ user }) {
+      if (!user.is_active) {
+        return Promise.reject(
+          new Error(
+            "Your account is not active, Please contact the administrator."
+          )
+        );
+      }
+      return true;
+    },
+  },
+
+  pages: {
+    signIn: "/login",
+  },
+});
+
+export { handler as GET, handler as POST };
+
+const handleAuthentication = async (credentials, req) => {
+  try {
+    const prisma = new PrismaClient();
+    const userData = await prisma.user.findFirst({
+      where: {
+        email: credentials.email,
+      },
+    });
+
+    if (!userData) {
+      return { success: false, message: "Provided email is not valid." };
+    }
+
+    const isUser = await bcrypt.compare(
+      credentials.password,
+      userData.password
+    );
+    if (!isUser) {
+      return {
+        success: false,
+        message: "Password is incorrect. Please try again.",
+      };
+    }
+    return {
+      success: true,
+      data: userData,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Something went wrong, Please try again.",
+    };
+  }
+};

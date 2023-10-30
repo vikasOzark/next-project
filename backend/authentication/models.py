@@ -5,9 +5,11 @@ from django.utils.translation import gettext as _
 import uuid
 from datetime import timedelta, datetime
 from django.utils import timezone
+from django.contrib.auth.models import PermissionsMixin
+
 
 class BaseUserModelManager(BaseUserManager):
-    def create_user(self, email, username, first_name, password=None):
+    def create_user(self, email, username, first_name, password=None, **kwargs):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -19,6 +21,23 @@ class BaseUserModelManager(BaseUserManager):
             email=self.normalize_email(email),
             first_name=first_name,
             username=username,
+            **kwargs
+        )
+        user.is_active = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_sub_user(self, email, username, first_name, password=None, **kwargs):
+        if not email:
+            raise ValueError("Users must have an email address")
+
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name=first_name,
+            username=username,
+            parant_user = self.pk
+            **kwargs
         )
         user.is_active = True
         user.set_password(password)
@@ -43,9 +62,10 @@ class BaseUserModelManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("Email Address"), unique=True)
     username = models.CharField(_("Username"), unique=True, max_length=50)
+    parent_user = models.ForeignKey("self", related_name="parent", on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(_("First Name"), max_length=15)
     last_name = models.CharField(_("Last Name"), max_length=15, blank=True, null=True)
     phone_number = models.PositiveIntegerField(_("Phone Number"), blank=True, null=True)
