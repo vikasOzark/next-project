@@ -52,7 +52,7 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
         <aside
           className={`md:flex lg:flex z-20 flex-col w-64 h-screen px-5 fixed ${
             menuOpen ? "" : "hidden"
-          } overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700`}
+          } overflow-y-auto bg-white  dark:bg-gray-900 dark:border-gray-700`}
         >
           <div
             onClick={() => setMenuOpen(false)}
@@ -111,7 +111,7 @@ function NavigationLink({ href, text, icon }) {
       href={href === "/home" ? "/" : href}
       passHref
       className={`${
-        isActive && "bg-gray-800"
+        isActive ? "bg-gray-800 text-gray-600 " : "text-gray-600 "
       } flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700`}
     >
       {icon}

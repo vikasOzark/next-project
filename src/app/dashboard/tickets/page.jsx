@@ -57,14 +57,6 @@ export default function Tickets() {
                     Create
                   </ActionButton>
 
-                  <button show={true} onClick={() => setCreateModalOpen(true)}>
-                    open
-                  </button>
-
-                  <ActionButton onClick={() => setCreateModalOpen(true)}>
-                    hello
-                  </ActionButton>
-
                   <DropdownMenuButton
                     icon={<VscSymbolKeyword />}
                     styleButton="hover:bg-slate-600"
@@ -76,11 +68,9 @@ export default function Tickets() {
             {/* <div className=""></div> */}
           </div>
         </div>
-        {createModalOpen ? (
-          <Modal>
-            <div className="">hello</div>
-          </Modal>
-        ) : null}
+        <Modal open={createModalOpen} setOpen={setCreateModalOpen} modalTitle={"Create Task"}>
+          <CreateTicketForm />
+        </Modal>
       </main>
       {/* <CreateTicketForm /> */}
     </>

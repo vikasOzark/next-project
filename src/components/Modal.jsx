@@ -13,7 +13,7 @@ export default function Modal({open, setOpen, cssClass, children, modalTitle}) {
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className={twMerge("relative z-10", cssClass)} initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog as="div" className={twMerge("relative z-30", cssClass)} initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

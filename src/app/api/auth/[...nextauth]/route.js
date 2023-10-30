@@ -38,7 +38,7 @@ const handler = NextAuth({
     maxAge: 30 * 24 * 60 * 60,
   },
 
-  cookies: cookies,
+  // cookies: cookies,
 
   callbacks: {
     async signIn({ user }) {

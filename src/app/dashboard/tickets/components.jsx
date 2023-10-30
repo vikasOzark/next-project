@@ -10,19 +10,19 @@ export const TicketStatusCard = ({
   return (
     <>
       <div
-        class={twMerge(
+        className={twMerge(
           `rounded-xl bg-white ms-2 text-card-foreground shadow`,
           style
         )}
         // style={{ width: "max-content" }}
       >
-        <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-          <h3 class="tracking-tight text-sm font-medium">{title}</h3>
+        <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="tracking-tight text-sm font-medium">{title}</h3>
           {icon}
         </div>
-        <div class="p-6 pt-0">
-          <div class="text-2xl font-bold">{data}</div>
-          <p class="text-xs text-muted-foreground">{analyticString}</p>
+        <div className="p-6 pt-0">
+          <div className="text-2xl font-bold">{data}</div>
+          <p className="text-xs text-muted-foreground">{analyticString}</p>
         </div>
       </div>
     </>

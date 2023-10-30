@@ -9,9 +9,7 @@ import Image from "next/image";
 
 export const NavbarFooter = ({ children }) => {
   const { data, status } = useSession();
-  console.log(status);
-  console.log(data);
-
+  
   const navigation = [
     // { name: 'Home', href: '/', current: true },
     // { name: 'Dashoard', href: '/dashboard', current: false }

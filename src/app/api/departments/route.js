@@ -23,11 +23,12 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
+    console.log(error.message);
     return NextResponse.json(
       {
         message: "Internal server error, Please try again.",
         success: false,
-        data: {},
+        data: [],
       },
       { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
     );

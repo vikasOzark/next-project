@@ -12,8 +12,8 @@ export const DepartmentSidenav = () => {
 
   return (
     <>
-      {responseData.isSuccess &&
-        responseData.data?.data?.map((item) => (
+      {responseData.isSuccess && responseData.data?.success &&
+        responseData.data.data?.map((item) => (
           <button
             key={item.id}
             className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-700 transition-colors duration-300 transform bg-gray-100 rounded-lg dark:bg-gray-800 dark:text-gray-200"
@@ -39,7 +39,7 @@ export const DepartmentSidenav = () => {
             </svg>
           </button>
         ))}
-      {responseData.isSuccess && responseData.data?.data?.length === 0 ? (
+      {responseData.isSuccess && responseData.data?.success &&  responseData.data?.data?.length === 0 ? (
         <InfoMessage message={"No department found."} />
       ) : null}
 
