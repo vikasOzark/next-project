@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import { twMerge } from "tailwind-merge";
 
 export const TicketStatusCard = ({
@@ -38,6 +39,15 @@ export const TableRow = () => {
     "Teams",
     "Edit",
   ];
+
+    const responseDatas = useQuery("tickets-list", async () => {
+    const response = await fetch("/api/tickets");
+    const json_response = await response.json();
+    console.log(json_response);
+    return json_response;
+  });
+
+  console.log(responseDatas);
 
   return (
     <>

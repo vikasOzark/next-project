@@ -17,11 +17,11 @@ enum Role {
 }
 
 enum Status {
-    Pending
-    Close
-    Reject
-    Finish
-    Hold
+    PENDING
+    CLOSE
+    REJECT
+    FINISH
+    HOLD
 }
 
 model User {
@@ -62,12 +62,12 @@ model Tickets {
     id           String     @id @default(auto()) @map("_id") @db.ObjectId
     taskTitle    String     @unique
     ticketDetil  String?
-    status       String     @default("")
+    status       Status     @default(PENDING)
     department   Department @relation(fields: [departmentId], references: [id])
     createdById  User       @relation(fields: [userId], references: [id])
-    tag          Tags?      @relation(fields: [tagId], references: [id])
+    tags         Tags?      @relation(fields: [tagId], references: [id])
     departmentId String     @db.ObjectId
     userId       String     @db.ObjectId
-    tagId        String     @db.ObjectId
+    tagId        String?    @db.ObjectId
     createdAt    DateTime   @default(now())
 }

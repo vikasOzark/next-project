@@ -48,7 +48,7 @@ export const DepartmentSidenav = () => {
       ) : null}
 
       {responseData.isSuccess && !responseData.data?.success ? (
-        <ErrorMessage message={"Something went wrong.sss"} />
+        <ErrorMessage message={"Something went wrong."} />
       ) : null}
 
       {responseData.isLoading && (

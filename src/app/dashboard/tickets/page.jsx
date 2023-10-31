@@ -54,7 +54,7 @@ export default function Tickets() {
                     cssClass=" hover:bg-slate-600 flex items-center gap-2"
                   >
                     <VscAdd />
-                    Create
+                    Create Ticket
                   </ActionButton>
 
                   <DropdownMenuButton
@@ -68,7 +68,7 @@ export default function Tickets() {
             {/* <div className=""></div> */}
           </div>
         </div>
-        <Modal open={createModalOpen} setOpen={setCreateModalOpen} modalTitle={"Create Task"}>
+        <Modal open={createModalOpen} setOpen={setCreateModalOpen} modalTitle={"Create Ticket"}>
           <CreateTicketForm />
         </Modal>
       </main>
