@@ -1,6 +1,6 @@
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
@@ -9,7 +9,7 @@ export async function POST(request) {
   try {
     const userId = await getUserId(request);
     prisma.$connect();
-    const ticket = await prisma.tickets.create({
+    await prisma.tickets.create({
       data: {
         taskTitle: requestBody.taskTitle,
         ticketDetil: requestBody.ticketDetil,
@@ -49,41 +49,6 @@ export async function POST(request) {
   }
 }
 
-// export async function GET(request) {
-//   const requestBody = await request.json();
-//   console.log(requestBody);
-//   try {
-//     const userId = await getUserId(request);
-//     // prisma.$connect()
-
-//     // const allTicket = await prisma.tickets.findMany({
-//     //     where : {
-//     //         userId : userId
-//     //     }
-//     // })
-
-//     return NextResponse.json({
-//       success: true,
-//       message: "Ticket is created successfully.",
-//       data: allTicket,
-//     });
-//   } catch (error) {
-//     let message = null;
-
-//     if (error.message.split(":")[0] === "self") {
-//       message = error.message;
-//     } else {
-//       message = "Something went wrong.";
-//     }
-
-//     return NextResponse.json({
-//       success: false,
-//       message: message,
-//       data: [],
-//     });
-//   }
-// }
-
 export async function GET(request) {
   try {
     const userObjectId = await getUserId(request);
@@ -106,6 +71,7 @@ export async function GET(request) {
         message: "Successfully get the department data.",
         success: true,
         data: ticketsData,
+        ticketStatus: Status
       },
       { status: httpStatus.HTTP_200_OK }
     );

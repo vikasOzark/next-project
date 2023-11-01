@@ -1,18 +1,25 @@
 "use client";
 
 import CreateTicketForm from "@/components/Forms/CreateTicketForm";
-import { TableRow, TicketStatusCard } from "./components";
+import { TicketStatusCard, TicketTableComponent } from "./components";
 import { FcBearish, FcBullish, FcMindMap, FcProcess } from "react-icons/fc";
-import { DropdownMenuButton } from "@/components/DropdownButton";
-import { VscAdd, VscPulse, VscSymbolKeyword } from "react-icons/vsc";
-import { ButtonIcon } from "@radix-ui/react-icons";
-import { ActionButton, SubmitButton } from "@/components/Buttons";
-import { Button } from "@/components/ui/button";
+import {
+  VscAdd, VscSymbolKeyword
+} from "react-icons/vsc";
+import { ActionButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DropdownMenuButton } from "./TicketTableGlobleAction";
+import { useQuery } from "react-query";
 
 export default function Tickets() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  
+  const responseData = useQuery("tickets-list", async () => {
+    const response = await fetch("/api/tickets");
+    const json_response = await response.json();
+    return json_response;
+  });
 
   return (
     <>
@@ -46,7 +53,7 @@ export default function Tickets() {
 
         <div className="mt-4">
           <div className="grid gap-2 grid-cols-1 md:grid-cols-12 lg:grid-cols-12">
-            <div className=" md:col-span-8 lg:col-span-8">
+            <div className=" md:col-span-9 lg:col-span-9 col-spam-12">
               <div className="flex justify-end mb-2">
                 <div className="flex items-center gap-2">
                   <ActionButton
@@ -58,18 +65,24 @@ export default function Tickets() {
                   </ActionButton>
 
                   <DropdownMenuButton
+                    title={"Actions"}
                     icon={<VscSymbolKeyword />}
                     styleButton="hover:bg-slate-600"
                   />
                 </div>
               </div>
-              <TableRow />
+              <TicketTableComponent responseData={responseData} />
             </div>
             {/* <div className=""></div> */}
           </div>
         </div>
-        <Modal open={createModalOpen} setOpen={setCreateModalOpen} modalTitle={"Create Ticket"}>
-          <CreateTicketForm />
+
+        <Modal
+          open={createModalOpen}
+          setOpen={setCreateModalOpen}
+          modalTitle={"Create Ticket"}
+        >
+          <CreateTicketForm modalClose={setCreateModalOpen} refreshFunction={responseData.refetch} />
         </Modal>
       </main>
       {/* <CreateTicketForm /> */}

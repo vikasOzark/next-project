@@ -6,7 +6,7 @@ import axios from "axios";
 import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
 
-export default function CreateTicketForm() {
+export default function CreateTicketForm({refreshFunction, modalClose}) {
   const formElement = useRef();
   const [tagsIsOption, setTagsIsOption] = useState(false);
   const [formError, setFormError] = useState({})
@@ -90,6 +90,10 @@ export default function CreateTicketForm() {
       if (response ) {
         if (response.data?.success) {
           toast.success("Ticket is created.")
+          refreshFunction()
+          setTimeout(() => {
+            modalClose(false)
+          }, 1000);
         } else {
           toast.error(response.data?.message)
         } 
