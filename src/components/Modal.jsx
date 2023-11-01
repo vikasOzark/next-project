@@ -79,19 +79,18 @@ export default function Modal({
   );
 }
 
-export const ButtonDropdownComponent = ({title, selectedUserTags=[]}) => {
-
+export const ButtonDropdownComponent = ({ title, selectedUserTags = [] }) => {
   const tagsSelectedFormat = () => {
-      if (selectedUserTags.length > 0) {
-        selectedUserTags.map(tag => ({
-            name: tag.name,
-            id: tag.id,
-            isSelected: true,
-          }))
-      } else {
-        return []
-      }
-  }
+    if (selectedUserTags.length > 0) {
+      selectedUserTags.map((tag) => ({
+        name: tag.name,
+        id: tag.id,
+        isSelected: true,
+      }));
+    } else {
+      return [];
+    }
+  };
   const [tagsIsOption, setTagsIsOption] = useState(false);
   const [selectedTag, setSelectedTag] = useState(tagsSelectedFormat());
   const [tags, setTags] = useState([]);
@@ -104,10 +103,9 @@ export const ButtonDropdownComponent = ({title, selectedUserTags=[]}) => {
 
   useEffect(() => {
     if (responseData.data && responseData.data?.success) {
-      setTags(responseData.data?.data)
+      setTags(responseData.data?.data);
     }
-  },[responseData.isSuccess])
-
+  }, [responseData.isSuccess]);
 
   const handleSelect = (tag) => {
     const isMatched = selectedTag.find((item) => item.id === tag.id);
@@ -169,10 +167,10 @@ export const ButtonDropdownComponent = ({title, selectedUserTags=[]}) => {
           >
             {tagsIsOption ? (
               <VscAdd className=" rotate-90 transition-transform " />
-              ) : (
-                <VscAdd className="transition-transform" />
-                )}
-                {title}
+            ) : (
+              <VscAdd className="transition-transform" />
+            )}
+            {title}
           </button>
         </div>
 
@@ -207,7 +205,11 @@ export const ButtonDropdownComponent = ({title, selectedUserTags=[]}) => {
               {item.name}
             </p>
           ))}
-          {tags.length < 1 ? <><p className="text-center ">No Tags Available</p></> : null}
+          {tags.length < 1 ? (
+            <>
+              <p className="text-center ">No Tags Available</p>
+            </>
+          ) : null}
         </div>
       </div>
     </>
