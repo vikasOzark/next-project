@@ -1,8 +1,12 @@
 import { useRef, useState } from "react";
 import { VscAdd, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
 import { LoadingButton, SubmitButton } from "../Buttons";
+import { useMutation } from "react-query";
+import formValidator from "@/utils/formValidator";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-export const CreateTagForm = (setTagsIsOption) => {
+export const CreateTagForm = () => {
   const [tagColor, setTagColor] = useState(null);
   const formElement = useRef();
 
@@ -13,18 +17,12 @@ export const CreateTagForm = (setTagsIsOption) => {
   const mutation = useMutation({
     mutationFn: (event) => {
       event.preventDefault();
-      const ticketData = {
+
+      const tagData = {
         title: event.target.title.value,
         color: tagColor,
       };
-
-      const isError = formValidator(ticketData);
-      if (isError) {
-        setFormError(isError);
-        throw new Error();
-      }
-
-      return axios.post(`/api/tickets`, ticketData);
+      return axios.post(`/api/tags`, tagData);
     },
 
     onSettled: async (data) => {
@@ -33,20 +31,25 @@ export const CreateTagForm = (setTagsIsOption) => {
         if (response.data?.success) {
           toast.success(response.data?.message);
           setTagColor(null);
-          setTimeout(() => {
-            setTagsIsOption(false);
-          }, 1000);
+          // setTimeout(() => {
+          //   setTagsIsOption(false);
+          // }, 1000);
         } else {
           setTagColor(null);
           toast.error(response.data?.message);
         }
       }
     },
+    onError: async (data) => {
+      console.log(data);
+      toast.error("Something went wrong, Please try again.")
+      return
+    }
   });
 
   return (
     <>
-      <form ref={formElement}>
+      <form ref={formElement} onSubmit={mutation.mutate}>
         <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3">
           <div>
             <label
@@ -57,19 +60,11 @@ export const CreateTagForm = (setTagsIsOption) => {
             </label>
             <div className="mt-2">
               <input
-                ref={tagTitleRef}
                 id="title"
                 name="title"
                 type="text"
                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-
-              <p>{tagTitleRef.current?.value}</p>
-              {/* {mutation.isError && formError?.title && (
-                <small className="text-red-500 font-bold">
-                  {formError?.title}
-                </small>
-              )} */}
             </div>
           </div>
         </div>
@@ -112,11 +107,6 @@ export const CreateTagForm = (setTagsIsOption) => {
                 tagColor === "bg-slate-400" ? " border-2 border-black" : ""
               }`}
             ></div>
-            {/* {mutation.isError && formError?.ticketDetil && (
-              <small className="text-red-500 font-bold">
-                {formError?.ticketDetil}
-              </small>
-            )} */}
           </div>
         </div>
 

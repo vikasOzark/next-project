@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   const requestBody = await request.json();
+  console.log(requestBody);
   try {
     const userId = await getUserId(request);
     prisma.$connect();
@@ -54,16 +55,17 @@ export async function GET(request) {
     const userObjectId = await getUserId(request);
     prisma.$connect();
 
-    // await prisma.tickets.findMany
-
     const ticketsData = await prisma.tickets.findMany({
       where: {
         userId: userObjectId,
       },
+      
       include: {
         department: true,
+        tags: true,
         where: userObjectId,
       },
+
     });
 
     return NextResponse.json(

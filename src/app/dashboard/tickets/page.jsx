@@ -51,32 +51,26 @@ export default function Tickets() {
           />
         </div>
 
-        <div className="mt-4">
-          <div className="grid gap-2 grid-cols-1 md:grid-cols-12 lg:grid-cols-12">
-            <div className=" md:col-span-9 lg:col-span-9 col-spam-12">
-              <div className="flex justify-end mb-2">
-                <div className="flex items-center gap-2">
-                  <ActionButton
-                    onClick={() => setCreateModalOpen(true)}
-                    cssClass=" hover:bg-slate-600 flex items-center gap-2"
-                  >
-                    <VscAdd />
-                    Create Ticket
-                  </ActionButton>
+        <div className="mt-4 w-full ps-1">
+          <div className="flex justify-end mb-2">
+            <div className="flex items-center gap-2">
+              <ActionButton
+                onClick={() => setCreateModalOpen(true)}
+                cssClass=" hover:bg-slate-600 flex items-center gap-2"
+              >
+                <VscAdd />
+                Create Ticket
+              </ActionButton>
 
-                  <DropdownMenuButton
-                    title={"Actions"}
-                    icon={<VscSymbolKeyword />}
-                    styleButton="hover:bg-slate-600"
-                  />
-                </div>
-              </div>
-              <TicketTableComponent responseData={responseData} />
+              <DropdownMenuButton
+                title={"Actions"}
+                icon={<VscSymbolKeyword />}
+                styleButton="hover:bg-slate-600"
+              />
             </div>
-            {/* <div className=""></div> */}
           </div>
-        </div>
-
+          <TicketTableComponent responseData={responseData} />
+          </div>
         <Modal
           open={createModalOpen}
           setOpen={setCreateModalOpen}

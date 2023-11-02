@@ -5,16 +5,18 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient()
 
 export async function POST(request) {
+  const requestBody = await request.json()
   try {
     const userObjectId = await getUserId(request);
     prisma.$connect();
 
     const tagsData = await prisma.tags.create({
       data: {
-        title : "testing",
+        title : requestBody.title,
+        color : requestBody.color,
         createdById : {
             connect : {
-                userObjectId
+                id: userObjectId
             }
         }
       },
@@ -32,7 +34,7 @@ export async function POST(request) {
     console.log(error.message);
     return NextResponse.json(
       {
-        message: "Internal server error, Please try again.",
+        message: "Internal server error, Please try again." + error.message,
         success: false,
         data: [],
       },

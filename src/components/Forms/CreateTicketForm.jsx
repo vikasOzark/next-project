@@ -1,4 +1,4 @@
-import { VscAdd, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
+import { VscAdd, VscCheck, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
 import { LoadingButton, SubmitButton } from "../Buttons";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
@@ -10,18 +10,22 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
   const formElement = useRef();
   const [tagsIsOption, setTagsIsOption] = useState(false);
   const [formError, setFormError] = useState({})
-  const [tags, setTags] = useState([
-    {
-      name: "test",
-      id: 1,
-      isSelected: false,
-    },
-    {
-      name: "hello",
-      id: 5,
-      isSelected: false,
-    },
-  ]);
+  const [tags, setTags] = useState([]);
+  
+  const responseTagsData = useQuery("tags-list", async () => {
+    const response = await fetch("/api/tags");
+    const json_response = await response.json();
+
+    if (json_response?.success) {
+      const formatted = json_response.data?.map(item => ({
+         name : item.title, id: item.id, color: item.color, isSelected: false
+       }))
+       setTags(formatted);
+    }
+
+    return json_response;
+  });
+
 
   const responseData = useQuery("departments", async () => {
     const response = await fetch("/api/departments");
@@ -204,7 +208,7 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
             {selectedTag.map((item) => (
               <span
                 key={item.id}
-                className="bg-purple-300 px-3 rounded-full font-bold py-1 flex gap-2 items-center break-keep"
+                className={`px-3 rounded-full font-bold py-1 flex text-white gap-2 items-center break-keep ${item.color}`}
               >
                 {item.name}{" "}
                 <VscChromeClose
@@ -224,11 +228,10 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
               <p
                 key={item.id}
                 onClick={() => handleSelect(item)}
-                className={`p-1 hover:bg-slate-300 font-bold rounded mb-1 ${
-                  item.isSelected ? "bg-slate-400" : ""
-                }`}
+                className={`p-1 hover:bg-slate-300 font-bold rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color }`}
               >
                 {item.name}
+                {item.isSelected && <VscCheck />}
               </p>
             ))}
           </div>

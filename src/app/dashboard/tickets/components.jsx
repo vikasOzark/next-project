@@ -25,7 +25,6 @@ export const TicketStatusCard = ({
           `rounded-xl bg-white ms-2 text-card-foreground shadow`,
           style
         )}
-        // style={{ width: "max-content" }}
       >
         <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
           <h3 className="tracking-tight text-sm font-medium">{title}</h3>
