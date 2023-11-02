@@ -40,10 +40,7 @@ export function DropdownActionMenuButton({
         <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
+          <DropdownMenuItem>Edit ticket</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

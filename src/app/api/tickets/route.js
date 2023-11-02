@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   const requestBody = await request.json();
-  console.log(requestBody);
+  console.log(requestBody.tags?.map((tag) => ({ id: tag.id })));
   try {
     const userId = await getUserId(request);
     prisma.$connect();
@@ -24,6 +24,9 @@ export async function POST(request) {
           connect: {
             id: userId,
           },
+        },
+        tags: {
+          connect: requestBody.tags?.map((tagId) => ({ id: tagId.id })),
         },
       },
     });
@@ -47,6 +50,8 @@ export async function POST(request) {
       message: message,
       data: [],
     });
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
@@ -59,13 +64,12 @@ export async function GET(request) {
       where: {
         userId: userObjectId,
       },
-      
+
       include: {
         department: true,
         tags: true,
         where: userObjectId,
       },
-
     });
 
     return NextResponse.json(
@@ -73,7 +77,7 @@ export async function GET(request) {
         message: "Successfully get the department data.",
         success: true,
         data: ticketsData,
-        ticketStatus: Status
+        ticketStatus: Status,
       },
       { status: httpStatus.HTTP_200_OK }
     );
@@ -87,5 +91,7 @@ export async function GET(request) {
       },
       { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }

@@ -54,7 +54,8 @@ model Tags {
     createdAt   DateTime  @default(now())
     createdById User      @relation(fields: [userId], references: [id])
     userId      String    @db.ObjectId
-    Tickets     Tickets[]
+    tickets     Tickets[] @relation(fields: [ticketId], references: [id])
+    ticketId    String[]  @db.ObjectId
 }
 
 model Tickets {
@@ -64,9 +65,9 @@ model Tickets {
     status       Status     @default(PENDING)
     department   Department @relation(fields: [departmentId], references: [id])
     createdById  User       @relation(fields: [userId], references: [id])
-    tags         Tags?      @relation(fields: [tagId], references: [id])
+    tags         Tags[]     @relation(references: [id], fields: [tagsId])
+    tagsId       String[]   @db.ObjectId
     departmentId String     @db.ObjectId
     userId       String     @db.ObjectId
-    tagId        String?    @db.ObjectId
     createdAt    DateTime   @default(now())
 }

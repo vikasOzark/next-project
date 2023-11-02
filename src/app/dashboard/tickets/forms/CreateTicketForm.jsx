@@ -1,31 +1,39 @@
-import { VscAdd, VscCheck, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
-import { LoadingButton, SubmitButton } from "../Buttons";
+import {
+  VscAdd,
+  VscCheck,
+  VscChevronUp,
+  VscChromeClose,
+  VscTag,
+} from "react-icons/vsc";
+import { LoadingButton, SubmitButton } from "../../../../components/Buttons";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
 
-export default function CreateTicketForm({refreshFunction, modalClose}) {
+export default function CreateTicketForm({ refreshFunction, modalClose }) {
   const formElement = useRef();
   const [tagsIsOption, setTagsIsOption] = useState(false);
-  const [formError, setFormError] = useState({})
+  const [formError, setFormError] = useState({});
   const [tags, setTags] = useState([]);
-  
+
   const responseTagsData = useQuery("tags-list", async () => {
     const response = await fetch("/api/tags");
     const json_response = await response.json();
 
     if (json_response?.success) {
-      const formatted = json_response.data?.map(item => ({
-         name : item.title, id: item.id, color: item.color, isSelected: false
-       }))
-       setTags(formatted);
+      const formatted = json_response.data?.map((item) => ({
+        name: item.title,
+        id: item.id,
+        color: item.color,
+        isSelected: false,
+      }));
+      setTags(formatted);
     }
 
     return json_response;
   });
-
 
   const responseData = useQuery("departments", async () => {
     const response = await fetch("/api/departments");
@@ -82,27 +90,27 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
 
       const isError = formValidator(ticketData);
       if (isError) {
-        setFormError(isError)
-        throw new Error()
+        setFormError(isError);
+        throw new Error();
       }
-      
+
       return axios.post(`/api/tickets`, ticketData);
     },
 
     onSettled: async (data) => {
-      const response = await data
-      if (response ) {
+      const response = await data;
+      if (response) {
         if (response.data?.success) {
-          toast.success("Ticket is created.")
-          refreshFunction()
+          toast.success("Ticket is created.");
+          refreshFunction();
           setTimeout(() => {
-            modalClose(false)
+            modalClose(false);
           }, 1000);
         } else {
-          toast.error(response.data?.message)
-        } 
+          toast.error(response.data?.message);
+        }
       }
-      
+
       setSelectedTag([]);
       const resetTags = tags.map((item) => {
         return { ...item, ["isSelected"]: false };
@@ -111,7 +119,6 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
       formElement.current.reset();
     },
   });
-
 
   const dropdownRef = useRef(null);
   const handleClickOutside = (event) => {
@@ -147,7 +154,11 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
               type="text"
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
-            {mutation.isError && formError?.taskTitle && <small className="text-red-500 font-bold">{formError?.taskTitle}</small> }
+            {mutation.isError && formError?.taskTitle && (
+              <small className="text-red-500 font-bold">
+                {formError?.taskTitle}
+              </small>
+            )}
           </div>
         </div>
 
@@ -173,10 +184,13 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
                   ))
                 : null}
             </select>
-            {mutation.isError && formError?.department && <small className="text-red-500 font-bold">{formError?.department}</small> }
+            {mutation.isError && formError?.department && (
+              <small className="text-red-500 font-bold">
+                {formError?.department}
+              </small>
+            )}
           </div>
         </div>
-
       </div>
 
       <div>
@@ -228,7 +242,7 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
               <p
                 key={item.id}
                 onClick={() => handleSelect(item)}
-                className={`p-1 hover:bg-slate-300 font-bold rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color }`}
+                className={`text-center hover:opacity-50 border rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color}`}
               >
                 {item.name}
                 {item.isSelected && <VscCheck />}
@@ -251,7 +265,11 @@ export default function CreateTicketForm({refreshFunction, modalClose}) {
             name="ticketDetil"
             className="py-2 bg-white border w-full rounded-lg px-2"
           />
-          {mutation.isError && formError?.ticketDetil && <small className="text-red-500 font-bold">{formError?.ticketDetil}</small> }
+          {mutation.isError && formError?.ticketDetil && (
+            <small className="text-red-500 font-bold">
+              {formError?.ticketDetil}
+            </small>
+          )}
         </div>
       </div>
 

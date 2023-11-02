@@ -1,12 +1,11 @@
 import { useRef, useState } from "react";
-import { VscAdd, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
+import { VscAdd } from "react-icons/vsc";
 import { LoadingButton, SubmitButton } from "../Buttons";
 import { useMutation } from "react-query";
-import formValidator from "@/utils/formValidator";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const CreateTagForm = () => {
+export const CreateTagForm = ({ setTagsModalOpen }) => {
   const [tagColor, setTagColor] = useState(null);
   const formElement = useRef();
 
@@ -17,7 +16,6 @@ export const CreateTagForm = () => {
   const mutation = useMutation({
     mutationFn: (event) => {
       event.preventDefault();
-
       const tagData = {
         title: event.target.title.value,
         color: tagColor,
@@ -31,9 +29,9 @@ export const CreateTagForm = () => {
         if (response.data?.success) {
           toast.success(response.data?.message);
           setTagColor(null);
-          // setTimeout(() => {
-          //   setTagsIsOption(false);
-          // }, 1000);
+          setTimeout(() => {
+            setTagsModalOpen(false);
+          }, 1000);
         } else {
           setTagColor(null);
           toast.error(response.data?.message);
@@ -42,9 +40,9 @@ export const CreateTagForm = () => {
     },
     onError: async (data) => {
       console.log(data);
-      toast.error("Something went wrong, Please try again.")
-      return
-    }
+      toast.error("Something went wrong, Please try again.");
+      return;
+    },
   });
 
   return (
@@ -111,7 +109,7 @@ export const CreateTagForm = () => {
         </div>
 
         <div className="flex justify-end mt-2">
-          {false ? (
+          {mutation.isLoading ? (
             <LoadingButton title={"Creating..."} />
           ) : (
             <SubmitButton

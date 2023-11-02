@@ -1,11 +1,9 @@
 "use client";
 
-import CreateTicketForm from "@/components/Forms/CreateTicketForm";
+import CreateTicketForm from "@/app/dashboard/tickets/forms/CreateTicketForm";
 import { TicketStatusCard, TicketTableComponent } from "./components";
 import { FcBearish, FcBullish, FcMindMap, FcProcess } from "react-icons/fc";
-import {
-  VscAdd, VscSymbolKeyword
-} from "react-icons/vsc";
+import { VscAdd, VscSymbolKeyword } from "react-icons/vsc";
 import { ActionButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
 import { useEffect, useState } from "react";
@@ -14,7 +12,7 @@ import { useQuery } from "react-query";
 
 export default function Tickets() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  
+
   const responseData = useQuery("tickets-list", async () => {
     const response = await fetch("/api/tickets");
     const json_response = await response.json();
@@ -70,13 +68,16 @@ export default function Tickets() {
             </div>
           </div>
           <TicketTableComponent responseData={responseData} />
-          </div>
+        </div>
         <Modal
           open={createModalOpen}
           setOpen={setCreateModalOpen}
           modalTitle={"Create Ticket"}
         >
-          <CreateTicketForm modalClose={setCreateModalOpen} refreshFunction={responseData.refetch} />
+          <CreateTicketForm
+            modalClose={setCreateModalOpen}
+            refreshFunction={responseData.refetch}
+          />
         </Modal>
       </main>
       {/* <CreateTicketForm /> */}
