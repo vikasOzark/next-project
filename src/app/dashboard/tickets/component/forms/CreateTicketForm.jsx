@@ -5,7 +5,7 @@ import {
   VscChromeClose,
   VscTag,
 } from "react-icons/vsc";
-import { LoadingButton, SubmitButton } from "../../../../components/Buttons";
+import { LoadingButton, SubmitButton } from "../../../../../components/Buttons";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";

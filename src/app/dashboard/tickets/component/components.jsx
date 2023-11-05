@@ -1,43 +1,14 @@
 import { VscGear, VscGroupByRefType } from "react-icons/vsc";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { twMerge } from "tailwind-merge";
 import {
   DropdownActionMenuButton,
   TicketStatusUpdate,
 } from "./TicketTableMenu";
 import { LoadingButton } from "@/components/Buttons";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { ButtonDropdownComponent } from "@/components/Modal";
-
-export const TicketStatusCard = ({
-  title,
-  data,
-  analyticString,
-  icon,
-  style,
-}) => {
-  return (
-    <>
-      <div
-        className={twMerge(
-          `rounded-xl bg-white ms-2 text-card-foreground shadow`,
-          style
-        )}
-      >
-        <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-          <h3 className="tracking-tight text-sm font-medium">{title}</h3>
-          {icon}
-        </div>
-        <div className="p-6 pt-0">
-          <div className="text-2xl font-bold">{data}</div>
-          <p className="text-xs text-muted-foreground">{analyticString}</p>
-        </div>
-      </div>
-    </>
-  );
-};
 
 export const RefreshContext = React.createContext();
 export const TicketTableComponent = ({ responseData }) => {
@@ -45,7 +16,7 @@ export const TicketTableComponent = ({ responseData }) => {
     <>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-          <div className="overflow-hidden dark:border-gray-700 md:rounded-lg h-[100vh]">
+          <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
             {responseData.isLoading ? (
               <div className="flex justify-center border-0">
                 <LoadingButton title={"Loading tickets..."} />

@@ -1,7 +1,7 @@
 "use client";
-import { NavbarFooter } from "@/components/Navbar";
+import { NavbarFooter } from "@/components/Navbars/Navbar";
 import { DepartmentSidenav } from "@/components/SSRComponent/DepartmentSidenav";
-import { SideNavbar } from "@/components/Sidenavbar";
+import { SideNavbar } from "@/components/Navbars/Sidenavbar";
 import { usePathname } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -12,8 +12,8 @@ export default function LayoutPage({ children }) {
   const pathname = usePathname();
   const queryClient = new QueryClient();
   const nonNavbar = ["/singup", "/login"];
-  const [menuOpen, setMenuOpen] = useState(false)
-  
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -32,9 +32,9 @@ export default function LayoutPage({ children }) {
                         </Suspense>
                       </SideNavbar>
                     </div>
-                    <div className="col-span-10 px-4">
+                    <div className="col-span-10 px-4 my-4 h-full">
                       <Toaster position="top-right" reverseOrder={false} />
-                      <NavbarFooter menuOpen={menuOpen} setMenuOpen={setMenuOpen}>{children}</NavbarFooter>
+                      {children}
                     </div>
                   </div>
                 </>

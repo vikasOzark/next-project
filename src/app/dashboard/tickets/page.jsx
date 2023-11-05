@@ -1,13 +1,12 @@
 "use client";
 
-import CreateTicketForm from "@/app/dashboard/tickets/forms/CreateTicketForm";
-import { TicketStatusCard, TicketTableComponent } from "./components";
-import { FcBearish, FcBullish, FcMindMap, FcProcess } from "react-icons/fc";
+import CreateTicketForm from "@/app/dashboard/tickets/component/forms/CreateTicketForm";
+import { TicketTableComponent } from "./component/components";
 import { VscAdd, VscSymbolKeyword } from "react-icons/vsc";
 import { ActionButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
-import { useEffect, useState } from "react";
-import { DropdownMenuButton } from "./TicketTableGlobleAction";
+import { useState } from "react";
+import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
 import { useQuery } from "react-query";
 
 export default function Tickets() {
@@ -22,51 +21,24 @@ export default function Tickets() {
   return (
     <>
       <main>
-        <div className=" grid grid-cols-4 gap-2 overflow-x-auto overflow-hidden w-full">
-          <TicketStatusCard
-            title={"Total Tickes"}
-            data={32}
-            analyticString={"Success rate is 20%"}
-            icon={<FcMindMap size={25} />}
-          />
-          <TicketStatusCard
-            title={"Closed"}
-            data={15}
-            analyticString={"Closing rate is 50%"}
-            icon={<FcProcess size={25} />}
-          />
-          <TicketStatusCard
-            title={"Open Tickes"}
-            data={10}
-            analyticString={"Success rate is 20%"}
-            icon={<FcBullish size={25} />}
-          />
-          <TicketStatusCard
-            title={"Rejected Tickes"}
-            data={5}
-            analyticString={"Success rate is 20%"}
-            icon={<FcBearish size={25} />}
-          />
-        </div>
+        <div className="flex justify-end mb-2">
+          <div className="flex items-center gap-2">
+            <ActionButton
+              onClick={() => setCreateModalOpen(true)}
+              cssClass=" hover:bg-slate-600 flex items-center gap-2"
+            >
+              <VscAdd />
+              Create Ticket
+            </ActionButton>
 
-        <div className="mt-4 w-full ps-1">
-          <div className="flex justify-end mb-2">
-            <div className="flex items-center gap-2">
-              <ActionButton
-                onClick={() => setCreateModalOpen(true)}
-                cssClass=" hover:bg-slate-600 flex items-center gap-2"
-              >
-                <VscAdd />
-                Create Ticket
-              </ActionButton>
-
-              <DropdownMenuButton
-                title={"Actions"}
-                icon={<VscSymbolKeyword />}
-                styleButton="hover:bg-slate-600"
-              />
-            </div>
+            <DropdownMenuButton
+              title={"Actions"}
+              icon={<VscSymbolKeyword />}
+              styleButton="hover:bg-slate-600"
+            />
           </div>
+        </div>
+        <div className="mt-4 w-full ps-1">
           <TicketTableComponent responseData={responseData} />
         </div>
         <Modal
@@ -80,7 +52,6 @@ export default function Tickets() {
           />
         </Modal>
       </main>
-      {/* <CreateTicketForm /> */}
     </>
   );
 }

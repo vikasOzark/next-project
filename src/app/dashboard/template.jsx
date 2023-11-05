@@ -1,3 +1,3 @@
 export default function Template({ children }) {
-    return <div>{children}</div>
-  }
+  return <div className="h-full">{children}</div>;
+}

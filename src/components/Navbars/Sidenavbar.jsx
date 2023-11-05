@@ -16,9 +16,12 @@ import {
 import { VscChromeClose, VscSignOut } from "react-icons/vsc";
 import { useSession, signOut } from "next-auth/react";
 import { urlRoutes } from "@/utils/urlRoutes";
+import { LoadingState } from "../Buttons";
 
 export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
   const [open, setOpen] = useState(false);
+  const [isSignout, setSignout] = useState(false);
+
   const session = useSession();
   const router = useRouter();
 
@@ -40,11 +43,27 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
       route: urlRoutes.CREATE_TICKET,
     },
     {
-      title: "User Permissions",
+      title: "User Management",
       icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
       route: urlRoutes.PERMISSIONS,
     },
+    {
+      title: "Profile",
+      icon: <HomeIcon className="h-5 w-5" title="Profile" />,
+      route: urlRoutes.PROFILE,
+    },
   ];
+
+  const handleSignout = () => {
+    setSignout(true);
+    try {
+      setTimeout(() => {
+        signOut();
+      }, 1000);
+    } finally {
+      setSignout(false);
+    }
+  };
 
   return (
     <>
@@ -73,6 +92,19 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
             </nav>
 
             <div className="mb-3">
+              {isSignout ? (
+                <div className=" rounded border font-bold text-center py-1 mb-2">
+                  <LoadingState title={"Logging out..."} cssClass={"py-1"} />
+                </div>
+              ) : (
+                <div
+                  onClick={() => handleSignout()}
+                  className="hover:bg-gray-200 cursor-pointer active:border-blue-400 border rounded font-bold text-center py-1 mb-2"
+                >
+                  Log out
+                </div>
+              )}
+
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-semibold text-gray-800 dark:text-white">
                   Departments
@@ -111,7 +143,7 @@ function NavigationLink({ href, text, icon }) {
       href={href === "/home" ? "/" : href}
       passHref
       className={`${
-        isActive ? "bg-gray-800 text-gray-600 " : "text-gray-600 "
+        isActive ? "bg-gray-100 text-gray-400 " : "text-gray-600 "
       } flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700`}
     >
       {icon}
