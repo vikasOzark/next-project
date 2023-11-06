@@ -6,15 +6,12 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   const requestBody = await request.json();
-  console.log(requestBody.tags?.map((tag) => ({ id: tag.id })));
   try {
     const userId = await getUserId(request);
-    prisma.$connect();
-    await prisma.tickets.create({
+    const createdTicket = await prisma.tickets.create({
       data: {
         taskTitle: requestBody.taskTitle,
         ticketDetil: requestBody.ticketDetil,
-
         department: {
           connect: {
             id: requestBody.department,
@@ -26,15 +23,15 @@ export async function POST(request) {
           },
         },
         tags: {
-          connect: requestBody.tags?.map((tagId) => ({ id: tagId.id })),
-        },
+  connect: requestBody.tags?.map((tag) => ({ id: tag.id })),
+},
       },
     });
 
     return NextResponse.json({
       success: true,
       message: "Ticket is created successfully.",
-      data: [],
+      data: [createdTicket],
     });
   } catch (error) {
     console.log(error.message);
@@ -54,6 +51,7 @@ export async function POST(request) {
     await prisma.$disconnect();
   }
 }
+
 
 export async function GET(request) {
   try {

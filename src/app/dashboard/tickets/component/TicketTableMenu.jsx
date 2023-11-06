@@ -9,12 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { VscCheck } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import { twMerge } from "tailwind-merge";
 import { RefreshContext } from "./components";
 import toast from "react-hot-toast";
+import Modal from "@/components/Modal";
+import UpdateTicketForm from "./forms/UpdateTicketForm";
 
 export function DropdownActionMenuButton({
   styleButton,
@@ -22,28 +24,35 @@ export function DropdownActionMenuButton({
   title,
   actionData,
 }) {
+  const [updateTicketModal, setTicketUpdateModal] = useState(false)
+  
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className={twMerge(
-            "px-4 flex gap-2 items-center font-bold hover-bg-gray-500",
-            styleButton
-          )}
-        >
-          {icon}
-          {title}
-        </Button>
-      </DropdownMenuTrigger>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            className={twMerge(
+              "px-4 flex gap-2 items-center font-bold hover-bg-gray-500",
+              styleButton
+            )}
+          >
+            {icon}
+            {title}
+          </Button>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Edit ticket</DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={() => setTicketUpdateModal(true)}>Edit ticket</DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Modal open={updateTicketModal} setOpen={setTicketUpdateModal} modalTitle={"Update ticket"} >
+        <UpdateTicketForm ticketData={actionData}  />
+      </Modal>
+    </>
   );
 }
 

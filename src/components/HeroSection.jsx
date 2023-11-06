@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import {signIn, useSession} from "next-auth/react"
+import { AiOutlineLogin } from "react-icons/ai"
 
 export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -10,7 +11,7 @@ export default function HeroSection() {
   return (
     <div className="">
       <div className="relative isolate px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl py-20 sm:py-48 lg:py-56">
+        <div className="mx-auto max-w-[67rem]  min-w-min py-32 sm:py-35 md:py-56 lg:py-64 ">
         <div
           className="absolute inset-x-0 -z-10 top-0 transform-gpu overflow-hidden blur-3xl " aria-hidden="true">
           <div
@@ -23,7 +24,7 @@ export default function HeroSection() {
         </div>
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-200 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              New upcoming master className.{' '}
+              Read our blogs.{' '}
               <a href="#" className="font-semibold text-indigo-600">
                 <span className="absolute inset-0" aria-hidden="true" />
                 Read more <span aria-hidden="true">&rarr;</span>
@@ -32,24 +33,19 @@ export default function HeroSection() {
           </div>
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-100 sm:text-6xl">
-              Learn stratergy of trading with live className
+              Streamline Your Support Experience with Our Ticket Tracker
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-              fugiat veniam occaecat fugiat aliqua.
+              – Effortlessly Manage, Monitor, and Resolve your Inquiries, All in One Place!
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="/login"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Register now
-              </a>
+              
               <div
                 onClick={() => signIn ()}
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="rounded-md flex items-center gap-2 bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Register now
+                Sign in here
+                <AiOutlineLogin size={20} />
               </div>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-200">
                 Learn more <span aria-hidden="true">→</span>

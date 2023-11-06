@@ -137,6 +137,8 @@ const TableRowComponent = ({ data, ticketStatus }) => {
     },
   });
 
+  console.log(data);
+
   return (
     <>
       <tr>
@@ -170,8 +172,8 @@ const TableRowComponent = ({ data, ticketStatus }) => {
         </td>
 
         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-          <div className=" flex gap-2 items-center">
-            {data.tags?.map((tag) => (
+          {/* <div className=" flex gap-2 items-center">
+            {data?.tags?.map((tag) => (
               <p
                 className={`${tag.color} rounded-full px-4 py-[2px] font-bold text-white`}
                 key={tag.id}
@@ -179,7 +181,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
                 {tag.title}
               </p>
             ))}
-          </div>
+          </div> */}
         </td>
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">

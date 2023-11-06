@@ -6,14 +6,16 @@ import {
   VscTag,
 } from "react-icons/vsc";
 import { LoadingButton, SubmitButton } from "../../../../../components/Buttons";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
+import { RefreshContext } from "../components";
+// import { RefreshContext } from "@/app/dashboard/tickets/";
+
 
 export default function UpdateTicketForm({
-  refreshFunction,
   modalClose,
   ticketData,
 }) {
@@ -21,6 +23,9 @@ export default function UpdateTicketForm({
   const [tagsIsOption, setTagsIsOption] = useState(false);
   const [formError, setFormError] = useState({});
   const [tags, setTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState([]);
+  const [ticketDataUpdate, setTicketDataUpdate] = useState({...ticketData})
+  const refreshFunction = useContext(RefreshContext)
 
   useQuery("tags-list", async () => {
     const response = await fetch("/api/tags");
@@ -44,9 +49,7 @@ export default function UpdateTicketForm({
     const json_response = await response.json();
     return json_response;
   });
-
-  const [selectedTag, setSelectedTag] = useState([]);
-
+  
   const handleSelect = (tag) => {
     const isMatched = selectedTag.find((item) => item.id === tag.id);
     if (!isMatched) {
@@ -132,6 +135,17 @@ export default function UpdateTicketForm({
   };
 
   useEffect(() => {
+
+    if (ticketDataUpdate.tags) {
+      const tagsSelected = ticketDataUpdate.tags(tag => ({
+        name: tag.title,
+        id: tag.id,
+        color: tag.color,
+        isSelected: true,
+      }))
+      setSelectedTag(tagsSelected)
+    }
+    
     document.addEventListener("click", handleClickOutside, true);
     return () => {
       document.removeEventListener("click", handleClickOutside, true);
@@ -153,8 +167,10 @@ export default function UpdateTicketForm({
           </label>
           <div className="mt-2">
             <input
+              value={ticketDataUpdate.taskTitle}
               id="taskTitle"
               name="taskTitle"
+              onChange={(e) => setTicketDataUpdate(e.target.value)}
               type="text"
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -182,7 +198,7 @@ export default function UpdateTicketForm({
               <option value="">select department</option>
               {responseData.isSuccess && responseData.data?.success
                 ? responseData.data.data?.map((item) => (
-                    <option key={item.id} value={item.id}>
+                    <option selected={ticketDataUpdate?.department.name === item.name? true : false} key={item.id} value={item.id}>
                       {item.name}
                     </option>
                   ))
@@ -265,6 +281,8 @@ export default function UpdateTicketForm({
         </label>
         <div className="mt-2">
           <textarea
+            value={ticketDataUpdate.ticketDetil}
+            onChange={(e) => setTicketDataUpdate(e.target.value)}
             id="ticketDetil"
             name="ticketDetil"
             className="py-2 bg-white border w-full rounded-lg px-2"
