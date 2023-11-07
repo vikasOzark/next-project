@@ -140,16 +140,14 @@ const TableRowComponent = ({ data, ticketStatus }) => {
   const mutationTagRemove = useMutation({
     mutationFn: async (tagId) => {
       toast.loading("Removing tag...");
-      return axios.patch(`/api/tickets/${data.id}/?operationTo=tag`);
+      return axios.patch(`/api/tickets/${data.id}/?operationTo=tag&tagId=${tagId}`);
     },
     onSettled: async (response) => {
       if (response) {
         toast.remove();
         if (response.data.success) {
           contextFunction();
-          toast.success(
-            response.data?.message || "Tag removed Successfully."
-          );
+          toast.success(response.data?.message || "Tag removed Successfully.");
         } else {
           toast.error(
             response.data?.message || "Something went wrong while removing tag."
@@ -158,7 +156,6 @@ const TableRowComponent = ({ data, ticketStatus }) => {
       }
     },
   });
-
 
   return (
     <>

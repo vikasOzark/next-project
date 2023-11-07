@@ -1,14 +1,18 @@
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
-import { useParams } from "next/navigation";
 import { NextResponse } from "next/server";
+
 const prisma = new PrismaClient();
 
 export async function POST(request) {
   const requestBody = await request.json();
   try {
     const userId = await getUserId(request);
+    if (!userId) {
+      throw new Error("self: Please re-login, and try again.");
+    }
+
     const createdTicket = await prisma.tickets.create({
       data: {
         taskTitle: requestBody.taskTitle,
@@ -24,8 +28,8 @@ export async function POST(request) {
           },
         },
         tags: {
-  connect: requestBody.tags?.map((tag) => ({ id: tag.id })),
-},
+          connect: requestBody.tags?.map((tag) => ({ id: tag.id })),
+        },
       },
     });
 
@@ -35,7 +39,6 @@ export async function POST(request) {
       data: [createdTicket],
     });
   } catch (error) {
-    console.log(error.message);
     let message = null;
     if (error.message.split(":")[0] === "self") {
       message = error.message;
@@ -52,7 +55,6 @@ export async function POST(request) {
     await prisma.$disconnect();
   }
 }
-
 
 export async function GET(request) {
   try {
@@ -100,8 +102,8 @@ export async function PATCH(request) {
 
   try {
     const createdTicket = await prisma.tickets.update({
-      where : {
-        id : requestBody.ticketId
+      where: {
+        id: requestBody.ticketId,
       },
       data: {
         taskTitle: requestBody.taskTitle,
@@ -122,7 +124,6 @@ export async function PATCH(request) {
       message: "Ticket is created successfully.",
       data: [createdTicket],
     });
-
   } catch (error) {
     let message = null;
     if (error.message.split(":")[0] === "self") {
@@ -139,36 +140,4 @@ export async function PATCH(request) {
   } finally {
     await prisma.$disconnect();
   }
-}
-
-export async function DELETE  (data) {
-  const params = useParams()
-  console.log(params);
-  try {
-
-    switch (params) {
-      case value:
-        
-        break;
-    
-      default:
-        break;
-    }
-    
-  } catch (error) {
-    let message = null;
-    if (error.message.split(":")[0] === "self") {
-      message = error.message;
-    } else {
-      message = "Something went wrong.";
-    }
-
-    return NextResponse.json({
-      success: false,
-      message: message,
-      data: [],
-    });
-    
-  }
-
 }

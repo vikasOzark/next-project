@@ -35,6 +35,8 @@ export async function POST(request) {
       );
       requestBody.password = hashedPassword;
 
+      console.log(requestBody);
+
       const user = await prisma.user.create({
         data: requestBody,
       });
@@ -48,10 +50,16 @@ export async function POST(request) {
       throw new Error("Your Email or Contact number is already exists.");
     }
   } catch (error) {
+    let message = null;
+    if (error.message.split(":")[0] === "self") {
+      message = error.message;
+    } else {
+      message = "Something went wrong.";
+    }
+
     return NextResponse.json({
       success: false,
-      message:
-        error?.message || "Something went wrong, Please chck the details.",
+      message: message,
       data: [],
     });
   }
@@ -59,14 +67,12 @@ export async function POST(request) {
 
 export async function GET(request) {
   await prisma.$connect();
-  
+
   try {
-    const userId = await getUserId()
+    const userId = await getUserId();
     const userList = await prisma.user.findMany({
-      where : {
-      }
-    })
-    
+      where: {},
+    });
   } catch (error) {
     return NextResponse.json({
       success: false,
@@ -75,6 +81,6 @@ export async function GET(request) {
       data: [],
     });
   } finally {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   }
 }

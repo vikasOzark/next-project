@@ -4,24 +4,23 @@ import { PrismaClient, Status } from "@prisma/client";
 
 const { NextResponse } = require("next/server");
 
-
 export async function POST(request, context) {
-    const { params } = context
-    const {status} = await request.json()
-    
-    const prisma = await new PrismaClient()
-    prisma.$connect() 
+  const { params } = context;
+  const { status } = await request.json();
 
-    await prisma.tickets.update({
-      where : {
-        userId : getUserId(request),
-        id : params.ticketId
-      },
-      data : {
-        status : Status[status]
-      }
-    })
-    
+  const prisma = await new PrismaClient();
+  prisma.$connect();
+
+  await prisma.tickets.update({
+    where: {
+      userId: getUserId(request),
+      id: params.ticketId,
+    },
+    data: {
+      status: Status[status],
+    },
+  });
+
   try {
     return NextResponse.json(
       {
@@ -32,7 +31,6 @@ export async function POST(request, context) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    console.log(error.message);
     return NextResponse.json(
       {
         message: "Something went wrong, Please try again.",
@@ -45,18 +43,19 @@ export async function POST(request, context) {
 }
 
 export async function DELETE(request, context) {
-    const { params } = context
-    
-    const prisma = await new PrismaClient()
-    prisma.$connect() 
+  const { params } = context;
 
-    await prisma.tickets.delete({
-      where : {
-        userId : getUserId(request),
-        id : params.ticketId
-      }
-    })
-    
+  const prisma = await new PrismaClient();
+  prisma.$connect();
+
+  const userId = await getUserId(request);
+  await prisma.tickets.delete({
+    where: {
+      userId: userId,
+      id: params.ticketId,
+    },
+  });
+
   try {
     return NextResponse.json(
       {
@@ -79,44 +78,43 @@ export async function DELETE(request, context) {
 }
 
 export async function PATCH(request, context) {
-    const { params } = context
-    console.log('=================================');
-  const operationTo = request;
+  const { params } = context;
 
-  console.log(operationTo);
+  const url = new URL(request.url);
+  const query = Object.fromEntries(url.searchParams);
 
-    switch (operationTO) {
+  const prisma = await new PrismaClient();
+  prisma.$connect();
+
+  try {
+    switch (query.operationTo) {
       case "tag":
-        
+        await handleTagRemove(request, query, params);
         break;
-    
+
       default:
         break;
     }
-    
-    const prisma = await new PrismaClient()
-    prisma.$connect() 
-    
-    try {
-      // await prisma.tickets.update({
-      //   where : {
-      //     id : params.ticketId
-      //   }
-      // })
-
 
     return NextResponse.json(
       {
-        message: "Successfully ticket is deleted.",
+        message: "Successfully tag is removed.",
         success: true,
         data: [],
       },
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
+    let message = null;
+    if (error.message.split(":")[0] === "self") {
+      message = error.message;
+    } else {
+      message = "Something went wrong.";
+    }
+
     return NextResponse.json(
       {
-        message: "SOmething went wrong.",
+        message: message,
         success: false,
         data: [],
       },
@@ -125,3 +123,29 @@ export async function PATCH(request, context) {
   }
 }
 
+const handleTagRemove = async (request, query, params) => {
+  const userId = await getUserId(request);
+  if (!userId) {
+    throw new Error("self: Please re-login and try again.");
+  }
+
+  if (!query.tagId) {
+    throw new Error("self: Something went wrong, Please try again.");
+  }
+
+  const prisma = await new PrismaClient();
+  prisma.$connect();
+
+  await prisma.tickets.update({
+    where: {
+      id: params.ticketId,
+    },
+    data: {
+      tags: {
+        disconnect: {
+          id: query.tagId,
+        },
+      },
+    },
+  });
+};
