@@ -1,6 +1,7 @@
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
+import { useParams } from "next/navigation";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
@@ -92,4 +93,82 @@ export async function GET(request) {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+export async function PATCH(request) {
+  const requestBody = await request.json();
+
+  try {
+    const createdTicket = await prisma.tickets.update({
+      where : {
+        id : requestBody.ticketId
+      },
+      data: {
+        taskTitle: requestBody.taskTitle,
+        ticketDetil: requestBody.ticketDetil,
+        department: {
+          connect: {
+            id: requestBody.department,
+          },
+        },
+        tags: {
+          connect: requestBody.tags?.map((tag) => ({ id: tag.id })),
+        },
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Ticket is created successfully.",
+      data: [createdTicket],
+    });
+
+  } catch (error) {
+    let message = null;
+    if (error.message.split(":")[0] === "self") {
+      message = error.message;
+    } else {
+      message = "Something went wrong.";
+    }
+
+    return NextResponse.json({
+      success: false,
+      message: message,
+      data: [],
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function DELETE  (data) {
+  const params = useParams()
+  console.log(params);
+  try {
+
+    switch (params) {
+      case value:
+        
+        break;
+    
+      default:
+        break;
+    }
+    
+  } catch (error) {
+    let message = null;
+    if (error.message.split(":")[0] === "self") {
+      message = error.message;
+    } else {
+      message = "Something went wrong.";
+    }
+
+    return NextResponse.json({
+      success: false,
+      message: message,
+      data: [],
+    });
+    
+  }
+
 }

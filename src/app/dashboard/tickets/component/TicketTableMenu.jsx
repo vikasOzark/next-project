@@ -49,7 +49,7 @@ export function DropdownActionMenuButton({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Modal open={updateTicketModal} setOpen={setTicketUpdateModal} modalTitle={"Update ticket"} >
+      <Modal cssClass={"min-w-fit"} className=" " open={updateTicketModal} setOpen={setTicketUpdateModal} modalTitle={"Update ticket"} >
         <UpdateTicketForm ticketData={actionData}  />
       </Modal>
     </>

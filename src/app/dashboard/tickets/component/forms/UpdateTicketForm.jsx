@@ -12,11 +12,9 @@ import axios from "axios";
 import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
 import { RefreshContext } from "../components";
-// import { RefreshContext } from "@/app/dashboard/tickets/";
-
+import { handleRemove, handleSelect } from "./updateTicketUtils";
 
 export default function UpdateTicketForm({
-  modalClose,
   ticketData,
 }) {
   const formElement = useRef();
@@ -50,45 +48,11 @@ export default function UpdateTicketForm({
     return json_response;
   });
   
-  const handleSelect = (tag) => {
-    const isMatched = selectedTag.find((item) => item.id === tag.id);
-    if (!isMatched) {
-      setSelectedTag([...selectedTag, tag]);
-    }
-
-    tags.find((item, index) => {
-      if (item.id === tag.id) {
-        const newUpdated = [...tags];
-        if (!newUpdated[index].isSelected) {
-          newUpdated[index].isSelected = true;
-        }
-        setTags(newUpdated);
-      }
-    });
-  };
-
-  const handleRemove = (tag) => {
-    selectedTag.find((item, index) => {
-      if (item.id === tag.id) {
-        const newA = [...selectedTag];
-        newA.splice(index, 1);
-        setSelectedTag(newA);
-      }
-
-      tags.find((item, index) => {
-        if (item.id === tag.id) {
-          const newUpdated = [...tags];
-          newUpdated[index].isSelected = false;
-          setTags(newUpdated);
-        }
-      });
-    });
-  };
-
   const mutation = useMutation({
     mutationFn: (event) => {
       event.preventDefault();
       const ticketData = {
+        ticketId: ticketDataUpdate.id,
         taskTitle: event.target.taskTitle.value,
         ticketDetil: event.target.ticketDetil.value,
         department: event.target.department.value,
@@ -101,18 +65,14 @@ export default function UpdateTicketForm({
         throw new Error();
       }
 
-      return axios.post(`/api/tickets`, ticketData);
+      return axios.patch(`/api/tickets`, ticketData);
     },
-
     onSettled: async (data) => {
       const response = await data;
       if (response) {
         if (response.data?.success) {
           toast.success("Ticket is created.");
           refreshFunction();
-          setTimeout(() => {
-            modalClose(false);
-          }, 1000);
         } else {
           toast.error(response.data?.message);
         }
@@ -135,9 +95,8 @@ export default function UpdateTicketForm({
   };
 
   useEffect(() => {
-
     if (ticketDataUpdate.tags) {
-      const tagsSelected = ticketDataUpdate.tags(tag => ({
+      const tagsSelected = ticketDataUpdate?.tags.map(tag => ({
         name: tag.title,
         id: tag.id,
         color: tag.color,
@@ -246,7 +205,7 @@ export default function UpdateTicketForm({
               >
                 {item.name}{" "}
                 <VscChromeClose
-                  onClick={() => handleRemove(item)}
+                  onClick={() => handleRemove(item, tags, setTags, selectedTag, setSelectedTag)}
                   className=" hover:bg-gray-100 rounded-full h-5 p-[3px] cursor-pointer w-5"
                 />{" "}
               </span>
@@ -261,7 +220,7 @@ export default function UpdateTicketForm({
             {tags?.sort().map((item) => (
               <p
                 key={item.id}
-                onClick={() => handleSelect(item)}
+                onClick={() => handleSelect(item, tags, setTags, setSelectedTag, selectedTag)}
                 className={`text-center hover:opacity-50 border rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color}`}
               >
                 {item.name}

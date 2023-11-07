@@ -1,4 +1,4 @@
-import { VscGear, VscGroupByRefType } from "react-icons/vsc";
+import { VscChromeClose, VscGear, VscGroupByRefType } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import { twMerge } from "tailwind-merge";
 import {
@@ -137,7 +137,28 @@ const TableRowComponent = ({ data, ticketStatus }) => {
     },
   });
 
-  console.log(data);
+  const mutationTagRemove = useMutation({
+    mutationFn: async (tagId) => {
+      toast.loading("Removing tag...");
+      return axios.patch(`/api/tickets/${data.id}/?operationTo=tag`);
+    },
+    onSettled: async (response) => {
+      if (response) {
+        toast.remove();
+        if (response.data.success) {
+          contextFunction();
+          toast.success(
+            response.data?.message || "Tag removed Successfully."
+          );
+        } else {
+          toast.error(
+            response.data?.message || "Something went wrong while removing tag."
+          );
+        }
+      }
+    },
+  });
+
 
   return (
     <>
@@ -172,16 +193,20 @@ const TableRowComponent = ({ data, ticketStatus }) => {
         </td>
 
         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-          {/* <div className=" flex gap-2 items-center">
+          <div className=" flex gap-2 items-center">
             {data?.tags?.map((tag) => (
               <p
-                className={`${tag.color} rounded-full px-4 py-[2px] font-bold text-white`}
+                className={`${tag.color} rounded-full flex justify-between gap-2 px-4 py-[2px] font-bold text-white`}
                 key={tag.id}
               >
                 {tag.title}
+                <VscChromeClose
+                  onClick={() => mutationTagRemove.mutate(tag.id)}
+                  className=" hover:bg-gray-100 hover:text-black rounded-full h-5 p-[3px] cursor-pointer w-5"
+                />{" "}
               </p>
             ))}
-          </div> */}
+          </div>
         </td>
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">

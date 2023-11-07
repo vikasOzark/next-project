@@ -42,7 +42,7 @@ export default function HeroSection() {
               
               <div
                 onClick={() => signIn ()}
-                className="rounded-md flex items-center gap-2 bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="rounded-md flex items-center cursor-pointer gap-2 bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in here
                 <AiOutlineLogin size={20} />
