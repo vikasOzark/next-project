@@ -80,34 +80,36 @@ export async function DELETE(request, context) {
 
 export async function PATCH(request, context) {
     const { params } = context
-    console.log('=================================');
-  const operationTo = request;
-
-  console.log(operationTo);
-
-    switch (operationTO) {
-      case "tag":
-        
-        break;
     
-      default:
-        break;
-    }
-    
-    const prisma = await new PrismaClient()
-    prisma.$connect() 
+    const url = new URL(request.url);
+    const query = Object.fromEntries(url.searchParams);
+    const { operationTo } = query 
     
     try {
-      // await prisma.tickets.update({
-      //   where : {
-      //     id : params.ticketId
-      //   }
-      // })
-
-
+      const prisma = await new PrismaClient()
+      prisma.$connect() 
+      
+      switch (operationTo) {
+        case "tag":
+          const tagId = query.tagId
+          await prisma.tickets.update({
+            where : {id : params.ticketId},
+            data : {
+              relatedEntity : {
+                disconnect : tagId
+              }
+            }
+        })
+          
+          break;
+      
+        default:
+          break;
+      }
+      
     return NextResponse.json(
       {
-        message: "Successfully ticket is deleted.",
+        message: "Successfully tag removed.",
         success: true,
         data: [],
       },
