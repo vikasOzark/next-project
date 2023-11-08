@@ -1,10 +1,46 @@
 import { SelectComponent } from "@/components/DropdownButton";
 import Link from "next/link";
 import { LoaderIcon } from "react-hot-toast";
+import { createUserMutation } from "./userUtils";
+import { useMutation, useQuery } from "react-query";
+import { getDepartmentData } from "@/app/dashboard/tickets/component/forms/utils";
+import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Role } from "@prisma/client";
 
 export default function UserCreateUser() {
-   
-  
+  const [formError, setFormError] = useState({});
+  const [selectedTag, setSelectedTag] = useState([]);
+  const [department, setSelectedDepartment] = useState(null);
+
+  const departmentRes = useQuery("department-data", getDepartmentData);
+  const mutation = useMutation({
+    mutationFn: async (event) =>
+      createUserMutation(event, selectedTag, setFormError),
+
+    onSettled: async (data) => {
+      const response = await data;
+      if (response) {
+        if (response.data?.success) {
+          toast.success("Ticket is created.");
+          refreshFunction();
+          setTimeout(() => {
+            modalClose(false);
+          }, 1000);
+        } else {
+          toast.error(response.data?.message);
+        }
+      }
+
+      setSelectedTag([]);
+      const resetTags = tags.map((item) => {
+        return { ...item, ["isSelected"]: false };
+      });
+      setTags(resetTags);
+      formElement.current.reset();
+    },
+  });
+
   return (
     <>
       {" "}
@@ -68,7 +104,13 @@ export default function UserCreateUser() {
                 Select department
               </label>
               <div className="mt-2">
-                <SelectComponent />
+                <SelectComponent
+                  setterFunction={setSelectedDepartment}
+                  subTitle={"Department"}
+                  data={
+                    departmentRes.data?.success ? departmentRes.data.data : []
+                  }
+                />
               </div>
             </div>
 
@@ -94,6 +136,24 @@ export default function UserCreateUser() {
               </small>
             )} */}
             </div>
+          </div>
+
+          <div className="w-full">
+            <label
+              htmlFor="password"
+              className=" text-sm flex items-center gap-2 text-gray-800 dark:text-gray-800 font-medium leading-6 "
+            >
+              Password
+              {/* <ToolTip icon={<VscQuestion size={23} className="text-gray-800 dark:text-gray-800" /> } text={"data display"} /> */}
+            </label>
+            <SelectComponent
+              setterFunction={setSelectedDepartment}
+              subTitle={"User Role"}
+              data={[
+                { name: Role.Admin, id: Role.Admin },
+                { name: Role.User, id: Role.User },
+              ]}
+            />
           </div>
 
           <div>

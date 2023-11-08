@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
-  DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import {
@@ -17,15 +20,15 @@ import {
 
 import * as React from "react";
 
-export function DropdownMenuCheckboxes({title, subTitle, data}) {
-  const [showStatusBar, setShowStatusBar] = React.useState(true)
-  const [showActivityBar, setShowActivityBar] = React.useState(false)
-  const [showPanel, setShowPanel] = React.useState(false)
+export function DropdownMenuCheckboxes({ title, subTitle, data }) {
+  const [showStatusBar, setShowStatusBar] = React.useState(true);
+  const [showActivityBar, setShowActivityBar] = React.useState(false);
+  const [showPanel, setShowPanel] = React.useState(false);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button >{title}</Button>
+        <Button>{title}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>{subTitle}</DropdownMenuLabel>
@@ -50,25 +53,23 @@ export function DropdownMenuCheckboxes({title, subTitle, data}) {
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
-export function SelectComponent() {
+export function SelectComponent({setterFunction, subTitle, data }) {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+    <Select  onValueChange={setterFunction} >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder={`Select ${subTitle.toLowerCase()}`} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          <SelectLabel>{subTitle}</SelectLabel>
+          {data?.map((item) => (
+            <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }

@@ -10,6 +10,7 @@ import UserCreateUser from "./components/Forms/UserCreateForm";
 
 export default function Permissions() {
   const [userCreateModal, setUserModal] = useState(false);
+  
   return (
     <>
       <section className="container px-4 mx-auto">

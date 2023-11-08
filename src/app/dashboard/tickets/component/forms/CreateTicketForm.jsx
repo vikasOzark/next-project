@@ -11,6 +11,7 @@ import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
+import { getDepartmentData, getTagsList } from "./utils";
 
 export default function CreateTicketForm({ refreshFunction, modalClose }) {
   const formElement = useRef();
@@ -18,28 +19,9 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
   const [formError, setFormError] = useState({});
   const [tags, setTags] = useState([]);
 
-  const responseTagsData = useQuery("tags-list", async () => {
-    const response = await fetch("/api/tags");
-    const json_response = await response.json();
+  useQuery("tags-list", getTagsList(setTags));
 
-    if (json_response?.success) {
-      const formatted = json_response.data?.map((item) => ({
-        name: item.title,
-        id: item.id,
-        color: item.color,
-        isSelected: false,
-      }));
-      setTags(formatted);
-    }
-
-    return json_response;
-  });
-
-  const responseData = useQuery("departments", async () => {
-    const response = await fetch("/api/departments");
-    const json_response = await response.json();
-    return json_response;
-  });
+  const responseData = useQuery("departments", getDepartmentData);
 
   const [selectedTag, setSelectedTag] = useState([]);
 
