@@ -1,19 +1,24 @@
 import formValidator from "@/utils/formValidator";
+import axios from "axios";
 
-export const createUserMutation = (event, selectedTag, setFormError) => {
+export const createUserMutation = (event, data, setFormError) => {
       event.preventDefault();
+      console.log(event.target);
+    
       const ticketData = {
-        taskTitle: event.target.taskTitle.value,
-        ticketDetil: event.target.ticketDetil.value,
-        department: event.target.department.value,
-        tags: selectedTag,
+        first_name: event.target.first_name.value,
+        last_name: event.target.last_name.value,
+        contact_number : event.target.contact_number.value,
+        email : event.target.email.value,
+        password : event.target.confirm_password.value,
+...data
       };
+      console.log(ticketData);
+      // const isError = formValidator(ticketData);
+      // if (isError) {
+      //   setFormError(isError);
+      //   throw new Error();
+      // }
 
-      const isError = formValidator(ticketData);
-      if (isError) {
-        setFormError(isError);
-        throw new Error();
-      }
-
-      return axios.post(`/api/tickets`, ticketData);
+      return axios.post(`/api/users`, ticketData);
     }

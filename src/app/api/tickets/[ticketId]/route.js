@@ -1,8 +1,8 @@
+import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
-
-const { NextResponse } = require("next/server");
+import NextResponse from "next/server"
 
 export async function POST(request, context) {
   const { params } = context;
@@ -31,14 +31,7 @@ export async function POST(request, context) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        message: "Something went wrong, Please try again.",
-        success: false,
-        data: [],
-      },
-      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
-    );
+    return ErrorResponseHandler(error)
   }
 }
 
@@ -66,14 +59,7 @@ export async function DELETE(request, context) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        message: "SOmething went wrong.",
-        success: false,
-        data: [],
-      },
-      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
-    );
+    return ErrorResponseHandler(error)
   }
 }
 
@@ -104,22 +90,9 @@ export async function PATCH(request, context) {
       },
       { status: httpStatus.HTTP_200_OK }
     );
-  } catch (error) {
-    let message = null;
-    if (error.message.split(":")[0] === "self") {
-      message = error.message;
-    } else {
-      message = "Something went wrong.";
-    }
 
-    return NextResponse.json(
-      {
-        message: message,
-        success: false,
-        data: [],
-      },
-      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
-    );
+  } catch (error) {
+   return ErrorResponseHandler(error)
   }
 }
 

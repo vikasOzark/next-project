@@ -39,11 +39,13 @@ export async function POST(request) {
       data: [createdTicket],
     });
   } catch (error) {
+     const errorMessage = error.message.split(":")
+    
     let message = null;
-    if (error.message.split(":")[0] === "self") {
-      message = error.message;
+    if (errorMessage[0] === "self") {
+      message = errorMessage[1];
     } else {
-      message = "Something went wrong.";
+      message = "Something went wrong. Please try again.";
     }
 
     return NextResponse.json({
@@ -125,9 +127,11 @@ export async function PATCH(request) {
       data: [createdTicket],
     });
   } catch (error) {
+    const errorMessage = error.message.split(":")
+    
     let message = null;
-    if (error.message.split(":")[0] === "self") {
-      message = error.message;
+    if (errorMessage[0] === "self") {
+      message = errorMessage[1];
     } else {
       message = "Something went wrong.";
     }

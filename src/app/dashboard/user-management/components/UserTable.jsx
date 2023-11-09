@@ -1,6 +1,6 @@
 "use client";
 
-export default function     UserTable() {
+export default function UserTable() {
   const HEADERS = ["Name", "Status", "Role", "Email address", "Teams", "Edit"];
 
   return (

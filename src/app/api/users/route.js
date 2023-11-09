@@ -7,6 +7,16 @@ export async function POST(request) {
   try {
     const requestBody = await request.json();
     await prisma.$connect();
+console.log(requestBody);
+  //   {
+  //   first_name: 'testing',
+  //   last_name: 'testi',
+  //   contact_number: '1234567890',
+  //   email: 'vk4041604@gmail.com',
+  //   password: '123',
+  //   userType: 'User',
+  //   department: '653cfaf885741601a05f2b0a'
+  // }
 
     const bcrypt = require("bcrypt");
     const saltRounds = 10;
@@ -27,7 +37,7 @@ export async function POST(request) {
         ],
       },
     });
-
+    
     if (!isAvailable) {
       const hashedPassword = await bcrypt.hash(
         requestBody.password,
@@ -35,26 +45,34 @@ export async function POST(request) {
       );
       requestBody.password = hashedPassword;
 
-      console.log(requestBody);
-
+      const userId = await getUserId(request);
       const user = await prisma.user.create({
-        data: requestBody,
+        data: {
+          ...requestBody,
+          parent : {
+            connect : {
+              id : userId
+            }
+          }
+        },
       });
 
       return NextResponse.json({
         success: true,
-        message: "You signed up successfully.",
-        data: user,
+        message: "User created successfully.",
+        data: [],
       });
     } else {
-      throw new Error("Your Email or Contact number is already exists.");
+      throw new Error("self: Your Email or Contact number is already exists.");
     }
   } catch (error) {
+    console.log(error.message);
+    const errorMessage = error.message.split(":")
     let message = null;
-    if (error.message.split(":")[0] === "self") {
-      message = error.message;
+    if (errorMessage[0] === "self") {
+      message = errorMessage[1];
     } else {
-      message = "Something went wrong.";
+      message = "Something went wrong, Please try again.";
     }
 
     return NextResponse.json({

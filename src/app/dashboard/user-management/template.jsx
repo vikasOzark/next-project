@@ -1,7 +1,7 @@
 export default function Template({ children }) {
   return (
     <>
-      <section className="container px-4 mx-auto">
+      <section className="">
         <div className="flex items-center gap-x-3">
           <h2 className="text-lg font-medium text-white dark:text-white">
             Team members

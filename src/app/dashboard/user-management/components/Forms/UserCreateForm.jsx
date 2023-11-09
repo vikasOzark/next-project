@@ -1,6 +1,6 @@
 import { SelectComponent } from "@/components/DropdownButton";
 import Link from "next/link";
-import { LoaderIcon } from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import { createUserMutation } from "./userUtils";
 import { useMutation, useQuery } from "react-query";
 import { getDepartmentData } from "@/app/dashboard/tickets/component/forms/utils";
@@ -8,21 +8,21 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Role } from "@prisma/client";
 
-export default function UserCreateUser() {
+export default function UserCreateUser({ refreshFunction }) {
   const [formError, setFormError] = useState({});
-  const [selectedTag, setSelectedTag] = useState([]);
-  const [department, setSelectedDepartment] = useState(null);
+  const [departmentMemberId, setSelectedDepartment] = useState(null);
+  const [role, setSelectedRole] = useState(null);
 
   const departmentRes = useQuery("department-data", getDepartmentData);
   const mutation = useMutation({
     mutationFn: async (event) =>
-      createUserMutation(event, selectedTag, setFormError),
+      createUserMutation(event, { role, departmentMemberId }, setFormError),
 
     onSettled: async (data) => {
       const response = await data;
       if (response) {
         if (response.data?.success) {
-          toast.success("Ticket is created.");
+          toast.success(response.data?.message);
           refreshFunction();
           setTimeout(() => {
             modalClose(false);
@@ -31,12 +31,6 @@ export default function UserCreateUser() {
           toast.error(response.data?.message);
         }
       }
-
-      setSelectedTag([]);
-      const resetTags = tags.map((item) => {
-        return { ...item, ["isSelected"]: false };
-      });
-      setTags(resetTags);
       formElement.current.reset();
     },
   });
@@ -45,7 +39,7 @@ export default function UserCreateUser() {
     <>
       {" "}
       <div className=" sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-4 !text-left">
+        <form onSubmit={mutation.mutate} className="space-y-4 !text-left">
           <div className=" grid grid-cols md:grid-cols-2 lg:grid-cols-2 gap-2">
             <div>
               <label
@@ -97,10 +91,7 @@ export default function UserCreateUser() {
 
           <div className=" grid grid-cols md:grid-cols-2 lg:grid-cols-2 gap-2">
             <div className="">
-              <label
-                htmlFor="lasr_name"
-                className="block text-sm text-gray-800 dark:text-gray-800 font-medium leading-6 "
-              >
+              <label className="block text-sm text-gray-800 dark:text-gray-800 font-medium leading-6 ">
                 Select department
               </label>
               <div className="mt-2">
@@ -139,15 +130,12 @@ export default function UserCreateUser() {
           </div>
 
           <div className="w-full">
-            <label
-              htmlFor="password"
-              className=" text-sm flex items-center gap-2 text-gray-800 dark:text-gray-800 font-medium leading-6 "
-            >
+            <label className=" text-sm flex items-center gap-2 text-gray-800 dark:text-gray-800 font-medium leading-6 ">
               Password
               {/* <ToolTip icon={<VscQuestion size={23} className="text-gray-800 dark:text-gray-800" /> } text={"data display"} /> */}
             </label>
             <SelectComponent
-              setterFunction={setSelectedDepartment}
+              setterFunction={setSelectedRole}
               subTitle={"User Role"}
               data={[
                 { name: Role.Admin, id: Role.Admin },
