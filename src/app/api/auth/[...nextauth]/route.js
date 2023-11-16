@@ -99,6 +99,7 @@ const handleAuthentication = async (credentials, req) => {
       data: userData,
     };
   } catch (error) {
+    console.log(error.message);
     return {
       success: false,
       message: "Something went wrong, Please try again.",

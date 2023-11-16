@@ -105,7 +105,7 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
                 </div>
               )}
 
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <h2 className="text-base font-semibold text-gray-800 dark:text-white">
                   Departments
                 </h2>
@@ -119,17 +119,17 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
                     title="create new department"
                   />
                 </button>
-              </div>
-              <nav className="mt-4 -mx-3 space-y-3 h-52 overflow-y-auto ">
-                <Suspense fallback={<Loading />}>{children}</Suspense>
-              </nav>
+              </div> */}
+              {/* <nav className="mt-4 -mx-3 space-y-3 h-52 overflow-y-auto "> */}
+              <Suspense fallback={<Loading />}>{children}</Suspense>
+              {/* </nav> */}
             </div>
           </div>
         </aside>
       </Disclosure>
-      <Modal open={open} setOpen={setOpen} modalTitle={"Create Department"}>
+      {/* <Modal open={open} setOpen={setOpen} modalTitle={"Create Department"}>
         <CreateDepartmentForm router={router} />
-      </Modal>
+      </Modal> */}
     </>
   );
 };

@@ -1,11 +1,9 @@
 import { SelectComponent } from "@/components/DropdownButton";
-import Link from "next/link";
 import toast, { LoaderIcon } from "react-hot-toast";
 import { createUserMutation } from "./userUtils";
 import { useMutation, useQuery } from "react-query";
 import { getDepartmentData } from "@/app/dashboard/tickets/component/forms/utils";
-import { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Role } from "@prisma/client";
 
 export default function UserCreateUser({ refreshFunction }) {

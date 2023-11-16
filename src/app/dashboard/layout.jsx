@@ -27,9 +27,9 @@ export default function LayoutPage({ children }) {
                   <div className="md:grid lg:grid md:grid-cols-12 lg:grid-cols-12 gap-4  ">
                     <div className="col-span-2">
                       <SideNavbar>
-                        <Suspense fallback={<Loading />}>
+                        {/* <Suspense fallback={<Loading />}>
                           <DepartmentSidenav />
-                        </Suspense>
+                        </Suspense> */}
                       </SideNavbar>
                     </div>
                     <div className="col-span-10 px-4 my-4 h-full">

@@ -17,11 +17,6 @@ export const TicketTableComponent = ({ responseData }) => {
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
         <div className="inline-block min-w-full  align-middle md:px-6 lg:px-8">
           <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
-            {responseData.isLoading ? (
-              <div className="flex justify-center border-0">
-                <LoadingButton title={"Loading tickets..."} />
-              </div>
-            ) : (
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 ">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
@@ -78,7 +73,6 @@ export const TicketTableComponent = ({ responseData }) => {
                   <TableBodyRow responseData={responseData} />
                 </RefreshContext.Provider>
               </table>
-            )}
           </div>
         </div>
       </div>

@@ -8,20 +8,16 @@ import React, { useState } from "react";
 import { DropdownMenuCheckboxes } from "@/components/DropdownButton";
 import UserCreateUser from "./components/Forms/UserCreateForm";
 import { useQuery } from "react-query";
+import { getUsersData } from "./components/Forms/userUtils";
 
-const UserContext = React.createContext();
+export const UsersDataContext = React.createContext();
 export default function Permissions() {
   const [userCreateModal, setUserModal] = useState(false);
-
-  const responseData = useQuery("tickets-list", async () => {
-    const response = await fetch("/api/tickets");
-    const json_response = await response.json();
-    return json_response;
-  });
+  const usersResponse = useQuery("users-list", getUsersData);
 
   return (
     <>
-      <UserContext.Provider value={responseData}>
+      <UsersDataContext.Provider value={usersResponse}>
         <section className="">
           <div className="flex flex-col mt-6">
             <div className="-mx-4 -my-2 overflow-x-auto">
@@ -57,7 +53,7 @@ export default function Permissions() {
             <UserCreateUser />
           </Modal>
         </section>
-      </UserContext.Provider>
+      </UsersDataContext.Provider>
     </>
   );
 }

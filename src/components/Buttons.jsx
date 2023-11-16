@@ -7,14 +7,14 @@ export const LoadingButton = ({ title, cssClass }) => {
         disabled
         type="button"
         className={twMerge(
-          "py-2.5 px-5 mr-2 text-sm font-bold text-gray-900 bg-white rounded-lg border border-gray-200 focus:z-10 focus:ring-2 inline-flex items-center cursor-progress caret-fuchsia-400",
+          "py-2.5 px-5 mr-2 text-sm font-bold text-gray-600 bg-white rounded-lg  focus:z-10 focus:ring-2 inline-flex items-center cursor-progress caret-fuchsia-400",
           cssClass
         )}
       >
         <svg
           aria-hidden="true"
           role="status"
-          className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
+          className="inline w-5 h-5 mr-3 text-gray-200 animate-spin dark:text-gray-600"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

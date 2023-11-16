@@ -1,3 +1,5 @@
+import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -7,16 +9,6 @@ export async function POST(request) {
   try {
     const requestBody = await request.json();
     await prisma.$connect();
-console.log(requestBody);
-  //   {
-  //   first_name: 'testing',
-  //   last_name: 'testi',
-  //   contact_number: '1234567890',
-  //   email: 'vk4041604@gmail.com',
-  //   password: '123',
-  //   userType: 'User',
-  //   department: '653cfaf885741601a05f2b0a'
-  // }
 
     const bcrypt = require("bcrypt");
     const saltRounds = 10;
@@ -37,7 +29,7 @@ console.log(requestBody);
         ],
       },
     });
-    
+
     if (!isAvailable) {
       const hashedPassword = await bcrypt.hash(
         requestBody.password,
@@ -49,11 +41,11 @@ console.log(requestBody);
       const user = await prisma.user.create({
         data: {
           ...requestBody,
-          parent : {
-            connect : {
-              id : userId
-            }
-          }
+          parent: {
+            connect: {
+              id: userId,
+            },
+          },
         },
       });
 
@@ -67,7 +59,7 @@ console.log(requestBody);
     }
   } catch (error) {
     console.log(error.message);
-    const errorMessage = error.message.split(":")
+    const errorMessage = error.message.split(":");
     let message = null;
     if (errorMessage[0] === "self") {
       message = errorMessage[1];
@@ -84,20 +76,21 @@ console.log(requestBody);
 }
 
 export async function GET(request) {
-  await prisma.$connect();
-
   try {
-    const userId = await getUserId();
+    await prisma.$connect();
+    const userId = await getUserId(request);
     const userList = await prisma.user.findMany({
-      where: {},
+      where: {
+        parentUserId: userId,
+      },
+      include: {
+        parent: true,
+      },
     });
+    console.log(userList);
+    return SuccessResponseHandler(userList);
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message:
-        error?.message || "Something went wrong, Please chck the details.",
-      data: [],
-    });
+    return ErrorResponseHandler(error);
   } finally {
     await prisma.$disconnect();
   }

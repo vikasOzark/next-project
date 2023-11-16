@@ -3,7 +3,7 @@
 import CreateTicketForm from "@/app/dashboard/tickets/component/forms/CreateTicketForm";
 import { TicketTableComponent } from "./component/components";
 import { VscAdd, VscSymbolKeyword } from "react-icons/vsc";
-import { ActionButton } from "@/components/Buttons";
+import { ActionButton, LoadingButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
 import { useState } from "react";
 import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
@@ -14,9 +14,13 @@ export default function Tickets() {
 
   const responseData = useQuery("tickets-list", async () => {
     const response = await fetch("/api/tickets");
+    console.log(response);
     const json_response = await response.json();
+    console.log(json_response);
     return json_response;
   });
+
+  console.log(responseData);
 
   return (
     <>
@@ -39,7 +43,13 @@ export default function Tickets() {
           </div>
         </div>
         <div className="mt-4 w-full ps-1">
-          <TicketTableComponent responseData={responseData} />
+          {responseData.isLoading ? (
+            <div className="flex justify-center border-0">
+              <LoadingButton title={"Loading tickets..."} />
+            </div>
+          ) : (
+            <TicketTableComponent responseData={responseData} />
+          )}
         </div>
         <Modal
           open={createModalOpen}

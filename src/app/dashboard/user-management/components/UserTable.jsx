@@ -1,22 +1,64 @@
 "use client";
 
+import { getUsersData } from "./Forms/userUtils";
+import React, { useContext, useState } from "react";
+import { LoadingButton } from "@/components/Buttons";
+import {
+  VscChromeClose,
+  VscGear,
+  VscGroupByRefType,
+  VscWarning,
+} from "react-icons/vsc";
+import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { UsersDataContext } from "../page";
+import {
+  DropdownActionMenuButton,
+  TicketStatusUpdate,
+} from "../../tickets/component/TicketTableMenu";
+import { useMutation } from "react-query";
+
 export default function UserTable() {
-  const HEADERS = ["Name", "Status", "Role", "Email address", "Teams", "Edit"];
+  const HEADERS = [
+    "First Namr",
+    "Last Name",
+    "Role",
+    "Email address",
+    "Contect number",
+    "Created by",
+    "Action",
+  ];
+  const usersResponse = useContext(UsersDataContext);
+  console.log(usersResponse);
 
   return (
     <>
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-800">
-          <tr>
-            {HEADERS.map((head, inx) => (
-              <TableHead key={`head-${inx}`} title={head} />
-            ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-          <TableDataRow />
-        </tbody>
-      </table>
+      {usersResponse.isLoading && (
+        <div className="flex justify-center border-0">
+          <LoadingButton title={"Loading users..."} />
+        </div>
+      )}
+      {usersResponse.isError && (
+        <SimpleErrorMessage
+          message={"Something went wrong, Please try again."}
+        />
+      )}
+      {usersResponse.isSuccess && (
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              {HEADERS.map((head, inx) => (
+                <TableHead key={`head-${inx}`} title={head} />
+              ))}
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+            {usersResponse.data?.success &&
+              usersResponse.data?.data?.map((user) => (
+                <TableDataRow key={user.id} user={user} />
+              ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }
@@ -29,55 +71,109 @@ const TableHead = ({ title }) => {
         className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
       >
         <div className="flex items-center gap-x-3">
-          <span>Name</span>
+          <span>{title}</span>
         </div>
       </th>
     </>
   );
 };
 
-const TableDataRow = () => {
+const TableDataRow = ({ user }) => {
+  const dateObject = new Date(user.createdAt);
+  const year = dateObject.getFullYear();
+  const month = dateObject.getMonth() + 1;
+  const day = dateObject.getDate();
+  const hours = dateObject.getHours();
+  const minutes = dateObject.getMinutes();
+  const dateAndTime = `${hours}:${minutes} | ${day}-${month}-${year}`;
+
+  const mutationAction = useMutation({
+    mutationFn: async () => {
+      toast.loading("Deleting ticket...");
+      return axios.delete(`/api/tickets/${user?.id}`);
+    },
+    onSettled: async (response) => {
+      if (response) {
+        toast.remove();
+        if (response.user?.success) {
+          contextFunction();
+          toast.success(
+            response.user?.message || "Ticket is deleted Successfully."
+          );
+        } else {
+          toast.error(
+            response.user?.message || "Something went wrong while deleting."
+          );
+        }
+      }
+    },
+  });
+
+  const mutationTagRemove = useMutation({
+    mutationFn: async (tagId) => {
+      toast.loading("Removing tag...");
+      return axios.patch(
+        `/api/tickets/${user?.id}/?operationTo=tag&tagId=${tagId}`
+      );
+    },
+    onSettled: async (response) => {
+      if (response) {
+        toast.remove();
+        if (response.user?.success) {
+          contextFunction();
+          toast.success(response.user?.message || "Tag removed Successfully.");
+        } else {
+          toast.error(
+            response.user?.message || "Something went wrong while removing tag."
+          );
+        }
+      }
+    },
+  });
+
   return (
     <>
       <tr>
         <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
           <div className="inline-flex items-center gap-x-3">
-            <input
-              type="checkbox"
-              className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
-            />
-
             <div className="flex items-center gap-x-2">
               <div>
                 <h2 className="font-medium text-gray-800 dark:text-white ">
-                  Olivia Wathan
+                  {user?.first_name}
                 </h2>
               </div>
             </div>
           </div>
         </td>
-        <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-          <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-            <h2 className="text-sm font-normal text-emerald-500">Active</h2>
+
+        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+          {user?.last_name}
+        </td>
+
+        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+          {user?.role}
+        </td>
+
+        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+          <div className=" flex gap-2 items-center">{user?.email}</div>
+        </td>
+
+        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+          <div className=" flex gap-2 items-center">{user?.contact_number}</div>
+        </td>
+
+        <td className="px-4 py-4 text-sm whitespace-nowrap">
+          <div className="flex items-center gap-x-6 justify-center">
+            {user?.parent.first_name}
           </div>
         </td>
-        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-          Lead Designer
-        </td>
-        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-          oliviawathan@example.com
-        </td>
+
         <td className="px-4 py-4 text-sm whitespace-nowrap">
-          <div className="flex items-center gap-x-2">
-            <p className="px-3 py-1 text-xs text-blue-500 rounded-full dark:bg-gray-800 bg-blue-100/60">
-              Product
-            </p>
-          </div>
-        </td>
-        <td className="px-4 py-4 text-sm whitespace-nowrap">
-          <div className="flex items-center gap-x-6">
-            <button className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+          <div className="flex items-center gap-x-6 justify-center">
+            <button
+              // onClick={() => mutationAction.mutate()}
+              className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -94,22 +190,13 @@ const TableDataRow = () => {
               </svg>
             </button>
 
-            <button className="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                />
-              </svg>
-            </button>
+            <DropdownActionMenuButton
+              // actionData={data}
+              icon={
+                <VscGear size={18} className="font-bold" fontWeight={800} />
+              }
+              styleButton="hover:bg-gray-200 bg-gray-50 text-black rounded"
+            />
           </div>
         </td>
       </tr>

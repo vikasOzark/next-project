@@ -39,8 +39,8 @@ export async function POST(request) {
       data: [createdTicket],
     });
   } catch (error) {
-     const errorMessage = error.message.split(":")
-    
+    const errorMessage = error.message.split(":");
+
     let message = null;
     if (errorMessage[0] === "self") {
       message = errorMessage[1];
@@ -74,6 +74,8 @@ export async function GET(request) {
         where: userObjectId,
       },
     });
+
+    console.log(ticketsData);
 
     return NextResponse.json(
       {
@@ -127,8 +129,8 @@ export async function PATCH(request) {
       data: [createdTicket],
     });
   } catch (error) {
-    const errorMessage = error.message.split(":")
-    
+    const errorMessage = error.message.split(":");
+
     let message = null;
     if (errorMessage[0] === "self") {
       message = errorMessage[1];
