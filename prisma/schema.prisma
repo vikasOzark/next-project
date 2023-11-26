@@ -1,3 +1,5 @@
+// suyash.d
+// netweb@123
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["multiSchema"]
@@ -73,4 +75,5 @@ model Tickets {
     departmentId String     @db.ObjectId
     userId       String     @db.ObjectId
     createdAt    DateTime   @default(now())
+    updated_at   DateTime?  @updatedAt
 }

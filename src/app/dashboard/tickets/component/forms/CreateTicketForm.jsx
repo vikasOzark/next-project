@@ -7,7 +7,7 @@ import {
 } from "react-icons/vsc";
 import { LoadingButton, SubmitButton } from "../../../../../components/Buttons";
 import { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
@@ -18,11 +18,11 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
   const [tagsIsOption, setTagsIsOption] = useState(false);
   const [formError, setFormError] = useState({});
   const [tags, setTags] = useState([]);
+  const queryClient = useQueryClient();
 
   useQuery("tags-list", getTagsList(setTags));
 
   const responseData = useQuery("departments", getDepartmentData);
-
   const [selectedTag, setSelectedTag] = useState([]);
 
   const handleSelect = (tag) => {
@@ -84,7 +84,7 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
       if (response) {
         if (response.data?.success) {
           toast.success("Ticket is created.");
-          refreshFunction();
+          // refreshFunction();
           setTimeout(() => {
             modalClose(false);
           }, 1000);
@@ -99,6 +99,10 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
       });
       setTags(resetTags);
       formElement.current.reset();
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tickets-list"] });
     },
   });
 

@@ -5,22 +5,20 @@ import { TicketTableComponent } from "./component/components";
 import { VscAdd, VscSymbolKeyword } from "react-icons/vsc";
 import { ActionButton, LoadingButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
-import { useState } from "react";
+import React, { useState } from "react";
 import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
 import { useQuery } from "react-query";
+import { useRouter } from "next/navigation";
+export const RounterContext = React.createContext();
 
 export default function Tickets() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const responseData = useQuery("tickets-list", async () => {
     const response = await fetch("/api/tickets");
-    console.log(response);
     const json_response = await response.json();
-    console.log(json_response);
     return json_response;
   });
-
-  console.log(responseData);
 
   return (
     <>

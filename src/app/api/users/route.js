@@ -87,7 +87,6 @@ export async function GET(request) {
         parent: true,
       },
     });
-    console.log(userList);
     return SuccessResponseHandler(userList);
   } catch (error) {
     return ErrorResponseHandler(error);

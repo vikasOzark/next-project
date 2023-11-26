@@ -20,7 +20,7 @@ export default function Loading() {
             fill="#1C64F2"
           />
         </svg>
-        <p className="text-lg font-bold text-white">Loading...</p>
+        <p className="text-lg font-bold text-white">New Loading state...</p>
       </div>
     </>
   );

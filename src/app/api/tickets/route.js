@@ -1,3 +1,4 @@
+import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
@@ -61,7 +62,7 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     const userObjectId = await getUserId(request);
-    prisma.$connect();
+    await prisma.$connect();
 
     const ticketsData = await prisma.tickets.findMany({
       where: {
@@ -75,11 +76,9 @@ export async function GET(request) {
       },
     });
 
-    console.log(ticketsData);
-
     return NextResponse.json(
       {
-        message: "Successfully get the department data.",
+        message: "Successfully get the tickets data.",
         success: true,
         data: ticketsData,
         ticketStatus: Status,
@@ -88,14 +87,7 @@ export async function GET(request) {
     );
   } catch (error) {
     console.log(error.message);
-    return NextResponse.json(
-      {
-        message: "Internal server error, Please try again.",
-        success: false,
-        data: [],
-      },
-      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
-    );
+    return ErrorResponseHandler(error);
   } finally {
     await prisma.$disconnect();
   }
@@ -129,6 +121,7 @@ export async function PATCH(request) {
       data: [createdTicket],
     });
   } catch (error) {
+    console.log(error.message);
     const errorMessage = error.message.split(":");
 
     let message = null;

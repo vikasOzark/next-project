@@ -1,20 +1,11 @@
 "use client";
 
-import { getUsersData } from "./Forms/userUtils";
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import { LoadingButton } from "@/components/Buttons";
-import {
-  VscChromeClose,
-  VscGear,
-  VscGroupByRefType,
-  VscWarning,
-} from "react-icons/vsc";
+import { VscGear } from "react-icons/vsc";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { UsersDataContext } from "../page";
-import {
-  DropdownActionMenuButton,
-  TicketStatusUpdate,
-} from "../../tickets/component/TicketTableMenu";
+import { DropdownActionMenuButton } from "../../tickets/component/TicketTableMenu";
 import { useMutation } from "react-query";
 
 export default function UserTable() {
@@ -28,7 +19,6 @@ export default function UserTable() {
     "Action",
   ];
   const usersResponse = useContext(UsersDataContext);
-  console.log(usersResponse);
 
   return (
     <>

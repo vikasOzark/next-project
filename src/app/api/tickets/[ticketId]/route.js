@@ -1,45 +1,65 @@
 import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
-import NextResponse from "next/server"
+import NextResponse from "next/server";
+const prisma = await new PrismaClient();
+
+export async function GET(request, context) {
+  try {
+    await prisma.$connect();
+    const { params } = context;
+
+    const userObjectId = await getUserId(request);
+    const ticket = await prisma.tickets.findFirst({
+      where: {
+        id: params.ticketId,
+      },
+
+      include: {
+        department: true,
+        tags: true,
+        where: userObjectId,
+      },
+    });
+
+    return SuccessResponseHandler(ticket, "Ticket data fetched.");
+  } catch (error) {
+    return ErrorResponseHandler(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 
 export async function POST(request, context) {
-  const { params } = context;
-  const { status } = await request.json();
-
-  const prisma = await new PrismaClient();
-  prisma.$connect();
-
-  await prisma.tickets.update({
-    where: {
-      userId: getUserId(request),
-      id: params.ticketId,
-    },
-    data: {
-      status: Status[status],
-    },
-  });
-
   try {
-    return NextResponse.json(
-      {
-        message: `Successfully task status is updated to ${status}`,
-        success: true,
-        data: [],
+    const { params } = context;
+    const { status } = await request.json();
+    await prisma.$connect();
+    const data = await prisma.tickets.update({
+      where: {
+        userId: getUserId(request),
+        id: params.ticketId,
       },
-      { status: httpStatus.HTTP_200_OK }
+      data: {
+        status: Status[status],
+      },
+    });
+
+    return SuccessResponseHandler(
+      [],
+      "Successfully task status is updated to ${status}"
     );
   } catch (error) {
-    return ErrorResponseHandler(error)
+    return ErrorResponseHandler(error);
   }
 }
 
 export async function DELETE(request, context) {
   const { params } = context;
 
-  const prisma = await new PrismaClient();
-  prisma.$connect();
+  await prisma.$connect();
 
   const userId = await getUserId(request);
   await prisma.tickets.delete({
@@ -59,7 +79,7 @@ export async function DELETE(request, context) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    return ErrorResponseHandler(error)
+    return ErrorResponseHandler(error);
   }
 }
 
@@ -90,9 +110,8 @@ export async function PATCH(request, context) {
       },
       { status: httpStatus.HTTP_200_OK }
     );
-
   } catch (error) {
-   return ErrorResponseHandler(error)
+    return ErrorResponseHandler(error);
   }
 }
 

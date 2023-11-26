@@ -1,5 +1,5 @@
 import { VscChromeClose, VscGear, VscGroupByRefType } from "react-icons/vsc";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { twMerge } from "tailwind-merge";
 import {
   DropdownActionMenuButton,
@@ -9,6 +9,8 @@ import { LoadingButton } from "@/components/Buttons";
 import React, { useContext } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Link from "next/link";
+import { urlRoutes } from "@/utils/urlRoutes";
 
 export const RefreshContext = React.createContext();
 export const TicketTableComponent = ({ responseData }) => {
@@ -17,62 +19,62 @@ export const TicketTableComponent = ({ responseData }) => {
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
         <div className="inline-block min-w-full  align-middle md:px-6 lg:px-8">
           <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 ">
-                <thead className="bg-gray-50 dark:bg-gray-800">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                    >
-                      <div className="flex items-center gap-x-3">
-                        <input
-                          type="checkbox"
-                          className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
-                        />
-                        <span>Name</span>
-                      </div>
-                    </th>
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 ">
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th
+                    scope="col"
+                    className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    <div className="flex items-center gap-x-3">
+                      <input
+                        type="checkbox"
+                        className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
+                      />
+                      <span>Name</span>
+                    </div>
+                  </th>
 
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                    >
-                      Ticket status
-                    </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    Ticket status
+                  </th>
 
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                    >
-                      Department
-                    </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    Department
+                  </th>
 
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                    >
-                      Created on
-                    </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    Created on
+                  </th>
 
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                    >
-                      Tags
-                    </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    Tags
+                  </th>
 
-                    <th
-                      scope="col"
-                      className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                    >
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <RefreshContext.Provider value={responseData.refetch}>
-                  <TableBodyRow responseData={responseData} />
-                </RefreshContext.Provider>
-              </table>
+                  <th
+                    scope="col"
+                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <RefreshContext.Provider value={responseData.refetch}>
+                <TableBodyRow responseData={responseData} />
+              </RefreshContext.Provider>
+            </table>
           </div>
         </div>
       </div>
@@ -107,7 +109,6 @@ const TableRowComponent = ({ data, ticketStatus }) => {
   const dateAndTime = `${hours}:${minutes} | ${day}-${month}-${year}`;
 
   const contextFunction = useContext(RefreshContext);
-  // const [tosterId, setTosterIs] = useState(null)
 
   const mutationAction = useMutation({
     mutationFn: async () => {
@@ -165,9 +166,12 @@ const TableRowComponent = ({ data, ticketStatus }) => {
 
             <div className="flex items-center gap-x-2">
               <div>
-                <h2 className="font-medium text-gray-800 dark:text-white ">
+                <Link
+                  href={`${urlRoutes.TICKETS}/${data.id}`}
+                  className="font-medium text-gray-800 dark:text-white "
+                >
                   {data.taskTitle}
-                </h2>
+                </Link>
               </div>
             </div>
           </div>

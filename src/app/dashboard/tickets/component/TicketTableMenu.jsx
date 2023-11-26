@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useState, useTransition } from "react";
 import { VscCheck } from "react-icons/vsc";
 import { useMutation } from "react-query";
 import { twMerge } from "tailwind-merge";
@@ -17,6 +17,8 @@ import { RefreshContext } from "./components";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
 import UpdateTicketForm from "./forms/UpdateTicketForm";
+import { RounterContext } from "../page";
+import { useRouter } from "next/navigation";
 
 export function DropdownActionMenuButton({
   styleButton,
@@ -24,8 +26,8 @@ export function DropdownActionMenuButton({
   title,
   actionData,
 }) {
-  const [updateTicketModal, setTicketUpdateModal] = useState(false)
-  
+  const [updateTicketModal, setTicketUpdateModal] = useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -45,12 +47,20 @@ export function DropdownActionMenuButton({
           <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => setTicketUpdateModal(true)}>Edit ticket</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTicketUpdateModal(true)}>
+              Edit ticket
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Modal cssClass={"min-w-fit"} className=" " open={updateTicketModal} setOpen={setTicketUpdateModal} modalTitle={"Update ticket"} >
-        <UpdateTicketForm ticketData={actionData}  />
+      <Modal
+        cssClass={"min-w-fit"}
+        className=" "
+        open={updateTicketModal}
+        setOpen={setTicketUpdateModal}
+        modalTitle={"Update ticket"}
+      >
+        <UpdateTicketForm ticketData={actionData} />
       </Modal>
     </>
   );
@@ -64,38 +74,40 @@ export function TicketStatusUpdate({
   ticketStatus,
 }) {
   const contextFunction = useContext(RefreshContext);
+  const router = useRouter();
 
   const mutationAction = useMutation({
     mutationFn: async (status) => {
+      toast.loading(
+        `${actionData.taskTitle}'s status is updating to ${status}...`
+      );
       return axios.post(`/api/tickets/${actionData.id}`, { status: status });
     },
     onSettled: async (response) => {
       if (response) {
         if (response.data.success) {
           contextFunction();
+          router.refresh();
+          toast.dismiss();
           toast.success(
             response.data?.message || "Successfully status is updated."
           );
         } else {
+          toast.dismiss();
           toast.error(
             response.data?.message || "Something went wrong while updating."
           );
         }
       }
     },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(
+        error?.request?.response.message ||
+          "Something went wrong, Please try again."
+      );
+    },
   });
-
-  const statusCss = (status) => {
-    if (ticketStatus.PENDING === status) {
-      return "bg-yellow-300";
-    } else if (ticketStatus.REJECT === status) {
-      return "bg-red-300";
-    } else if (ticketStatus.CLOSE === status) {
-      return "bg-green-300";
-    } else {
-      return "bg-blue-300";
-    }
-  };
 
   return (
     <DropdownMenu>
@@ -121,7 +133,8 @@ export function TicketStatusUpdate({
                 <DropdownMenuItem
                   key={status}
                   className={`flex items-center justify-between ${statusCss(
-                    status
+                    status,
+                    ticketStatus
                   )}`}
                 >
                   {status} {<VscCheck />}
@@ -142,3 +155,15 @@ export function TicketStatusUpdate({
     </DropdownMenu>
   );
 }
+
+const statusCss = (status, ticketStatus) => {
+  if (ticketStatus.PENDING === status) {
+    return "bg-yellow-300";
+  } else if (ticketStatus.REJECT === status) {
+    return "bg-red-300";
+  } else if (ticketStatus.CLOSE === status) {
+    return "bg-green-300";
+  } else {
+    return "bg-blue-300";
+  }
+};
