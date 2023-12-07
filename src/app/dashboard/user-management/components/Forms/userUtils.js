@@ -36,3 +36,16 @@ export const getUsersData = async () => {
   }
   throw new Error("");
 };
+
+export const getUsersDataNew = async () => {
+  const response = await axios("/api/users");
+
+  if (response.status === 500) {
+    throw new Error("");
+  }
+  const json_response = await response.json();
+  if (json_response.success) {
+    return json_response;
+  }
+  throw new Error("");
+};
