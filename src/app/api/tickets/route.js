@@ -83,7 +83,7 @@ export async function PATCH(request) {
   try {
     const createdTicket = await prisma.tickets.update({
       where: {
-        id: requestBody.ticketId,
+        id: requestBody?.ticketId,
       },
       data: {
         taskTitle: requestBody.taskTitle,

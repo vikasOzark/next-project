@@ -103,7 +103,7 @@ export default function Login() {
                     href={"/singup"}
                     className="text-white font-bold mt-2 flex items-center gap-2"
                   >
-                    {`Don't have a account, Singup here{" "}`}
+                    {`Don't have a account, Sing up here`}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

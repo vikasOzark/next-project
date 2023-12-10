@@ -14,7 +14,7 @@ export async function GET(request, context) {
     const userObjectId = await getUserId(request);
     const ticket = await prisma.tickets.findFirst({
       where: {
-        id: params.ticketId,
+        id: params?.ticketId,
       },
 
       include: {
@@ -41,7 +41,7 @@ export async function POST(request, context) {
     const data = await prisma.tickets.update({
       where: {
         userId: getUserId(request),
-        id: params.ticketId,
+        id: params?.ticketId,
       },
       data: {
         status: Status[status],
@@ -127,7 +127,7 @@ const handleTagRemove = async (request, query, params) => {
 
   await prisma.tickets.update({
     where: {
-      id: params.ticketId,
+      id: params?.ticketId,
     },
     data: {
       tags: {
