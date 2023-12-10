@@ -20,6 +20,7 @@ export async function GET(request, context) {
       include: {
         department: true,
         tags: true,
+        createdById: true,
         where: userObjectId,
       },
     });
@@ -48,8 +49,9 @@ export async function POST(request, context) {
     });
 
     return SuccessResponseHandler(
-      [],
-      "Successfully task status is updated to ${status}"
+      data,
+      "Successfully ticket status is updated.",
+      httpStatus.HTTP_202_ACCEPTED
     );
   } catch (error) {
     return ErrorResponseHandler(error);
@@ -58,25 +60,21 @@ export async function POST(request, context) {
 
 export async function DELETE(request, context) {
   const { params } = context;
-
   await prisma.$connect();
 
-  const userId = await getUserId(request);
-  await prisma.tickets.delete({
-    where: {
-      userId: userId,
-      id: params.ticketId,
-    },
-  });
-
   try {
-    return NextResponse.json(
-      {
-        message: "Successfully ticket is deleted.",
-        success: true,
-        data: [],
+    const userId = await getUserId(request);
+    await prisma.tickets.delete({
+      where: {
+        userId: userId,
+        id: params.ticketId,
       },
-      { status: httpStatus.HTTP_200_OK }
+    });
+
+    return SuccessResponseHandler(
+      [],
+      "Tickets is deleted",
+      httpStatus.HTTP_204_NO_CONTENT
     );
   } catch (error) {
     return ErrorResponseHandler(error);
@@ -93,11 +91,10 @@ export async function PATCH(request, context) {
   prisma.$connect();
 
   try {
-    switch (query.operationTo) {
-      case "tag":
+    switch (query.operationTo.toUpperCase()) {
+      case "TAG":
         await handleTagRemove(request, query, params);
         break;
-
       default:
         break;
     }

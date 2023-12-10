@@ -37,8 +37,9 @@ model User {
     parent       User?   @relation("parentUser", fields: [parentUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     parentor     User?   @relation("parentUser")
 
-    Department Department[] @relation(name: "createdBy")
-    Tickets    Tickets[]
+    Department          Department[] @relation(name: "createdBy")
+    Tickets             Tickets[]
+    ticketAssingedUsers Tickets[]    @relation(name: "assingedUser")
 }
 
 model Department {
@@ -76,4 +77,18 @@ model Tickets {
     userId       String     @db.ObjectId
     createdAt    DateTime   @default(now())
     updated_at   DateTime?  @updatedAt
+
+    assingedUser   User?   @relation(name: "assingedUser", fields: [assingedUserId], references: [id])
+    assingedUserId String? @db.ObjectId
+
+    note   Notes[]  @relation(references: [id], fields: [noteId])
+    noteId String[] @db.ObjectId
+}
+
+model Notes {
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    note      String
+    createdAt DateTime  @default(now())
+    tickets   Tickets[] @relation(fields: [ticketId], references: [id])
+    ticketId  String[]  @db.ObjectId
 }

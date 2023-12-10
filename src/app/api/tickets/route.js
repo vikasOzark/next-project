@@ -40,22 +40,7 @@ export async function POST(request) {
       data: [createdTicket],
     });
   } catch (error) {
-    const errorMessage = error.message.split(":");
-
-    let message = null;
-    if (errorMessage[0] === "self") {
-      message = errorMessage[1];
-    } else {
-      message = "Something went wrong. Please try again.";
-    }
-
-    return NextResponse.json({
-      success: false,
-      message: message,
-      data: [],
-    });
-  } finally {
-    await prisma.$disconnect();
+    return ErrorResponseHandler(error);
   }
 }
 
@@ -86,7 +71,6 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    console.log(error.message);
     return ErrorResponseHandler(error);
   } finally {
     await prisma.$disconnect();

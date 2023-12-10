@@ -1,3 +1,10 @@
+import { LoadingState } from "@/components/Buttons";
+import axios from "axios";
+import { redirect } from "next/navigation";
+import toast, { LoaderIcon } from "react-hot-toast";
+import { VscTrash } from "react-icons/vsc";
+import { twMerge } from "tailwind-merge";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,63 +15,72 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axios from "axios";
-import { useState } from "react";
 import { VscCheck } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
-import { twMerge } from "tailwind-merge";
-import toast from "react-hot-toast";
-import Modal from "@/components/Modal";
-import UpdateTicketForm from "./forms/UpdateTicketForm";
 import { useRouter } from "next/navigation";
 
-export function DropdownActionMenuButton({
-  styleButton,
-  icon,
+export const TicketDeleteButton = ({
+  ticketId,
   title,
-  actionData,
-}) {
-  const [updateTicketModal, setTicketUpdateModal] = useState(false);
+  revalidateKey,
+  className,
+  navigateTo = null,
+}) => {
+  const queryClient = useQueryClient();
+
+  const mutationAction = useMutation({
+    mutationFn: async () => {
+      toast.loading("Deleting ticket...");
+      return axios.delete(`/api/tickets/${ticketId}`);
+    },
+    onSettled: async (response) => {
+      if (response) {
+        toast.remove();
+        if (response.data.success) {
+          toast.success(
+            response.data?.message || "Ticket is deleted Successfully."
+          );
+        } else {
+          console.log("called else in settled");
+          toast.error(
+            response.data?.message || "Something went wrong while deleting."
+          );
+        }
+      }
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: [revalidateKey] });
+      toast.remove();
+    },
+    onSuccess: () => {
+      if (navigateTo) {
+        redirect(navigateTo);
+      }
+      queryClient.invalidateQueries({ queryKey: [revalidateKey] });
+    },
+  });
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            className={twMerge(
-              "px-4 flex gap-2 items-center font-bold hover-bg-gray-500",
-              styleButton
-            )}
-          >
-            {icon}
-            {title}
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => setTicketUpdateModal(true)}>
-              Edit ticket
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <Modal
-        cssClass={"min-w-fit"}
-        className=" "
-        open={updateTicketModal}
-        setOpen={setTicketUpdateModal}
-        modalTitle={"Update ticket"}
-      >
-        <UpdateTicketForm ticketData={actionData} />
-      </Modal>
+      {mutationAction.isLoading ? (
+        <LoadingState />
+      ) : (
+        <button
+          onClick={() => mutationAction.mutate()}
+          className={twMerge(
+            `text-gray-500 flex gap-2 border px-3 py-1 items-center border-gray-800 rounded-full transition-colors duration-200 text-lg dark:hover:text-red-500 hover:border-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none`,
+            className
+          )}
+        >
+          <VscTrash size={18} />
+          {title}
+        </button>
+      )}
     </>
   );
-}
+};
 
-export function TicketStatusUpdate({
+export function AssignUserAction({
   styleButton,
   icon,
   title,
@@ -72,13 +88,15 @@ export function TicketStatusUpdate({
   ticketStatus,
   revalidateKey,
 }) {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutationAction = useMutation({
     mutationFn: async (status) => {
-      toast.loading(`Ticket status is updating...`);
-      return axios.post(`/api/tickets/${actionData.id}`, { status: status });
+      toast.loading(`Assigning is in processing...`);
+      return axios.post(
+        `/api/tickets/${actionData.id}/?operationTo=user_assignment`,
+        { status: status }
+      );
     },
     onSettled: async (response) => {
       if (response) {
@@ -153,30 +171,3 @@ export function TicketStatusUpdate({
     </DropdownMenu>
   );
 }
-
-export const statusCss = (status, ticketStatus, classType = "bg") => {
-  if (classType.toUpperCase() === "BG") {
-    if (ticketStatus.PENDING === status) {
-      return "bg-yellow-300";
-    } else if (ticketStatus.REJECT === status) {
-      return "bg-red-300";
-    } else if (ticketStatus.CLOSE === status) {
-      return "bg-green-300";
-    } else {
-      return "bg-blue-300";
-    }
-  }
-
-  if (classType.toUpperCase() === "TEXT") {
-    if (ticketStatus.PENDING === status) {
-      return "text-yellow-300";
-    } else if (ticketStatus.REJECT === status) {
-      return "text-red-300";
-    } else if (ticketStatus.CLOSE === status) {
-      return "text-green-300";
-    } else {
-      return "text-blue-300";
-    }
-  }
-  return "";
-};

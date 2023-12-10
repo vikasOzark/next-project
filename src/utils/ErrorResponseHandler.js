@@ -15,6 +15,7 @@ const ErrorResponseHandler = (error) => {
       message: message,
       success: false,
       data: [],
+      error: error,
     },
     { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
   );

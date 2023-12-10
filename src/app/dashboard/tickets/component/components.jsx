@@ -1,6 +1,5 @@
 import { VscChromeClose, VscGear, VscGroupByRefType } from "react-icons/vsc";
-import { useMutation, useQueryClient } from "react-query";
-import { twMerge } from "tailwind-merge";
+import { useMutation, useQuery } from "react-query";
 import {
   DropdownActionMenuButton,
   TicketStatusUpdate,
@@ -11,9 +10,16 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { urlRoutes } from "@/utils/urlRoutes";
+import { SimpleInfoMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { TicketDeleteButton } from "../ticketActionUtils";
 
-export const RefreshContext = React.createContext();
-export const TicketTableComponent = ({ responseData }) => {
+export const TicketTableComponent = () => {
+  const responseData = useQuery("tickets-list", async () => {
+    const response = await fetch("/api/tickets");
+    const json_response = await response.json();
+    return json_response;
+  });
+
   return (
     <>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
@@ -21,60 +27,23 @@ export const TicketTableComponent = ({ responseData }) => {
           <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 ">
               <thead className="bg-gray-50 dark:bg-gray-800">
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                  >
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        type="checkbox"
-                        className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
-                      />
-                      <span>Name</span>
-                    </div>
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                  >
-                    Ticket status
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                  >
-                    Department
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                  >
-                    Created on
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                  >
-                    Tags
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                  >
-                    Action
-                  </th>
-                </tr>
+                <TableHeaderRow />
               </thead>
-              <RefreshContext.Provider value={responseData.refetch}>
-                <TableBodyRow responseData={responseData} />
-              </RefreshContext.Provider>
+              <TableBodyRow responseData={responseData} />
             </table>
+            {responseData.isLoading && (
+              <div className="flex justify-center mt-2">
+                {" "}
+                <LoadingButton title={"Loading tickets..."} />
+              </div>
+            )}
+            {responseData.data?.data.length === 0 && (
+              <>
+                <div className="mt-2">
+                  <SimpleInfoMessage message={"No tickets found."} />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -108,8 +77,6 @@ const TableRowComponent = ({ data, ticketStatus }) => {
   const minutes = dateObject.getMinutes();
   const dateAndTime = `${hours}:${minutes} | ${day}-${month}-${year}`;
 
-  const contextFunction = useContext(RefreshContext);
-
   const mutationAction = useMutation({
     mutationFn: async () => {
       toast.loading("Deleting ticket...");
@@ -119,7 +86,6 @@ const TableRowComponent = ({ data, ticketStatus }) => {
       if (response) {
         toast.remove();
         if (response.data.success) {
-          contextFunction();
           toast.success(
             response.data?.message || "Ticket is deleted Successfully."
           );
@@ -208,34 +174,25 @@ const TableRowComponent = ({ data, ticketStatus }) => {
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">
           <div className="flex items-center gap-x-6 justify-center">
-            <button
-              onClick={() => mutationAction.mutate()}
-              className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                />
-              </svg>
-            </button>
+            <TicketDeleteButton
+              key={`${data.id}-key`}
+              ticketId={data.id}
+              revalidateKey={"tickets-list"}
+              title={"Delete"}
+              className={"py-0"}
+            />
 
             <TicketStatusUpdate
+              key={data.id}
               title={"Status update"}
               icon={<VscGroupByRefType />}
               ticketStatus={ticketStatus}
               actionData={data}
+              revalidateKeyArray={"tickets-list"}
               styleButton="hover:bg-gray-200 bg-gray-50 text-gray-800"
             />
             <DropdownActionMenuButton
+              key={data.taskTitle}
               actionData={data}
               icon={
                 <VscGear size={18} className="font-bold" fontWeight={800} />
@@ -248,6 +205,61 @@ const TableRowComponent = ({ data, ticketStatus }) => {
     </>
   );
 };
+
+const TableHeaderRow = () => (
+  <>
+    {" "}
+    <tr>
+      <th
+        scope="col"
+        className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        <div className="flex items-center gap-x-3">
+          <input
+            type="checkbox"
+            className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
+          />
+          <span>Name</span>
+        </div>
+      </th>
+
+      <th
+        scope="col"
+        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        Ticket status
+      </th>
+
+      <th
+        scope="col"
+        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        Department
+      </th>
+
+      <th
+        scope="col"
+        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        Created on
+      </th>
+
+      <th
+        scope="col"
+        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        Tags
+      </th>
+
+      <th
+        scope="col"
+        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        Action
+      </th>
+    </tr>
+  </>
+);
 
 const TaskTag = () => {
   return (

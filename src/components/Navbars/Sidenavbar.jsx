@@ -71,7 +71,8 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
         <aside
           className={`md:flex lg:flex z-20 flex-col w-64 h-screen px-5 fixed ${
             menuOpen ? "" : "hidden"
-          } overflow-y-auto bg-white  dark:bg-gray-900 dark:border-gray-700`}
+          } overflow-y-auto
+            dark:bg-gray-900 dark:border-gray-700`}
         >
           <div
             onClick={() => setMenuOpen(false)}
@@ -99,7 +100,7 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
               ) : (
                 <div
                   onClick={() => handleSignout()}
-                  className="hover:bg-gray-200 cursor-pointer active:border-blue-400 border rounded font-bold text-center py-1 mb-2"
+                  className="hover:bg-gray-700 cursor-pointer text-gray-500 hover:text-gray-300 active:border-blue-400 border border-gray-600 rounded-2xl font-bold text-center py-1 mb-2"
                 >
                   Log out
                 </div>
@@ -143,8 +144,8 @@ function NavigationLink({ href, text, icon }) {
       href={href === "/home" ? "/" : href}
       passHref
       className={`${
-        isActive ? "bg-gray-100 text-gray-400 " : "text-gray-600 "
-      } flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700`}
+        isActive ? "bg-gray-600 text-white " : "text-gray-600 font-bold "
+      } flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700`}
     >
       {icon}
       {/* <XMarkIcon className="h-5 w-5 text-gray-900" aria-hidden="true" /> */}

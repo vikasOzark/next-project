@@ -14,12 +14,6 @@ export const RounterContext = React.createContext();
 export default function Tickets() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
-  const responseData = useQuery("tickets-list", async () => {
-    const response = await fetch("/api/tickets");
-    const json_response = await response.json();
-    return json_response;
-  });
-
   return (
     <>
       <main>
@@ -41,23 +35,14 @@ export default function Tickets() {
           </div>
         </div>
         <div className="mt-4 w-full ps-1">
-          {responseData.isLoading ? (
-            <div className="flex justify-center border-0">
-              <LoadingButton title={"Loading tickets..."} />
-            </div>
-          ) : (
-            <TicketTableComponent responseData={responseData} />
-          )}
+          <TicketTableComponent />
         </div>
         <Modal
           open={createModalOpen}
           setOpen={setCreateModalOpen}
           modalTitle={"Create Ticket"}
         >
-          <CreateTicketForm
-            modalClose={setCreateModalOpen}
-            refreshFunction={responseData.refetch}
-          />
+          <CreateTicketForm modalClose={setCreateModalOpen} />
         </Modal>
       </main>
     </>
