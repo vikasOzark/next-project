@@ -105,7 +105,7 @@ export async function PATCH(request) {
       data: [createdTicket],
     });
   } catch (error) {
-    console.log(error.message);
+     
     const errorMessage = error.message.split(":");
 
     let message = null;

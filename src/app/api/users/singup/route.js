@@ -68,7 +68,7 @@ export async function GET(request) {
       },
     });
 
-    console.log(users);
+     
   } catch (error) {
     return ErrorResponseHandler(error);
   } finally {

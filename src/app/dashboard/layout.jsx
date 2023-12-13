@@ -12,7 +12,6 @@ export default function LayoutPage({ children }) {
   const pathname = usePathname();
   const queryClient = new QueryClient();
   const nonNavbar = ["/singup", "/login"];
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <>

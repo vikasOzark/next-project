@@ -16,7 +16,7 @@ export const getTagsList = async (setTags) => {
     }));
     setTags(formatted);
   }
-  console.log(json_response);
+   
   return json_response;
 };
 

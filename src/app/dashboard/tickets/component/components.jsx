@@ -37,13 +37,14 @@ export const TicketTableComponent = () => {
                 <LoadingButton title={"Loading tickets..."} />
               </div>
             )}
-            {responseData.data?.data.length === 0 && (
-              <>
-                <div className="mt-2">
-                  <SimpleInfoMessage message={"No tickets found."} />
-                </div>
-              </>
-            )}
+            {responseData.data?.data &&
+              responseData.data?.data.length === 0 && (
+                <>
+                  <div className="mt-2">
+                    <SimpleInfoMessage message={"No tickets found."} />
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </div>
@@ -179,7 +180,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
               ticketId={data.id}
               revalidateKey={"tickets-list"}
               title={"Delete"}
-              className={"py-0"}
+              className={""}
             />
 
             <TicketStatusUpdate
@@ -188,16 +189,17 @@ const TableRowComponent = ({ data, ticketStatus }) => {
               icon={<VscGroupByRefType />}
               ticketStatus={ticketStatus}
               actionData={data}
-              revalidateKeyArray={"tickets-list"}
-              styleButton="hover:bg-gray-200 bg-gray-50 text-gray-800"
+              revalidateKey={"tickets-list"}
+              styleButton="hover:bg-gray-200 bg-gray-50 rounded-full text-gray-800"
             />
             <DropdownActionMenuButton
               key={data.taskTitle}
               actionData={data}
+              title={"More action"}
               icon={
                 <VscGear size={18} className="font-bold" fontWeight={800} />
               }
-              styleButton="hover:bg-gray-200 bg-gray-50 text-black rounded"
+              styleButton="hover:bg-gray-200 bg-gray-50 rounded-full text-gray-800 "
             />
           </div>
         </td>

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import httpStatus from "./httpStatus";
 
 const ErrorResponseHandler = (error) => {
+   
   const errorMessage = error.message.split(":");
   let message = null;
   if (errorMessage[0] === "self") {

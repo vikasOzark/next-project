@@ -35,11 +35,12 @@ model User {
 
     parentUserId String? @unique @db.ObjectId
     parent       User?   @relation("parentUser", fields: [parentUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    parentor     User?   @relation("parentUser")
+    parentor     User[]  @relation("parentUser")
 
     Department          Department[] @relation(name: "createdBy")
     Tickets             Tickets[]
     ticketAssingedUsers Tickets[]    @relation(name: "assingedUser")
+    Notes               Notes[]
 }
 
 model Department {
@@ -86,9 +87,13 @@ model Tickets {
 }
 
 model Notes {
-    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
     note      String
-    createdAt DateTime  @default(now())
-    tickets   Tickets[] @relation(fields: [ticketId], references: [id])
-    ticketId  String[]  @db.ObjectId
+    createdAt DateTime @default(now())
+
+    tickets  Tickets[] @relation(fields: [ticketId], references: [id])
+    ticketId String[]  @db.ObjectId
+
+    createdBy User   @relation(fields: [userId], references: [id])
+    userId    String @db.ObjectId
 }

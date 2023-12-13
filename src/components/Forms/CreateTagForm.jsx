@@ -39,7 +39,6 @@ export const CreateTagForm = ({ setTagsModalOpen }) => {
       }
     },
     onError: async (data) => {
-      console.log(data);
       toast.error("Something went wrong, Please try again.");
       return;
     },

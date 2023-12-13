@@ -9,13 +9,13 @@ import Image from "next/image";
 
 export const NavbarFooter = ({ children }) => {
   const { data, status } = useSession();
-  
+
   const navigation = [
     // { name: 'Home', href: '/', current: true },
     // { name: 'Dashoard', href: '/dashboard', current: false }
   ];
 
-  // console.log(userInfo());
+  //
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }

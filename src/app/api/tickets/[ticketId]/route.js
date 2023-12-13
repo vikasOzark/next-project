@@ -3,7 +3,7 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
-import NextResponse from "next/server";
+import { handleTagRemove, handleUserAssignment } from "./apiHelper";
 const prisma = await new PrismaClient();
 
 export async function GET(request, context) {
@@ -21,6 +21,7 @@ export async function GET(request, context) {
         department: true,
         tags: true,
         createdById: true,
+        assingedUser : true,
         where: userObjectId,
       },
     });
@@ -74,9 +75,10 @@ export async function DELETE(request, context) {
     return SuccessResponseHandler(
       [],
       "Tickets is deleted",
-      httpStatus.HTTP_204_NO_CONTENT
+      httpStatus.HTTP_202_ACCEPTED
     );
   } catch (error) {
+     
     return ErrorResponseHandler(error);
   }
 }
@@ -93,48 +95,31 @@ export async function PATCH(request, context) {
   try {
     switch (query.operationTo.toUpperCase()) {
       case "TAG":
+
         await handleTagRemove(request, query, params);
         break;
+
+      case "USER_ASSIGNMENT":
+        await handleUserAssignment(request, query, params);
+        break;
+
+      case "USER_UNASSIGN":
+        await handleUserUnassign(request, query, params);
+        break;
+        
+      case "NOTE_ADD":
+         
+        await handleUserUnassign(request, query, params);
+        break;
+
       default:
         break;
     }
 
-    return NextResponse.json(
-      {
-        message: "Successfully tag is removed.",
-        success: true,
-        data: [],
-      },
-      { status: httpStatus.HTTP_200_OK }
-    );
+    return SuccessResponseHandler([], "Person is assigned successfully.", httpStatus.HTTP_202_ACCEPTED)
   } catch (error) {
+     
     return ErrorResponseHandler(error);
   }
 }
 
-const handleTagRemove = async (request, query, params) => {
-  const userId = await getUserId(request);
-  if (!userId) {
-    throw new Error("self: Please re-login and try again.");
-  }
-
-  if (!query.tagId) {
-    throw new Error("self: Something went wrong, Please try again.");
-  }
-
-  const prisma = await new PrismaClient();
-  prisma.$connect();
-
-  await prisma.tickets.update({
-    where: {
-      id: params?.ticketId,
-    },
-    data: {
-      tags: {
-        disconnect: {
-          id: query.tagId,
-        },
-      },
-    },
-  });
-};

@@ -2,7 +2,7 @@ import { LoadingState } from "@/components/Buttons";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import toast, { LoaderIcon } from "react-hot-toast";
-import { VscTrash } from "react-icons/vsc";
+import { VscDebugStepBack, VscTrash } from "react-icons/vsc";
 import { twMerge } from "tailwind-merge";
 
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { VscCheck } from "react-icons/vsc";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
+import { getUsersData } from "../user-management/components/Forms/userUtils";
 
 export const TicketDeleteButton = ({
   ticketId,
@@ -33,46 +34,34 @@ export const TicketDeleteButton = ({
       toast.loading("Deleting ticket...");
       return axios.delete(`/api/tickets/${ticketId}`);
     },
-    onSettled: async (response) => {
-      if (response) {
-        toast.remove();
-        if (response.data.success) {
-          toast.success(
-            response.data?.message || "Ticket is deleted Successfully."
-          );
-        } else {
-          console.log("called else in settled");
-          toast.error(
-            response.data?.message || "Something went wrong while deleting."
-          );
-        }
-      }
-    },
     onError: () => {
-      queryClient.invalidateQueries({ queryKey: [revalidateKey] });
-      toast.remove();
+      toast.dismiss();
+      toast.error("Something went wrong, Please try again.");
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(revalidateKey);
+      toast.dismiss();
+      toast.success("Successfully ticket is deleted.");
+
       if (navigateTo) {
         redirect(navigateTo);
       }
-      queryClient.invalidateQueries({ queryKey: [revalidateKey] });
     },
   });
 
   return (
     <>
       {mutationAction.isLoading ? (
-        <LoadingState />
+        <LoadingState title={"Deleting..."} />
       ) : (
         <button
           onClick={() => mutationAction.mutate()}
           className={twMerge(
-            `text-gray-500 flex gap-2 border px-3 py-1 items-center border-gray-800 rounded-full transition-colors duration-200 text-lg dark:hover:text-red-500 hover:border-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none`,
+            `text-red-500 bg-red-100 py-1 flex gap-2  px-3 items-center  rounded-full transition-colors duration-200 text-lg dark:hover:text-red-500 dark:text-gray-300 hover:text-red-800 focus:outline-none`,
             className
           )}
         >
-          <VscTrash size={18} />
+          <VscTrash size={20} />
           {title}
         </button>
       )}
@@ -81,90 +70,74 @@ export const TicketDeleteButton = ({
 };
 
 export function AssignUserAction({
-  styleButton,
+  className,
   icon,
   title,
   actionData,
-  ticketStatus,
   revalidateKey,
+  isAlreadyAssigned = false,
 }) {
   const queryClient = useQueryClient();
+  const usersResponse = useQuery("users-list", getUsersData);
+  const usersData = usersResponse.data?.data || [];
 
   const mutationAction = useMutation({
-    mutationFn: async (status) => {
-      toast.loading(`Assigning is in processing...`);
-      return axios.post(
-        `/api/tickets/${actionData.id}/?operationTo=user_assignment`,
-        { status: status }
+    mutationFn: async (userId) => {
+      toast.loading("Assigning person in process...");
+      return axios.patch(
+        `/api/tickets/${actionData.id}/?operationTo=user_assignment&assignedUserId=${userId}`,
+        {}
       );
     },
-    onSettled: async (response) => {
-      if (response) {
-        if (response.data.success) {
-          router.refresh();
-          toast.dismiss();
-          toast.success(
-            response.data?.message || "Successfully status is updated."
-          );
-        } else {
-          toast.dismiss();
-          toast.error(
-            response.data?.message || "Something went wrong while updating."
-          );
-        }
-      }
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [revalidateKey] }),
-    onError: (error) => {
+    onError: async (error) => {
+      const err = await error.response.data;
       toast.dismiss();
-      toast.error(
-        error?.request?.response.message ||
-          "Something went wrong, Please try again."
-      );
+      toast.error(err.message);
+    },
+    onSuccess: (data) => {
+      toast.dismiss();
+      queryClient.invalidateQueries(revalidateKey);
+      toast.success("Successfully person assigned.");
     },
   });
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          className={twMerge(
-            "px-4 flex gap-2 items-center font-bold hover-bg-gray-500",
-            styleButton
-          )}
-        >
-          {icon}
-          {title}
-        </Button>
+        {isAlreadyAssigned ? (
+          <Button
+            className={twMerge(
+              "px-4 flex gap-2 items-center font-bold",
+              className
+            )}
+          >
+            <VscDebugStepBack size={18} />
+            Change person
+          </Button>
+        ) : (
+          <Button
+            className={twMerge(
+              "px-4 flex gap-2 items-center font-bold",
+              className
+            )}
+          >
+            {icon}
+            {title}
+          </Button>
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {Object.keys(ticketStatus).map((status) => (
-            <>
-              {status === actionData.status ? (
-                <DropdownMenuItem
-                  key={status}
-                  className={`flex items-center justify-between ${statusCss(
-                    status,
-                    ticketStatus
-                  )}`}
-                >
-                  {status} {<VscCheck />}
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onClick={() => mutationAction.mutate(status)}
-                  key={status}
-                  className={` flex items-center justify-between$`}
-                >
-                  {status}
-                </DropdownMenuItem>
-              )}
-            </>
+          {usersData.map((user) => (
+            <DropdownMenuItem
+              key={user.id}
+              onClick={() => mutationAction.mutate(user.id)}
+            >
+              {user.first_name}
+            </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>

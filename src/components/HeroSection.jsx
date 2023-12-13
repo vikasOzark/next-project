@@ -8,8 +8,8 @@ export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const data = useSession();
   // const { data: session } = data;
-  // console.log(data.data.user);
-  // console.log(session.user.token);
+  //
+  //
 
   return (
     <div className="">

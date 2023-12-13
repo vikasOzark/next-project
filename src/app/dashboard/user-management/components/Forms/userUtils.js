@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const createUserMutation = (event, data, setFormError) => {
   event.preventDefault();
-  console.log(event.target);
+   
 
   const ticketData = {
     first_name: event.target.first_name.value,
@@ -13,7 +13,7 @@ export const createUserMutation = (event, data, setFormError) => {
     password: event.target.confirm_password.value,
     ...data,
   };
-  console.log(ticketData);
+   
   // const isError = formValidator(ticketData);
   // if (isError) {
   //   setFormError(isError);
@@ -25,7 +25,7 @@ export const createUserMutation = (event, data, setFormError) => {
 
 export const getUsersData = async () => {
   const response = await fetch("/api/users");
-  console.log(response.status);
+   
 
   if (response.status === 500) {
     throw new Error("");

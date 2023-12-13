@@ -72,38 +72,22 @@ export function TicketStatusUpdate({
   ticketStatus,
   revalidateKey,
 }) {
-  const router = useRouter();
   const queryClient = useQueryClient();
-
   const mutationAction = useMutation({
     mutationFn: async (status) => {
       toast.loading(`Ticket status is updating...`);
       return axios.post(`/api/tickets/${actionData.id}`, { status: status });
     },
-    onSettled: async (response) => {
-      if (response) {
-        if (response.data.success) {
-          router.refresh();
-          toast.dismiss();
-          toast.success(
-            response.data?.message || "Successfully status is updated."
-          );
-        } else {
-          toast.dismiss();
-          toast.error(
-            response.data?.message || "Something went wrong while updating."
-          );
-        }
-      }
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [revalidateKey] }),
-    onError: (error) => {
+    onSuccess: () => {
+      queryClient.invalidateQueries(revalidateKey);
       toast.dismiss();
-      toast.error(
-        error?.request?.response.message ||
-          "Something went wrong, Please try again."
-      );
+      toast.success("Successfully status is updated.");
+    },
+    onError: async (error) => {
+      const err = await error.response.data;
+
+      toast.dismiss();
+      toast.error(err?.message || "Something went wrong, Please try again.");
     },
   });
 

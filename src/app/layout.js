@@ -10,6 +10,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-black">
         <Provider>{children}</Provider>
+        <div id="modal-portal" />
       </body>
     </html>
   );

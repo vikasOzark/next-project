@@ -23,7 +23,9 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
   const [isSignout, setSignout] = useState(false);
 
   const session = useSession();
-  const router = useRouter();
+  // const {userData} = session;
+
+  const USER_ROLE = session?.data?.user?.userData.role;
 
   useEffect(() => {
     if (session?.status === "unauthenticated") {
@@ -31,7 +33,25 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
     }
   });
 
-  const dashboardLinks = [
+  const USER_VIEW_LINKS = [
+    {
+      title: "Dashboard",
+      icon: <HomeIcon className="h-5 w-5" title="Dashboard" />,
+      route: urlRoutes.DASHBOARD,
+    },
+    {
+      title: "Tickets",
+      icon: <LifebuoyIcon className="h-5 w-5" title="create ticket" />,
+      route: urlRoutes.CREATE_TICKET,
+    },
+    {
+      title: "User Management",
+      icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+      route: urlRoutes.PERMISSIONS,
+    },
+  ];
+
+  const ADMIN_VIEW_LINKS = [
     {
       title: "Dashboard",
       icon: <HomeIcon className="h-5 w-5" title="Dashboard" />,
@@ -46,11 +66,6 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
       title: "User Management",
       icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
       route: urlRoutes.PERMISSIONS,
-    },
-    {
-      title: "Profile",
-      icon: <HomeIcon className="h-5 w-5" title="Profile" />,
-      route: urlRoutes.PROFILE,
     },
   ];
 
@@ -82,14 +97,27 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
           </div>
           <div className="flex flex-col justify-between flex-1 mt-6">
             <nav className="-mx-3 space-y-3 ">
-              {dashboardLinks.map((item) => (
-                <NavigationLink
-                  key={item.title}
-                  href={item.route}
-                  text={item.title}
-                  icon={item.icon}
-                />
-              ))}
+              {USER_ROLE === "admin"
+                ? ADMIN_VIEW_LINKS.map((item) => {
+                    return (
+                      <NavigationLink
+                        key={item.title}
+                        href={item.route}
+                        text={item.title}
+                        icon={item.icon}
+                      />
+                    );
+                  })
+                : USER_VIEW_LINKS.map((item) => {
+                    return (
+                      <NavigationLink
+                        key={item.title}
+                        href={item.route}
+                        text={item.title}
+                        icon={item.icon}
+                      />
+                    );
+                  })}
             </nav>
 
             <div className="mb-3">

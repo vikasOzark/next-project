@@ -7,7 +7,7 @@ const passwdValidator = (password, setFunction) => {
   const hasNumber = /\d/.test(password);
   const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const startsWithCapital = /^[A-Z]/.test(password);
-  console.log(hasNumber && hasSpecial && startsWithCapital);
+   
 
   if (password.length > 5) {
     if (hasNumber && hasSpecial && startsWithCapital) {

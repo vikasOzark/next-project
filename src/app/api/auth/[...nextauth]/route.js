@@ -61,8 +61,8 @@ const handler = NextAuth({
     },
     
     async session({ session, token }) {
-      console.log(token);
       session.user.id = token.userId;
+      session.user.userData = token.userData;
       return session;
     },
   },
@@ -102,7 +102,6 @@ const handleAuthentication = async (credentials, req) => {
       data: userData,
     };
   } catch (error) {
-    console.log(error.message);
     return {
       success: false,
       message: "Something went wrong, Please try again.",
