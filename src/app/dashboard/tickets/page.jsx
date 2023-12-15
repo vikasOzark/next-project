@@ -21,10 +21,12 @@ export default function Tickets() {
           <div className="flex items-center gap-2">
             <ActionButton
               onClick={() => setCreateModalOpen(true)}
-              cssClass=" hover:bg-slate-600 flex items-center gap-2"
+              cssClass=" hover:bg-slate-600 bg-gray-800 flex items-center gap-2"
             >
               <VscAdd />
-              Create Ticket
+              <span className="hidden md:block lg:block xl:block">
+                Create ticket
+              </span>
             </ActionButton>
 
             <DropdownMenuButton
@@ -40,7 +42,7 @@ export default function Tickets() {
         <Modal
           open={createModalOpen}
           setOpen={setCreateModalOpen}
-          modalTitle={"Create Ticket"}
+          modalTitle={"Create ticket"}
         >
           <CreateTicketForm modalClose={setCreateModalOpen} />
         </Modal>

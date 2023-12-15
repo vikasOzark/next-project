@@ -33,6 +33,8 @@ model User {
     password           String
     Tags               Tags[]
 
+    isDelete Boolean? @default(false)
+
     parentUserId String? @unique @db.ObjectId
     parent       User?   @relation("parentUser", fields: [parentUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     parentor     User[]  @relation("parentUser")

@@ -25,8 +25,8 @@ export const TicketTableComponent = () => {
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
         <div className="inline-block min-w-full  align-middle md:px-6 lg:px-8">
           <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 ">
-              <thead className="bg-gray-50 dark:bg-gray-800">
+            <table className="min-w-full divide-y divide-gray-400 dark:divide-gray-700 ">
+              <thead className="bg-gray-600 text-white font-bold text-lg dark:bg-gray-800">
                 <TableHeaderRow />
               </thead>
               <TableBodyRow responseData={responseData} />
@@ -55,7 +55,7 @@ export const TicketTableComponent = () => {
 const TableBodyRow = ({ responseData }) => {
   return (
     <>
-      <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+      <tbody className=" divide-y divide-gray-400 bg-gray-700  dark:divide-gray-700 dark:bg-gray-900">
         {responseData.isSuccess &&
           responseData.data.data?.map((ticket) => (
             <TableRowComponent
@@ -77,27 +77,6 @@ const TableRowComponent = ({ data, ticketStatus }) => {
   const hours = dateObject.getHours();
   const minutes = dateObject.getMinutes();
   const dateAndTime = `${hours}:${minutes} | ${day}-${month}-${year}`;
-
-  const mutationAction = useMutation({
-    mutationFn: async () => {
-      toast.loading("Deleting ticket...");
-      return axios.delete(`/api/tickets/${data.id}`);
-    },
-    onSettled: async (response) => {
-      if (response) {
-        toast.remove();
-        if (response.data.success) {
-          toast.success(
-            response.data?.message || "Ticket is deleted Successfully."
-          );
-        } else {
-          toast.error(
-            response.data?.message || "Something went wrong while deleting."
-          );
-        }
-      }
-    },
-  });
 
   const mutationTagRemove = useMutation({
     mutationFn: async (tagId) => {
@@ -123,19 +102,14 @@ const TableRowComponent = ({ data, ticketStatus }) => {
 
   return (
     <>
-      <tr>
-        <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+      <tr className="text-white">
+        <td className="px-4 py-4  font-medium  whitespace-nowrap">
           <div className="inline-flex items-center gap-x-3">
-            <input
-              type="checkbox"
-              className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
-            />
-
             <div className="flex items-center gap-x-2">
               <div>
                 <Link
                   href={`${urlRoutes.TICKETS}/${data.id}`}
-                  className="font-medium text-gray-800 dark:text-white "
+                  className="font-medium text-gray-300 dark:text-white "
                 >
                   {data.taskTitle}
                 </Link>
@@ -144,19 +118,19 @@ const TableRowComponent = ({ data, ticketStatus }) => {
           </div>
         </td>
 
-        <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+        <td className="px-12 py-4  font-medium  whitespace-nowrap">
           <TaskStatus status={data.status} TaskStatus={ticketStatus} />
         </td>
 
-        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+        <td className="px-4 py-4   dark:text-gray-300 whitespace-nowrap">
           {data.department.name}
         </td>
 
-        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+        <td className="px-4 py-4   dark:text-gray-300 whitespace-nowrap">
           {dateAndTime}
         </td>
 
-        <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+        <td className="px-4 py-4   dark:text-gray-300 whitespace-nowrap">
           <div className=" flex gap-2 items-center">
             {data?.tags?.map((tag) => (
               <p
@@ -173,14 +147,16 @@ const TableRowComponent = ({ data, ticketStatus }) => {
           </div>
         </td>
 
-        <td className="px-4 py-4 text-sm whitespace-nowrap">
+        <td className="px-4 py-4  whitespace-nowrap">
           <div className="flex items-center gap-x-6 justify-center">
             <TicketDeleteButton
               key={`${data.id}-key`}
               ticketId={data.id}
               revalidateKey={"tickets-list"}
               title={"Delete"}
-              className={""}
+              className={
+                "bg-red-500 hover:bg-red-600 text-white hover:text-white"
+              }
             />
 
             <TicketStatusUpdate
@@ -214,48 +190,48 @@ const TableHeaderRow = () => (
     <tr>
       <th
         scope="col"
-        className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        className="py-3.5 px-4  font-normal text-left rtl:text-right  dark:text-gray-400"
       >
         <div className="flex items-center gap-x-3">
-          <input
+          {/* <input
             type="checkbox"
             className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
-          />
+          /> */}
           <span>Name</span>
         </div>
       </th>
 
       <th
         scope="col"
-        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        className="px-4 py-3.5  font-normal text-left rtl:text-right  dark:text-gray-400"
       >
         Ticket status
       </th>
 
       <th
         scope="col"
-        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        className="px-4 py-3.5  font-normal text-left rtl:text-right  dark:text-gray-400"
       >
         Department
       </th>
 
       <th
         scope="col"
-        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        className="px-4 py-3.5  font-normal text-left rtl:text-right  dark:text-gray-400"
       >
         Created on
       </th>
 
       <th
         scope="col"
-        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        className="px-4 py-3.5  font-normal text-left rtl:text-right  dark:text-gray-400"
       >
         Tags
       </th>
 
       <th
         scope="col"
-        className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        className="px-4 py-3.5  font-normal text-left rtl:text-right  dark:text-gray-400"
       >
         Action
       </th>
@@ -279,7 +255,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-yellow-200 dark:bg-gray-800">
           <span className="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
-          <h2 className="text-sm text-yellow-700  font-bold">{status}</h2>
+          <h2 className=" text-yellow-700  font-bold">{status}</h2>
         </div>
       </>
     );
@@ -290,7 +266,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-green-200 dark:bg-gray-800">
           <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
-          <h2 className="text-sm text-green-700  font-bold">{status}</h2>
+          <h2 className=" text-green-700  font-bold">{status}</h2>
         </div>
       </>
     );
@@ -301,7 +277,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-blue-200 dark:bg-gray-800">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
-          <h2 className="text-sm text-blue-700  font-bold">{status}</h2>
+          <h2 className=" text-blue-700  font-bold">{status}</h2>
         </div>
       </>
     );
@@ -312,7 +288,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-red-200 dark:bg-gray-800">
           <span className="h-1.5 w-1.5 rounded-full bg-red-600"></span>
-          <h2 className="text-sm text-red-700  font-bold">{status}</h2>
+          <h2 className=" text-red-700  font-bold">{status}</h2>
         </div>
       </>
     );

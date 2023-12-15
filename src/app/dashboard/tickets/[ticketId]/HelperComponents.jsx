@@ -31,7 +31,7 @@ export const AssignedUser = ({ ticketData }) => {
 export const FloatingCard = ({ personData }) => {
   return (
     <>
-      <div className="absolute w-max hidden peer-hover:block transition-opacity mt-2 rounded-lg bg-gray-600 p-2">
+      <div className="absolute w-max duration-100 border border-gray-600 transition-all hidden peer-hover:block mt-2 rounded-lg bg-gray-800 p-2">
         <div className="border-b">
           <p className="flex text-3xl mb-1 justify-center ">
             {personData.first_name} {personData.last_name}
@@ -87,6 +87,11 @@ export const AddTicketNote = ({ ticketData }) => {
       toast.dismiss();
       toast.error("Couldn't added note !");
     },
+  });
+
+  useEffect(() => {
+    const handleClose = () => setModalOpen(false);
+    document.addEventListener("mousedown", handleClose);
   });
 
   return (

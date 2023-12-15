@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   VscAdd,
   VscCheck,
+  VscCheckAll,
+  VscEdit,
   VscExtensions,
   VscLoading,
   VscSymbolInterface,
@@ -148,6 +150,7 @@ export const Note = ({ note }) => {
 
 export const CreateNote = () => {
   const ticketData = useContext(TicketDataContext);
+  const createFormRef = useRef();
 
   const id = ticketData.params?.ticketId;
   const [modalOpen, setModalOpen] = useState(false);
@@ -173,6 +176,17 @@ export const CreateNote = () => {
     },
   });
 
+  useEffect(() => {
+    const handleClose = (event) => {
+      if (!createFormRef.current.contains(event.target)) {
+        setModalOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClose);
+
+    return () => document.removeEventListener("mousedown", handleClose);
+  });
+
   return (
     <>
       <div className="relative mb-4 flex gap-2">
@@ -185,7 +199,10 @@ export const CreateNote = () => {
           </div>
 
           {modalOpen && (
-            <div className={`mb-2 text-lg flex-1 font-bold text-white `}>
+            <div
+              ref={createFormRef}
+              className={`mb-2 text-lg flex-1 font-bold text-white `}
+            >
               <div className="text-2xl flex items-center gap-2 text-white mb-2 font-bold">
                 <VscSymbolInterface />
                 <div className="flex items-center gap-4 text-blue-900">
@@ -211,6 +228,7 @@ export const CreateNote = () => {
 
 export const CreateFirstNote = () => {
   const ticketData = useContext(TicketDataContext);
+  const createFormRef = useRef();
 
   const id = ticketData.params?.ticketId;
   const [modalOpen, setModalOpen] = useState(false);
@@ -236,24 +254,46 @@ export const CreateFirstNote = () => {
     },
   });
 
+  useEffect(() => {
+    const handleClose = (event) => {
+      if (!createFormRef.current.contains(event.target)) {
+        setModalOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClose);
+
+    return () => document.removeEventListener("mousedown", handleClose);
+  });
+
   return (
     <>
       <ActionButton
         onClick={() => setModalOpen((pre) => !pre)}
         cssClass={"bg-gray-700 rounded-full hover:bg-gray-600"}
       >
-        <VscAdd size={23} /> Add first note
+        {modalOpen ? (
+          <>
+            <VscEdit size={23} /> Add now
+          </>
+        ) : (
+          <>
+            <VscAdd size={23} /> Add first note
+          </>
+        )}
       </ActionButton>
 
       <div className="relative mb-4 mt-4 flex gap-2">
         <div className="flex w-full  gap-2">
           {modalOpen && (
             <div
+              ref={createFormRef}
               className={`mb-2 text-lg flex-1 font-bold text-white ${
                 modalOpen ? "block" : "hidden"
               } `}
             >
-              <div className={`bg-slate-800 p-2 rounded-lg`}>
+              <div
+                className={`bg-slate-800 border border-gray-600 p-2 rounded-lg`}
+              >
                 <NoteCreateForm mutate={addNoteMutation.mutate} />
               </div>
             </div>
@@ -284,25 +324,29 @@ export const NoteCreateForm = ({ mutate }) => {
   return (
     <>
       <form onSubmit={mutate}>
-        <div className=" ">
+        <div className="p-5">
           <div>
             <label
               htmlFor="note"
-              className="block text-sm text-white dark:text-white font-medium leading-6 "
+              className=" text-lg mb-4 text-white dark:text-white font-bold leading-6 "
             >
-              Write note
+              Write note here
             </label>
             <div className="mt-2">
               <textarea
                 id="note"
                 name="note"
                 type="text"
-                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="w-full rounded-md border-0 p-2 text-lg text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
-          <div className="my-2">
-            <SubmitButton title={"Add note"} cssClass={"bg-gray-300"} />
+          <div className="my-2 flex justify-end">
+            <SubmitButton
+              title={"Add note"}
+              cssClass={"bg-gray-300"}
+              icon={<VscCheckAll size={23} />}
+            />
           </div>
         </div>
       </form>

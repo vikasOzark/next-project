@@ -1,15 +1,58 @@
 import { NextResponse } from "next/server";
 import httpStatus from "./httpStatus";
 
-const ErrorResponseHandler = (error) => {
-   
+
+/**
+ * 
+ * @param {Error} error Error object
+ * @param {Map} extras pass additional such as statusCode or custom_message in dict
+ * @returns 
+ */
+const ErrorResponseHandler = (error, extras) => {
+  const { statusCode = httpStatus.HTTP_500_INTERNAL_SERVER_ERROR, custom_message = null } =
+    extras;
+
   const errorMessage = error.message.split(":");
   let message = null;
-  if (errorMessage[0] === "self") {
-    message = errorMessage[1];
+  console.log(errorMessage);
+
+  if (!custom_message) {
+    if (errorMessage[0] === "self") {
+      message = errorMessage[1];
+    } else {
+      message = "Something went wrong.";
+    }
   } else {
-    message = "Something went wrong.";
+    message = custom_message;
   }
+  
+  return NextResponse.json(
+    {
+      message: message,
+      success: false,
+      data: [],
+      error: error,
+    },
+    { status: statusCode }
+  );
+};
+
+
+/**
+ * 
+ * @param {Error} error Error object
+ * @param {Map} extras pass additional such as statusCode or custom_message in dict
+ * @returns 
+ */
+export const ErrorResponse = (config, statusCode=httpStatus.HTTP_500_INTERNAL_SERVER_ERROR) => {
+  const {
+    message = message,
+    success = false,
+    data = [],
+    error = error,
+  } = config
+
+  console.log(config);
 
   return NextResponse.json(
     {
@@ -18,7 +61,7 @@ const ErrorResponseHandler = (error) => {
       data: [],
       error: error,
     },
-    { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
+    { status: statusCode }
   );
 };
 

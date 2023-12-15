@@ -17,9 +17,10 @@ import { VscChromeClose, VscSignOut } from "react-icons/vsc";
 import { useSession, signOut } from "next-auth/react";
 import { urlRoutes } from "@/utils/urlRoutes";
 import { LoadingState } from "../Buttons";
+import { TfiAlignLeft } from "react-icons/tfi";
 
-export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
-  const [open, setOpen] = useState(false);
+export const SideNavbar = ({ children }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [isSignout, setSignout] = useState(false);
 
   const session = useSession();
@@ -82,10 +83,16 @@ export const SideNavbar = ({ children, menuOpen, setMenuOpen }) => {
 
   return (
     <>
-      <Disclosure as="nav" className="">
+      <Disclosure as="nav" className="relative">
+        <div onClick={() => setMenuOpen(true)} className="md:hidden lg:hidden">
+          <div className="absolute p-2 text-2xl">
+            <TfiAlignLeft color="white" />
+          </div>
+        </div>
+
         <aside
-          className={`md:flex lg:flex z-20 flex-col w-64 h-screen px-5 fixed ${
-            menuOpen ? "" : "hidden"
+          className={`md:flex lg:flex z-20 flex-col duration-500 transition-all bg-gray-800 w-64 h-screen px-5 fixed ${
+            menuOpen ? "left-0" : "-left-[100%] md:left-0 lg:left-0"
           } overflow-y-auto
             dark:bg-gray-900 dark:border-gray-700`}
         >
