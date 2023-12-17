@@ -49,10 +49,8 @@ export const ErrorResponse = (config, statusCode=httpStatus.HTTP_500_INTERNAL_SE
     message = message,
     success = false,
     data = [],
-    error = error,
+    error = null,
   } = config
-
-  console.log(config);
 
   return NextResponse.json(
     {

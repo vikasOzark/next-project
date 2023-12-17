@@ -8,12 +8,9 @@ import {
 } from "@/app/dashboard/tickets/ticketActionUtils";
 import axios from "axios";
 import {
-  VscAdd,
   VscChevronLeft,
   VscGroupByRefType,
-  VscPerson,
   VscPersonAdd,
-  VscPulse,
   VscServer,
 } from "react-icons/vsc";
 import { useQuery } from "react-query";
@@ -21,8 +18,7 @@ import { useRouter } from "next/navigation";
 import { urlRoutes } from "@/utils/urlRoutes";
 import { TicketStatusUpdate, statusCss } from "../component/TicketTableMenu";
 import { Status } from "prisma/prisma-client";
-import { AddTicketNote, AssignedUser } from "./HelperComponents";
-import { Button } from "@/components/ui/button";
+import { TicketHoverCard } from "./HelperComponents";
 import { NotesSection } from "./components/NotesSection";
 import React from "react";
 export const TicketDataContext = React.createContext();
@@ -166,7 +162,9 @@ const TicketDataSection = ({ ticketResponse }) => {
           <div className="">
             <h3 className="text-gray-400 text-lg">Assigned person</h3>
             <div className="flex gap-3 items-center mt-2">
-              <AssignedUser ticketData={ticketData} />
+              {/* <AssignedUser ticketData={ticketData} /> */}
+
+              <TicketHoverCard ticketData={ticketData} />
 
               <AssignUserAction
                 icon={<VscPersonAdd size={18} />}

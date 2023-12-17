@@ -6,59 +6,13 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { VscAdd, VscPerson } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
-
-export const AssignedUser = ({ ticketData }) => {
-  const personData = ticketData?.assingedUser;
-
-  return (
-    <>
-      {ticketData["assingedUser"] !== null && (
-        <div className="relative">
-          <p className=" capitalize peer flex gap-2 cursor-pointer   items-center bg-slate-700 rounded px-4 py-1">
-            <VscPerson size={28} />
-            <span>
-              {ticketData?.assingedUser?.first_name}{" "}
-              {ticketData?.assingedUser?.last_name}
-            </span>
-          </p>
-          <FloatingCard personData={personData} />
-        </div>
-      )}
-    </>
-  );
-};
-
-export const FloatingCard = ({ personData }) => {
-  return (
-    <>
-      <div className="absolute w-max duration-100 border border-gray-600 transition-all hidden peer-hover:block mt-2 rounded-lg bg-gray-800 p-2">
-        <div className="border-b">
-          <p className="flex text-3xl mb-1 justify-center ">
-            {personData.first_name} {personData.last_name}
-          </p>
-        </div>
-        <div className="grid gap-4 grid-cols-2">
-          <div className="">
-            <h3 className="text-gray-400 text-lg">Email</h3>
-            <p className=" capitalize">{personData?.email}</p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-lg">Contact number</h3>
-            <p className=" capitalize">{personData?.contact_number}</p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-lg">Role</h3>
-            <p className=" capitalize">{personData?.role}</p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-lg">Department</h3>
-            <p className=" capitalize"></p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+import { FcBusinessContact } from "react-icons/fc";
+import { SlPeople } from "react-icons/sl";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 export const AddTicketNote = ({ ticketData }) => {
   const { id } = ticketData;
@@ -141,3 +95,40 @@ export const AddTicketNote = ({ ticketData }) => {
     </>
   );
 };
+
+export function TicketHoverCard({ ticketData }) {
+  const personData = ticketData?.assingedUser;
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <Button variant="" className="gap-2 flex  capitalize">
+          <SlPeople size={20} />
+          {ticketData?.assingedUser?.first_name}{" "}
+          {ticketData?.assingedUser?.last_name}
+        </Button>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-80 bg-gray-900 text-white border-gray-700 rounded-lg">
+        <div className="flex space-x-4">
+          <FcBusinessContact size={65} />
+          <div className="space-y-1">
+            <h4 className="text-lg capitalize font-semibold">
+              {ticketData?.assingedUser?.first_name}{" "}
+              {ticketData?.assingedUser?.last_name}
+            </h4>
+
+            <p className="text-sm capitalize text-gray-500">
+              {personData?.email}
+            </p>
+            <p className="text-sm capitalize text-gray-500">
+              {personData?.contact_number}
+            </p>
+            <p className="text-sm capitalize text-gray-500">
+              {personData?.role}
+            </p>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+}

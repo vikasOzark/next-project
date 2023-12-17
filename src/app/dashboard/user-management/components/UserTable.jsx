@@ -1,13 +1,12 @@
 "use client";
 
 import { useContext } from "react";
-import { ActionButton, LoadingButton } from "@/components/Buttons";
 import { VscGear, VscTrash } from "react-icons/vsc";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { UsersDataContext } from "../page";
-import { DropdownActionMenuButton } from "../../tickets/component/TicketTableMenu";
-import { useMutation } from "react-query";
-import { DeleteUser } from "./userUtils/DeleteUser";
+import { ToggleDisableUser } from "./userUtils/DeleteUser";
+import { UpdateUserRole } from "./UpdateUserRole";
+import { LoadingButton } from "@/components/Buttons";
 
 export default function UserTable() {
   const HEADERS = [
@@ -17,6 +16,7 @@ export default function UserTable() {
     "Email address",
     "Contact number",
     "Created by",
+    "User state",
     "Action",
   ];
   const usersResponse = useContext(UsersDataContext);
@@ -35,15 +35,15 @@ export default function UserTable() {
       )}
       {usersResponse.isSuccess && (
         <>
-          <table className="min-w-full divide-y divide-gray-400 dark:divide-gray-700">
-            <thead className="bg-gray-700  dark:bg-gray-800">
+          <table className="min-w-full divide-y divide-gray-500 dark:divide-gray-700">
+            <thead className="bg-gray-900  dark:bg-gray-800">
               <tr>
                 {HEADERS.map((head, inx) => (
                   <TableHead key={`head-${inx}`} title={head} />
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-gray-600 divide-y divide-gray-400 dark:divide-gray-700 dark:bg-gray-900">
+            <tbody className="bg-gray-700 divide-y divide-gray-500 dark:divide-gray-700 dark:bg-gray-900">
               {usersResponse.data?.success &&
                 usersResponse.data?.data?.map((user) => (
                   <TableDataRow key={user.id} user={user} />
@@ -82,7 +82,7 @@ const TableDataRow = ({ user }) => {
 
   return (
     <>
-      <tr className="text-white">
+      <tr className={`text-white ${user.isDisabled && "bg-gray-800"} `}>
         <td className="px-4 py-4 text-sm font-medium  whitespace-nowrap">
           <div className="inline-flex items-center gap-x-3">
             <div className="flex items-center gap-x-2">
@@ -118,14 +118,29 @@ const TableDataRow = ({ user }) => {
         </td>
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">
+          <div
+            className={`flex items-center gap-x-6 rounded-full py-1 font-bold  justify-center ${
+              user.isDisabled
+                ? "bg-gray-400 text-gray-800"
+                : "bg-green-400 text-green-800"
+            }`}
+          >
+            {user.isDisabled ? "Disabled" : "Active"}
+          </div>
+        </td>
+
+        <td className="px-4 py-4 text-sm whitespace-nowrap">
           <div className="flex items-center gap-x-6 justify-center">
-            <DeleteUser userId={user.id} />
-            {/* <DropdownActionMenuButton
+            <ToggleDisableUser user={user} />
+
+            <UpdateUserRole
+              title={"Update role"}
+              userData={user}
               icon={
                 <VscGear size={18} className="font-bold" fontWeight={800} />
               }
-              styleButton="hover:bg-gray-200 bg-gray-50 text-black rounded"
-            /> */}
+              styleButton="rounded-full"
+            />
           </div>
         </td>
       </tr>

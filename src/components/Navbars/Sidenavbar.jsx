@@ -91,7 +91,7 @@ export const SideNavbar = ({ children }) => {
         </div>
 
         <aside
-          className={`md:flex lg:flex z-20 flex-col duration-500 transition-all bg-gray-800 w-64 h-screen px-5 fixed ${
+          className={`md:flex lg:flex z-20 flex-col duration-500 transition-all bg-black border-r border-gray-700 w-64 h-screen px-5 fixed ${
             menuOpen ? "left-0" : "-left-[100%] md:left-0 lg:left-0"
           } overflow-y-auto
             dark:bg-gray-900 dark:border-gray-700`}

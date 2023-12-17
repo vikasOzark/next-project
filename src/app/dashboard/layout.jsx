@@ -1,12 +1,8 @@
 "use client";
-import { NavbarFooter } from "@/components/Navbars/Navbar";
-import { DepartmentSidenav } from "@/components/SSRComponent/DepartmentSidenav";
 import { SideNavbar } from "@/components/Navbars/Sidenavbar";
 import { usePathname } from "next/navigation";
-import { Suspense, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Loading from "@/app/dashboard/loading";
 
 export default function LayoutPage({ children }) {
   const pathname = usePathname();
@@ -17,7 +13,7 @@ export default function LayoutPage({ children }) {
     <>
       <QueryClientProvider client={queryClient}>
         <html lang="en">
-          <body className="bg-gray-900">
+          <body className="bg-black">
             <div className="">
               {nonNavbar.includes(pathname) ? (
                 <>{children}</>
