@@ -73,6 +73,22 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .globle-bg {
+    @apply bg-[#28292a]
+  }
+
+  .soft-bg {
+    @apply bg-[#34363a]
+  }
+
+  .softer-bg {
+    @apply bg-[#434447]
+  }
+
+  .globle-btn {
+    @apply bg-[#004a77]
+  }
 }
 
 .tooltip {

@@ -8,7 +8,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-black">
+      <body className="globle-bg">
         <Provider>{children}</Provider>
         <div id="modal-portal" />
       </body>

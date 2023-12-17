@@ -129,14 +129,14 @@ export default function UserCreateUser({ refreshFunction }) {
 
           <div className="w-full">
             <label className=" text-sm flex items-center gap-2 text-gray-800 dark:text-gray-800 font-medium leading-6 ">
-              Password
+              Select role
               {/* <ToolTip icon={<VscQuestion size={23} className="text-gray-800 dark:text-gray-800" /> } text={"data display"} /> */}
             </label>
             <SelectComponent
               setterFunction={setSelectedRole}
               subTitle={"User Role"}
               data={[
-                { name: Role.Admin, id: Role.Admin },
+                // { name: Role.Admin, id: Role.Admin },
                 { name: Role.User, id: Role.User },
               ]}
             />

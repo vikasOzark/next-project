@@ -56,9 +56,9 @@ export function DropdownMenuCheckboxes({ title, subTitle, data }) {
   );
 }
 
-export function SelectComponent({setterFunction, subTitle, data }) {
+export function SelectComponent({ setterFunction, subTitle, data }) {
   return (
-    <Select  onValueChange={setterFunction} >
+    <Select onValueChange={setterFunction}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder={`Select ${subTitle.toLowerCase()}`} />
       </SelectTrigger>
@@ -66,7 +66,9 @@ export function SelectComponent({setterFunction, subTitle, data }) {
         <SelectGroup>
           <SelectLabel>{subTitle}</SelectLabel>
           {data?.map((item) => (
-            <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
+            <SelectItem key={item.id} value={item.id}>
+              {item.name}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>

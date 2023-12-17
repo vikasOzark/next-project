@@ -13,7 +13,7 @@ export default function LayoutPage({ children }) {
     <>
       <QueryClientProvider client={queryClient}>
         <html lang="en">
-          <body className="bg-black">
+          <body className="globle-bg">
             <div className="">
               {nonNavbar.includes(pathname) ? (
                 <>{children}</>

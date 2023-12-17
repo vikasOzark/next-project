@@ -158,7 +158,7 @@ export default function UpdateTicketForm({ ticketData }) {
         <div>
           <label
             htmlFor="department"
-            className="block text-sm text-black dark:text-black font-medium leading-6 "
+            className="block text-sm text-black   font-medium leading-6 "
           >
             Department
           </label>
@@ -197,7 +197,7 @@ export default function UpdateTicketForm({ ticketData }) {
       <div>
         <label
           htmlFor="department"
-          className="block text-sm mt-2 text-black dark:text-black font-medium leading-6 "
+          className="block text-sm mt-2 text-black   font-medium leading-6 "
         >
           Add Tags
         </label>
@@ -266,7 +266,7 @@ export default function UpdateTicketForm({ ticketData }) {
       <div>
         <label
           htmlFor="ticketDetil"
-          className="block mt-2 text-sm w-full text-black dark:text-black font-medium leading-6 "
+          className="block mt-2 text-sm w-full text-black   font-medium leading-6 "
         >
           Ticket Detail
         </label>

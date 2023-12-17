@@ -6,7 +6,7 @@ export const TableRow = () => {
           <div className="inline-flex items-center gap-x-3">
             <input
               type="checkbox"
-              className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
+              className="text-blue-500 border-gray-300 rounded   dark:ring-offset-gray-900 dark:border-gray-700"
             />
 
             <div className="flex items-center gap-x-2">
@@ -27,7 +27,7 @@ export const TableRow = () => {
           </div>
         </td>
         <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-          <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+          <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60  ">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
 
             <h2 className="text-sm font-normal text-emerald-500">Active</h2>
@@ -41,13 +41,13 @@ export const TableRow = () => {
         </td>
         <td className="px-4 py-4 text-sm whitespace-nowrap">
           <div className="flex items-center gap-x-2">
-            <p className="px-3 py-1 text-xs text-indigo-500 rounded-full dark:bg-gray-800 bg-indigo-100/60">
+            <p className="px-3 py-1 text-xs text-indigo-500 rounded-full   bg-indigo-100/60">
               Design
             </p>
-            <p className="px-3 py-1 text-xs text-blue-500 rounded-full dark:bg-gray-800 bg-blue-100/60">
+            <p className="px-3 py-1 text-xs text-blue-500 rounded-full   bg-blue-100/60">
               Product
             </p>
-            <p className="px-3 py-1 text-xs text-pink-500 rounded-full dark:bg-gray-800 bg-pink-100/60">
+            <p className="px-3 py-1 text-xs text-pink-500 rounded-full   bg-pink-100/60">
               Marketing
             </p>
           </div>

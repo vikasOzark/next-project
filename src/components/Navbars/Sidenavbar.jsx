@@ -91,10 +91,10 @@ export const SideNavbar = ({ children }) => {
         </div>
 
         <aside
-          className={`md:flex lg:flex z-20 flex-col duration-500 transition-all bg-black border-r border-gray-700 w-64 h-screen px-5 fixed ${
+          className={`md:flex lg:flex z-20 flex-col duration-500 transition-all globle-bg border-r border-gray-700 w-64 h-screen px-5 fixed ${
             menuOpen ? "left-0" : "-left-[100%] md:left-0 lg:left-0"
           } overflow-y-auto
-            dark:bg-gray-900 dark:border-gray-700`}
+              dark:border-gray-700`}
         >
           <div
             onClick={() => setMenuOpen(false)}
@@ -179,8 +179,8 @@ function NavigationLink({ href, text, icon }) {
       href={href === "/home" ? "/" : href}
       passHref
       className={`${
-        isActive ? "bg-gray-600 text-white " : "text-gray-600 font-bold "
-      } flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700`}
+        isActive ? "bg-gray-600 text-white " : "text-gray-400 font-bold "
+      } flex items-center px-3 py-2 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-800 dark:hover:text-gray-200 `}
     >
       {icon}
       {/* <XMarkIcon className="h-5 w-5 text-gray-900" aria-hidden="true" /> */}

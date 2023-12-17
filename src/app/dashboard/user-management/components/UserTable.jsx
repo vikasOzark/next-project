@@ -36,14 +36,14 @@ export default function UserTable() {
       {usersResponse.isSuccess && (
         <>
           <table className="min-w-full divide-y divide-gray-500 dark:divide-gray-700">
-            <thead className="bg-gray-900  dark:bg-gray-800">
+            <thead className="soft-bg">
               <tr>
                 {HEADERS.map((head, inx) => (
                   <TableHead key={`head-${inx}`} title={head} />
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-gray-700 divide-y divide-gray-500 dark:divide-gray-700 dark:bg-gray-900">
+            <tbody className="softer-bg divide-y divide-gray-500 dark:divide-gray-700  ">
               {usersResponse.data?.success &&
                 usersResponse.data?.data?.map((user) => (
                   <TableDataRow key={user.id} user={user} />
@@ -82,7 +82,7 @@ const TableDataRow = ({ user }) => {
 
   return (
     <>
-      <tr className={`text-white ${user.isDisabled && "bg-gray-800"} `}>
+      <tr className={`text-white ${user.isDisabled && "bg-gray-500"} `}>
         <td className="px-4 py-4 text-sm font-medium  whitespace-nowrap">
           <div className="inline-flex items-center gap-x-3">
             <div className="flex items-center gap-x-2">

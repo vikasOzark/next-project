@@ -23,10 +23,10 @@ export const TicketTableComponent = () => {
   return (
     <>
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
-        <div className="inline-block min-w-full  align-middle md:px-6 lg:px-8">
-          <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
+        <div className="inline-block min-w-full p-2  align-middle md:px-6 lg:px-8">
+          <div className="overflow-hidden shadow-xl dark:border-gray-700 md:rounded-lg">
             <table className="min-w-full divide-y divide-gray-400 dark:divide-gray-700 ">
-              <thead className="bg-gray-600 text-white font-bold text-lg dark:bg-gray-800">
+              <thead className="soft-bg text-white font-bold text-lg  ">
                 <TableHeaderRow />
               </thead>
               <TableBodyRow responseData={responseData} />
@@ -55,7 +55,7 @@ export const TicketTableComponent = () => {
 const TableBodyRow = ({ responseData }) => {
   return (
     <>
-      <tbody className=" divide-y divide-gray-400 bg-gray-700  dark:divide-gray-700 dark:bg-gray-900">
+      <tbody className=" divide-y divide-gray-400 softer-bg dark:divide-gray-700  ">
         {responseData.isSuccess &&
           responseData.data.data?.map((ticket) => (
             <TableRowComponent
@@ -195,7 +195,7 @@ const TableHeaderRow = () => (
         <div className="flex items-center gap-x-3">
           {/* <input
             type="checkbox"
-            className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
+            className="text-blue-500 border-gray-300 rounded   dark:ring-offset-gray-900 dark:border-gray-700"
           /> */}
           <span>Name</span>
         </div>
@@ -242,7 +242,7 @@ const TableHeaderRow = () => (
 const TaskTag = () => {
   return (
     <>
-      <p className="px-3 py-1 text-xs text-pink-500 rounded-full dark:bg-gray-800 bg-pink-100/60">
+      <p className="px-3 py-1 text-xs text-pink-500 rounded-full   bg-pink-100/60">
         Marketing
       </p>
     </>
@@ -253,7 +253,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.PENDING === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-yellow-200 dark:bg-gray-800">
+        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-yellow-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
           <h2 className=" text-yellow-700  font-bold">{status}</h2>
         </div>
@@ -264,7 +264,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.CLOSE === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-green-200 dark:bg-gray-800">
+        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-green-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
           <h2 className=" text-green-700  font-bold">{status}</h2>
         </div>
@@ -275,7 +275,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.HOLD === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-blue-200 dark:bg-gray-800">
+        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-blue-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
           <h2 className=" text-blue-700  font-bold">{status}</h2>
         </div>
@@ -286,7 +286,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.REJECT === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-red-200 dark:bg-gray-800">
+        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-red-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-red-600"></span>
           <h2 className=" text-red-700  font-bold">{status}</h2>
         </div>

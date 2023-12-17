@@ -46,12 +46,6 @@ export default function Permissions() {
                         <VscAdd />
                         Create User
                       </ActionButton>
-
-                      <DropdownMenuButton
-                        title={"Actions"}
-                        icon={<VscSymbolKeyword />}
-                        styleButton="hover:bg-slate-600"
-                      />
                     </div>
                   </div>
                 </div>

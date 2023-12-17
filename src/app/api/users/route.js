@@ -3,7 +3,6 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { test } from "../../../../backend/env/lib/python3.11/site-packages/django/contrib/admin/static/admin/js/vendor/xregexp/xregexp";
 const prisma = new PrismaClient();
 
 export async function POST(request) {
@@ -59,7 +58,6 @@ export async function POST(request) {
       throw new Error("self: Your Email or Contact number is already exists.");
     }
   } catch (error) {
-     
     const errorMessage = error.message.split(":");
     let message = null;
     if (errorMessage[0] === "self") {
@@ -88,7 +86,7 @@ export async function GET(request) {
         parent: true,
       },
     });
-     
+
     return SuccessResponseHandler(userList);
   } catch (error) {
     return ErrorResponseHandler(error);

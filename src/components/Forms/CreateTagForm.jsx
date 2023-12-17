@@ -69,7 +69,7 @@ export const CreateTagForm = ({ setTagsModalOpen }) => {
         <div>
           <label
             htmlFor="ticketDetil"
-            className="block mt-2 text-sm w-full text-black dark:text-black font-medium leading-6 "
+            className="block mt-2 text-sm w-full text-black   font-medium leading-6 "
           >
             Tag Color
           </label>

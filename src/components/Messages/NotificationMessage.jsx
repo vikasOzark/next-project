@@ -1,7 +1,7 @@
 export const ErrorMessage = ({ message }) => {
   return (
     <>
-      <div className="flex w-full h-[3rem] max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <div className="flex w-full h-[3rem] max-w-sm overflow-hidden bg-white rounded-lg shadow-md  ">
         <div className="flex items-center justify-center w-12 bg-red-500">
           <svg
             className="w-6 h-6 text-white fill-current"
@@ -30,7 +30,7 @@ export const ErrorMessage = ({ message }) => {
 export const InfoMessage = ({ message }) => {
   return (
     <>
-      <div className="flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <div className="flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md  ">
         <div className="flex items-center justify-center w-12 bg-red-500">
           <svg
             className="w-6 h-6 text-white fill-current"
@@ -59,7 +59,7 @@ export const InfoMessage = ({ message }) => {
 export const SuccessMessage = ({ message }) => {
   return (
     <>
-      <div className="flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <div className="flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md  ">
         <div className="flex items-center justify-center w-12 bg-red-500">
           <svg
             className="w-6 h-6 text-white fill-current"

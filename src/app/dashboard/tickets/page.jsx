@@ -17,11 +17,11 @@ export default function Tickets() {
   return (
     <>
       <main>
-        <div className="flex justify-end mb-2">
+        <div className="flex justify-end mb-1">
           <div className="flex items-center gap-2">
             <ActionButton
               onClick={() => setCreateModalOpen(true)}
-              cssClass=" hover:bg-slate-600 bg-gray-800 flex items-center gap-2"
+              cssClass=" hover:bg-slate-600 transition-all flex items-center gap-2"
             >
               <VscAdd />
               <span className="hidden md:block lg:block xl:block">
@@ -32,11 +32,11 @@ export default function Tickets() {
             <DropdownMenuButton
               title={"Actions"}
               icon={<VscSymbolKeyword />}
-              styleButton="hover:bg-slate-600"
+              styleButton="hover:bg-slate-600 bg-transparent"
             />
           </div>
         </div>
-        <div className="mt-4 w-full ps-1">
+        <div className="mt-2 w-full ps-1">
           <TicketTableComponent />
         </div>
         <Modal

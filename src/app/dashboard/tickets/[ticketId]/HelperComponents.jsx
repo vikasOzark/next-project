@@ -108,7 +108,7 @@ export function TicketHoverCard({ ticketData }) {
           {ticketData?.assingedUser?.last_name}
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent className="w-80 bg-gray-900 text-white border-gray-700 rounded-lg">
+      <HoverCardContent className="w-80 bg-[#434447] text-white shadow-xl border-0 rounded-lg">
         <div className="flex space-x-4">
           <FcBusinessContact size={65} />
           <div className="space-y-1">
@@ -117,13 +117,13 @@ export function TicketHoverCard({ ticketData }) {
               {ticketData?.assingedUser?.last_name}
             </h4>
 
-            <p className="text-sm capitalize text-gray-500">
+            <p className="text-sm capitalize text-gray-200">
               {personData?.email}
             </p>
-            <p className="text-sm capitalize text-gray-500">
+            <p className="text-sm capitalize text-gray-200">
               {personData?.contact_number}
             </p>
-            <p className="text-sm capitalize text-gray-500">
+            <p className="text-sm capitalize text-gray-200">
               {personData?.role}
             </p>
           </div>
