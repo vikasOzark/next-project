@@ -50,6 +50,11 @@ export const SideNavbar = ({ children }) => {
       icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
       route: urlRoutes.PERMISSIONS,
     },
+    {
+      title: "Advance Settings",
+      icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+      route: urlRoutes.ADVANCE_SETTINGS,
+    },
   ];
 
   const ADMIN_VIEW_LINKS = [
@@ -67,6 +72,11 @@ export const SideNavbar = ({ children }) => {
       title: "User Management",
       icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
       route: urlRoutes.PERMISSIONS,
+    },
+    {
+      title: "Advance Settings",
+      icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+      route: urlRoutes.ADVANCE_SETTINGS,
     },
   ];
 

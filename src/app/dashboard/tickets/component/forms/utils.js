@@ -3,7 +3,9 @@
  * Tag list in tags state
  * @param { Function } setTags accepts the function of useState's set function
  */
-export const getTagsList = async (setTags) => {
+export const getTagsList = async (config) => {
+  const {setTags=null} = config
+  
   const response = await fetch("/api/tags");
   const json_response = await response.json();
 
@@ -14,7 +16,10 @@ export const getTagsList = async (setTags) => {
       color: item.color,
       isSelected: false,
     }));
-    setTags(formatted);
+
+    if (setTags) {
+      setTags(formatted);
+    }
   }
    
   return json_response;

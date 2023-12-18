@@ -9,7 +9,7 @@ export const SimpleErrorMessage = ({ message, className }) => (
     )}
   >
     {" "}
-    <VscWarning /> {message}.
+    <VscWarning /> {message}
   </p>
 );
 
@@ -21,7 +21,7 @@ export const SimpleSuccessMessage = ({ message, className }) => (
     )}
   >
     {" "}
-    <VscPass /> {message}.
+    <VscPass /> {message}
   </p>
 );
 
@@ -33,6 +33,6 @@ export const SimpleInfoMessage = ({ message, className }) => (
     )}
   >
     {" "}
-    <VscInfo /> {message}.
+    <VscInfo /> {message}
   </p>
 );

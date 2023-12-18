@@ -6,15 +6,25 @@ import { LoadingButton, SubmitButton } from "../Buttons";
 import { VscOrganization } from "react-icons/vsc";
 import toast from "react-hot-toast";
 
-export const CreateDepartmentForm = ({ router }) => {
-  const departmentMutation = useMutation(async (jsonBody) => {
-    const response = await fetch("/api/departments", {
-      method: "POST",
-      headers: {},
-      body: JSON.stringify(jsonBody),
-    });
-    return await response.json();
-  });
+export const CreateDepartmentForm = () => {
+  const departmentMutation = useMutation(
+    async (jsonBody) => {
+      const response = await fetch("/api/departments", {
+        method: "POST",
+        headers: {},
+        body: JSON.stringify(jsonBody),
+      });
+      return await response.json();
+    },
+    {
+      onSuccess: (data) => {
+        toast.success(data?.message);
+      },
+      onError: (error) => {
+        toast.error(data?.message);
+      },
+    }
+  );
 
   /**
    * This function is used to submit the create department form.
@@ -28,21 +38,11 @@ export const CreateDepartmentForm = ({ router }) => {
     const payload = {
       department: formValues.department.value,
       description: formValues.description.value,
+      password: formValues.password.value,
       user: 1,
     };
     departmentMutation.mutate(payload);
   };
-
-  useEffect(() => {
-    if (departmentMutation.isSuccess) {
-      if (departmentMutation.data.success) {
-        toast.success(departmentMutation.data?.message);
-      } else {
-        toast.error(departmentMutation.data?.message);
-      }
-    }
-    router.refresh();
-  }, [departmentMutation.isLoading]);
 
   return (
     <>
@@ -60,8 +60,10 @@ export const CreateDepartmentForm = ({ router }) => {
                 type="text"
                 name="department"
                 id="department"
-                className={twMerge("input_css")}
-                placeholder="ex. Accounts"
+                className={twMerge(
+                  "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                )}
+                placeholder="Department name"
               />
               {departmentMutation.isSuccess &&
                 !departmentMutation.data.success && (
@@ -83,9 +85,40 @@ export const CreateDepartmentForm = ({ router }) => {
               <textarea
                 name="description"
                 id="desprition"
-                className={twMerge("input_css")}
+                className={twMerge(
+                  "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                )}
                 placeholder="ex. something..."
               />
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-900"
+            >
+              Admin password
+            </label>
+            <small>
+              Please provide admin password to authorize the authenticity.
+            </small>
+            <div className="mt-2 rounded-md shadow-sm">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                className={twMerge(
+                  "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                )}
+                placeholder="*******"
+              />
+              {departmentMutation.isSuccess &&
+                !departmentMutation.data.success && (
+                  <small className="text-red-500 font-bold">
+                    {departmentMutation.data?.data.department}
+                  </small>
+                )}
             </div>
           </div>
         </div>
@@ -94,7 +127,7 @@ export const CreateDepartmentForm = ({ router }) => {
           {!departmentMutation.isLoading && (
             <SubmitButton
               title={"Create department"}
-              cssClass={"text-white"}
+              cssClass={"text-black hover:bg-gray-300 transition-all"}
               icon={<VscOrganization />}
             />
           )}

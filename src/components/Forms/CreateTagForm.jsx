@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
 import { VscAdd } from "react-icons/vsc";
 import { LoadingButton, SubmitButton } from "../Buttons";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 export const CreateTagForm = ({ setTagsModalOpen }) => {
+  const queryClient = useQueryClient();
   const [tagColor, setTagColor] = useState(null);
   const formElement = useRef();
 
@@ -42,6 +43,7 @@ export const CreateTagForm = ({ setTagsModalOpen }) => {
       toast.error("Something went wrong, Please try again.");
       return;
     },
+    onSuccess: () => queryClient.invalidateQueries("tags-list"),
   });
 
   return (
@@ -102,6 +104,18 @@ export const CreateTagForm = ({ setTagsModalOpen }) => {
               onClick={() => handleColor("bg-slate-400")}
               className={`bg-slate-400 h-5 rounded cursor-pointer hover:bg-slate-500 ${
                 tagColor === "bg-slate-400" ? " border-2 border-black" : ""
+              }`}
+            ></div>
+            <div
+              onClick={() => handleColor("bg-green-400")}
+              className={`bg-green-400 h-5 rounded cursor-pointer hover:bg-green-500 ${
+                tagColor === "bg-green-400" ? " border-2 border-black" : ""
+              }`}
+            ></div>
+            <div
+              onClick={() => handleColor("bg-violet-400")}
+              className={` bg-violet-600 h-5 rounded cursor-pointer hover:bg-violet-700 ${
+                tagColor === "bg-violet-600" ? " border-2 border-black" : ""
               }`}
             ></div>
           </div>

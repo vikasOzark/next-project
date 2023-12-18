@@ -181,8 +181,6 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
 }
 
 const TagsOptions = ({ setTags, setSelectedTag, selectedTag, tags }) => {
-  console.count("tags mounted .. ");
-
   useQuery("tags-list", () => getTagsList(setTags), {
     cacheTime: 0,
     staleTime: 0,

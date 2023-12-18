@@ -6,4 +6,6 @@ export const urlRoutes = {
   PERMISSIONS: dashboard_prifix + "/user-management",
   PROFILE: dashboard_prifix + "/profile",
   TICKETS: dashboard_prifix + "/tickets",
+  ADVANCE_SETTINGS: dashboard_prifix + "/advance-settings",
+
 };

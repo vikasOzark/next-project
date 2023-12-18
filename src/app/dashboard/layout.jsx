@@ -27,9 +27,9 @@ export default function LayoutPage({ children }) {
                         </Suspense> */}
                       </SideNavbar>
                     </div>
-                    <div className="col-span-10 px-4 my-4 h-full">
+                    <div className="col-span-10 my-4 h-full">
                       <Toaster position="top-right" reverseOrder={false} />
-                      {children}
+                      <div className="container">{children}</div>
                     </div>
                   </div>
                 </>
