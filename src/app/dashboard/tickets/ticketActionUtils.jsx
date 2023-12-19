@@ -62,7 +62,7 @@ export const TicketDeleteButton = ({
           )}
         >
           <VscTrash size={20} />
-          {title}
+          <span className="hidden md:block lg:block">{title}</span>
         </button>
       )}
     </>
@@ -112,7 +112,7 @@ export function AssignUserAction({
             )}
           >
             <VscDebugStepBack size={18} />
-            Change person
+            <span className="hidden md:block lg:block">Change person</span>
           </Button>
         ) : (
           <Button
@@ -122,7 +122,7 @@ export function AssignUserAction({
             )}
           >
             {icon}
-            {title}
+            <span className="hidden md:block lg:block">{title}</span>
           </Button>
         )}
       </DropdownMenuTrigger>

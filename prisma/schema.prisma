@@ -1,5 +1,3 @@
-// suyash.d
-// netweb@123
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["multiSchema"]
@@ -86,6 +84,12 @@ model Tickets {
 
     note   Notes[]  @relation(references: [id], fields: [noteId])
     noteId String[] @db.ObjectId
+
+    isMerged Boolean @default(false)
+
+    mergedWithId String?   @unique @db.ObjectId
+    parent       Tickets?  @relation("mergedWith", fields: [mergedWithId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentor     Tickets[] @relation("mergedWith")
 }
 
 model Notes {

@@ -20,14 +20,14 @@ export default function LayoutPage({ children }) {
               ) : (
                 <>
                   <div className="md:grid lg:grid md:grid-cols-12 lg:grid-cols-12 gap-4  ">
-                    <div className="col-span-2">
+                    <div className="lg:col-span-2">
                       <SideNavbar>
                         {/* <Suspense fallback={<Loading />}>
                           <DepartmentSidenav />
                         </Suspense> */}
                       </SideNavbar>
                     </div>
-                    <div className="col-span-10 my-4 h-full">
+                    <div className="col-span-12 lg:col-span-10 my-4 h-full">
                       <Toaster position="top-right" reverseOrder={false} />
                       <div className="container">{children}</div>
                     </div>

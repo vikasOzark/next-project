@@ -101,7 +101,7 @@ export function TicketStatusUpdate({
           )}
         >
           {icon}
-          {title}
+          <span className="hidden md:block lg:block">{title}</span>
         </Button>
       </DropdownMenuTrigger>
 

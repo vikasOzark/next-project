@@ -102,7 +102,7 @@ export function TicketHoverCard({ ticketData }) {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Button variant="" className="gap-2 flex  capitalize">
+        <Button variant="" className="gap-2 flex text-inherit  capitalize">
           <SlPeople size={20} />
           {ticketData?.assingedUser?.first_name}{" "}
           {ticketData?.assingedUser?.last_name}

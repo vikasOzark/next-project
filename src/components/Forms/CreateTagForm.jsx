@@ -40,7 +40,8 @@ export const CreateTagForm = ({ setTagsModalOpen }) => {
       }
     },
     onError: async (data) => {
-      toast.error("Something went wrong, Please try again.");
+      const message = JSON.parse(data?.request?.response);
+      toast.error(data.message);
       return;
     },
     onSuccess: () => queryClient.invalidateQueries("tags-list"),

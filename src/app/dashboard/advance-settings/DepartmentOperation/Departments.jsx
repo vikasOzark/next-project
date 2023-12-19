@@ -15,7 +15,16 @@ export const Departments = () => {
   });
   return (
     <>
-      <div className="overflow-y-auto overflow-hidden h-[16em]">
+      <div
+        className="overflow-y-auto overflow-hidden vikas@vikasdev-Lenovo:~/next-project$ npm run dev
+
+> main-project@0.1.0 dev
+> next dev
+
+  ▲ Next.js 13.5.6
+  - Local:        http://localhost:3000
+  - Environments: .envh-[16em]"
+      >
         {responseData.isLoading && (
           <>
             <div className="flex justify-center ">

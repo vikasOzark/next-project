@@ -1,3 +1,4 @@
+import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
@@ -9,6 +10,12 @@ export async function POST(request) {
   try {
     const userObjectId = await getUserId(request);
     prisma.$connect();
+
+    if(!requestBody.color) {
+      return ErrorResponse({
+        message: "Color is required.",
+      })
+    }
 
     const tagsData = await prisma.tags.create({
       data: {

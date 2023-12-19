@@ -99,7 +99,7 @@ export const Note = ({ note }) => {
   });
 
   return (
-    <div className="relative mb-4 flex gap-2">
+    <div className="relative mb-4 flex gap-2 ">
       <div className="flex gap-2">
         <div
           onClick={deleteMutation.mutate}
@@ -205,11 +205,11 @@ export const CreateNote = () => {
             >
               <div className="text-2xl flex items-center gap-2 text-white mb-2 font-bold">
                 <VscSymbolInterface />
-                <div className="flex items-center gap-4 text-blue-900">
+                <div className="flex items-center gap-4 text-blue-500">
                   Add new note
                 </div>
               </div>
-              <div className={`bg-slate-800 p-2 rounded-lg`}>
+              <div className={`soft-bg shadow-md p-2 rounded-lg`}>
                 <NoteCreateForm mutate={addNoteMutation.mutate} />
               </div>
             </div>
@@ -287,13 +287,12 @@ export const CreateFirstNote = () => {
           {modalOpen && (
             <div
               ref={createFormRef}
+              id="note-form"
               className={`mb-2 text-lg flex-1 font-bold text-white ${
                 modalOpen ? "block" : "hidden"
               } `}
             >
-              <div
-                className={`bg-slate-800 border border-gray-600 p-2 rounded-lg`}
-              >
+              <div className={`softer-bg shadow-md p-2 rounded-lg`}>
                 <NoteCreateForm mutate={addNoteMutation.mutate} />
               </div>
             </div>

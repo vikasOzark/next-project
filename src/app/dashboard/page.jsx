@@ -1,5 +1,7 @@
 "use client";
 
+import HeroSection from "@/components/HeroSection";
+import { TutorCard } from "@/components/TutorCard";
 import { useSession, signOut } from "next-auth/react";
 export default function Dashboard() {
   const { data, status } = useSession();
@@ -8,7 +10,9 @@ export default function Dashboard() {
     <>
       <main className="">
         <section>
-          <div className="grid my-3 sm:grid-cols-1 p-2 gap-2 md:grid-cols-2 lg:grid-cols-4"></div>
+          <div className="grid my-3 sm:grid-cols-1 p-2 gap-2 md:grid-cols-2 lg:grid-cols-4">
+            {/* <TutorCard /> */}
+          </div>
         </section>
       </main>
     </>

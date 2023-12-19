@@ -53,7 +53,7 @@ export default function Page({ params }) {
             />
           </button>
         </div>
-        <div className="grid lg:grid-cols-12 md:grid-cols-2 md-grid-cols-1 gap-3">
+        <div className="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-3">
           <div className="col-span-8">
             {ticketResponse.isLoading ? (
               <div className="flex justify-center">
@@ -66,7 +66,7 @@ export default function Page({ params }) {
               </>
             )}
           </div>
-          <div className=" col-span-4">
+          <div className=" md:col-span-4">
             <div className=" font-bold text-2xl px-3 text-white">
               <h3 className="flex gap-2 items-center ">
                 <VscServer size={23} />
@@ -88,6 +88,18 @@ const TicketDataSection = ({ ticketResponse }) => {
     <>
       <div className="text-white font-bold">
         <div className="flex justify-end mb-2 gap-2">
+          <AssignUserAction
+            icon={<VscPersonAdd size={18} />}
+            title={"Assign people"}
+            actionData={ticketData}
+            revalidateKey={ticketData.id}
+            isAlreadyAssigned={
+              ticketData["assingedUser"] === null ? false : true
+            }
+            className={
+              "gap-2   hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
+            }
+          />
           <TicketStatusUpdate
             title={"Status update"}
             icon={<VscGroupByRefType />}
@@ -103,34 +115,52 @@ const TicketDataSection = ({ ticketResponse }) => {
             navigateTo={urlRoutes.TICKETS}
           />
         </div>
-        <div className="rounded-2xl grid grid-cols-3 gap-3 p-3 border border-gray-800 ">
+        <div className="rounded-2xl grid grid-cols-3 gap-3 p-3 border soft-bg shadow-md border-gray-800 ">
           <div className="">
-            <h3 className="text-gray-400 text-lg">Ticket title</h3>
-            <p className=" capitalize">{ticketData.taskTitle}</p>
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Ticket title
+            </h3>
+            <p className=" capitalize text-sm md:text-md lg:text-lg ">
+              {ticketData.taskTitle}
+            </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Department name</h3>
-            <p className=" capitalize">{ticketData?.department?.name}</p>
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Department
+            </h3>
+            <p className=" capitalize text-sm md:text-md lg:text-lg ">
+              {ticketData?.department?.name}
+            </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Ticket status</h3>
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Ticket status
+            </h3>
             <p className={`${statusCss(ticketData?.status, Status, "text")}`}>
               {ticketData?.status}
             </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Ticket details</h3>
-            <p className=" capitalize">{ticketData?.ticketDetil}</p>
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Ticket details
+            </h3>
+            <p className=" capitalize text-sm md:text-md lg:text-lg ">
+              {ticketData?.ticketDetil}
+            </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Creatd by</h3>
-            <p className=" capitalize">
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Created by
+            </h3>
+            <p className=" capitalize text-sm md:text-md lg:text-lg ">
               {ticketData?.createdById?.first_name}{" "}
               {ticketData?.createdById?.last_name}
             </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Assigned tags</h3>
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Tags
+            </h3>
             <div className=" flex gap-2 items-center">
               {ticketData?.tags?.map((tag) => (
                 <p
@@ -143,8 +173,10 @@ const TicketDataSection = ({ ticketResponse }) => {
             </div>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Created at</h3>
-            <p className=" capitalize">
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Created at
+            </h3>
+            <p className=" capitalize text-sm md:text-md lg:text-lg ">
               {handleTimeFormat(ticketData?.createdAt, {
                 isFormated: true,
                 datePrifix: "/",
@@ -153,20 +185,24 @@ const TicketDataSection = ({ ticketResponse }) => {
             </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Creatd by</h3>
-            <p className=" capitalize">
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Creatd by
+            </h3>
+            <p className=" capitalize text-sm md:text-md lg:text-lg ">
               {ticketData?.createdById?.first_name}{" "}
               {ticketData?.createdById?.last_name}
             </p>
           </div>
           <div className="">
-            <h3 className="text-gray-400 text-lg">Assigned person</h3>
+            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+              Assigned
+            </h3>
             <div className="flex gap-3 items-center mt-2">
               {/* <AssignedUser ticketData={ticketData} /> */}
 
               <TicketHoverCard ticketData={ticketData} />
 
-              <AssignUserAction
+              {/* <AssignUserAction
                 icon={<VscPersonAdd size={18} />}
                 title={"Assign people"}
                 actionData={ticketData}
@@ -175,9 +211,9 @@ const TicketDataSection = ({ ticketResponse }) => {
                   ticketData["assingedUser"] === null ? false : true
                 }
                 className={
-                  "flex gap-2 hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
+                  "gap-2 hidden md:block lg:block hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
                 }
-              />
+              /> */}
             </div>
           </div>
         </div>

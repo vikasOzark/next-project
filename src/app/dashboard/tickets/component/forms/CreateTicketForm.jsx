@@ -20,6 +20,28 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
   const [tags, setTags] = useState([]);
   const queryClient = useQueryClient();
 
+  useQuery(
+    "tags-list",
+    async () => {
+      const response = await fetch("/api/tags");
+      const json_response = await response.json();
+
+      if (json_response?.success) {
+        const formatted = json_response.data?.map((item) => ({
+          name: item.title,
+          id: item.id,
+          color: item.color,
+          isSelected: false,
+        }));
+        console.log(formatted);
+        setTags(formatted);
+      }
+
+      return json_response;
+    },
+    { refetchOnMount: false, refetchOnWindowFocus: false }
+  );
+
   const responseData = useQuery("departments", getDepartmentData);
   const [selectedTag, setSelectedTag] = useState([]);
 
@@ -129,7 +151,7 @@ export default function CreateTicketForm({ refreshFunction, modalClose }) {
           htmlFor="department"
           className="block text-sm mt-2 text-black   font-medium leading-6 "
         >
-          Add Tags
+          Assign tags
         </label>
 
         <div className="mt-2 relative flex items-center gap-2">
