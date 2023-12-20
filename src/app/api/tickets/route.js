@@ -45,6 +45,8 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+
+  const page = request.nextUrl.searchParams.get("page") || 1;
   try {
     const userObjectId = await getUserId(request);
     await prisma.$connect();
@@ -59,6 +61,11 @@ export async function GET(request) {
         tags: true,
         where: userObjectId,
       },
+      take:( 2 * Number(page)),
+      
+      orderBy: {
+        id : "desc",
+      }
     });
 
     return NextResponse.json(
@@ -71,6 +78,7 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
+      console.log(error.message);
     return ErrorResponseHandler(error);
   } finally {
     await prisma.$disconnect();

@@ -109,22 +109,26 @@ export function TicketHoverCard({ ticketData }) {
         </Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-80 bg-[#434447] text-white shadow-xl border-0 rounded-lg">
-        <div className="flex space-x-4">
+        <div className="flex gap-2 ">
           <FcBusinessContact size={65} />
-          <div className="space-y-1">
-            <h4 className="text-lg capitalize font-semibold">
-              {ticketData?.assingedUser?.first_name}{" "}
-              {ticketData?.assingedUser?.last_name}
-            </h4>
+          <div className="space-y-1 w-full">
+            <div className="flex items-center justify-between">
+              <h4 className="text-lg capitalize font-semibold">
+                {ticketData?.assingedUser?.first_name}{" "}
+                {ticketData?.assingedUser?.last_name}
+              </h4>
+
+              <p className="text-sm capitalize text-white bg-blue-600 px-2 rounded-md font-bold ">
+                {personData?.role}
+              </p>
+            </div>
 
             <p className="text-sm capitalize text-gray-200">
               {personData?.email}
             </p>
+
             <p className="text-sm capitalize text-gray-200">
               {personData?.contact_number}
-            </p>
-            <p className="text-sm capitalize text-gray-200">
-              {personData?.role}
             </p>
           </div>
         </div>

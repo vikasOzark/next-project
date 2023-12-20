@@ -157,7 +157,7 @@ export const SideNavbar = ({ children }) => {
 function NavigationLink({ href, text, icon }) {
   const currentPath = usePathname();
 
-  const isActive = href === currentPath ? true : false;
+  const isActive = currentPath.startsWith(href);
   return (
     <Link
       href={href === "/home" ? "/" : href}

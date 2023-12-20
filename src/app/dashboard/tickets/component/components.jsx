@@ -18,18 +18,18 @@ import { isLatestTicket } from "@/utils/dateTimeFormat";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Paginator } from "@/components/Pagination";
-export const selectContext = createContext();
+import { SelectContext } from "../page";
+export const RouterContext = createContext();
 
 export const TicketTableComponent = () => {
-  const [selected, setSelected] = useState([]);
   const param = useSearchParams();
   const router = useRouter();
-  console.log(param.get("page"));
 
   const responseData = useQuery(
     "tickets-list",
     async () => {
-      const response = await fetch("/api/tickets");
+      const page = param.get("page") || 1;
+      const response = await fetch(`/api/tickets?page=${Number(page)}`);
       const json_response = await response.json();
       return json_response;
     },
@@ -43,7 +43,7 @@ export const TicketTableComponent = () => {
 
   return (
     <>
-      <selectContext.Provider value={{ selected, setSelected }}>
+      <RouterContext.Provider value={{ router, responseData }}>
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
           <div className="inline-block min-w-full p-2  align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden shadow-xl dark:border-gray-700 md:rounded-lg">
@@ -54,7 +54,7 @@ export const TicketTableComponent = () => {
                 <TableBodyRow responseData={responseData} />
               </table>
               <div className="flex justify-center gap-2 mt-2">
-                <Paginator />
+                {/* <Paginator /> */}
               </div>
               {responseData.isLoading && (
                 <div className="flex justify-center mt-2">
@@ -73,7 +73,7 @@ export const TicketTableComponent = () => {
             </div>
           </div>
         </div>
-      </selectContext.Provider>
+      </RouterContext.Provider>
     </>
   );
 };
@@ -96,7 +96,7 @@ const TableBodyRow = ({ responseData }) => {
 };
 
 const TableRowComponent = ({ data, ticketStatus }) => {
-  const { selected, setSelected } = useContext(selectContext);
+  const { selectedTickets, setSelectedTickets } = useContext(SelectContext);
 
   const dateObject = new Date(data.createdAt);
   const year = dateObject.getFullYear();
@@ -128,6 +128,16 @@ const TableRowComponent = ({ data, ticketStatus }) => {
     },
   });
 
+  const handleSelect = (event) => {
+    if (event.target.checked) {
+      setSelectedTickets([...selectedTickets, data]);
+    } else {
+      setSelectedTickets(
+        selectedTickets.filter((ticket) => ticket.id !== data.id)
+      );
+    }
+  };
+
   return (
     <>
       <tr className="text-white group">
@@ -136,8 +146,9 @@ const TableRowComponent = ({ data, ticketStatus }) => {
             <div className="flex items-center gap-x-2">
               <div className=" flex gap-3">
                 <input
+                  id={data.id}
                   type="checkbox"
-                  onClick={() => setSelected([...selected, data.id])}
+                  onClick={(event) => handleSelect(event)}
                 />
                 <Link
                   href={`${urlRoutes.TICKETS}/${data.id}`}

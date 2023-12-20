@@ -1,9 +1,13 @@
 import { VscArrowLeft, VscArrowRight } from "react-icons/vsc";
 import { useRouter, useSearchParams } from "next/navigation";
 import next from "next";
+import { useContext } from "react";
+import { RouterContext } from "@/app/dashboard/tickets/component/components";
 
 export const Paginator = ({ totalPages = 5 }) => {
-  const router = useRouter();
+  // const router = useRouter();
+  const { router, responseData } = useContext(RouterContext);
+
   const searchParams = useSearchParams();
   const current = searchParams.get("page") || 1;
 
@@ -11,6 +15,7 @@ export const Paginator = ({ totalPages = 5 }) => {
     const nex_page = Number(current);
     if (current < totalPages) {
       router.push(`?page=${nex_page + 1}`);
+      responseData.refetch();
     }
   };
 
@@ -18,6 +23,7 @@ export const Paginator = ({ totalPages = 5 }) => {
     const previous = Number(current);
     if (previous !== 1) {
       router.push(`?page=${previous - 1}`);
+      responseData.refetch();
     }
   };
 
