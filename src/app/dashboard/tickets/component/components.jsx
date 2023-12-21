@@ -156,13 +156,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
                 >
                   {data.taskTitle}{" "}
                 </Link>
-                {isLatestTicket(data.createdAt) && (
-                  <span>
-                    <small className=" bg-purple-500 text-white px-3 py-1 rounded-full">
-                      New
-                    </small>
-                  </span>
-                )}
+                <TableFlag ticketData={data} />
               </div>
             </div>
           </div>
@@ -331,4 +325,28 @@ const TaskStatus = ({ TaskStatus, status }) => {
       </>
     );
   }
+};
+
+export const TableFlag = ({ ticketData }) => {
+  const mergedCount = ticketData._count?.mergedTicket;
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        {isLatestTicket(ticketData.createdAt) && (
+          <span>
+            <small className=" bg-purple-500 text-white px-3 py-1 rounded-full">
+              New
+            </small>
+          </span>
+        )}
+        {ticketData.isMerged && (
+          <span>
+            <small className=" bg-green-500 text-white px-3 py-1 flex gap-2 rounded-full">
+              Merged{mergedCount.toString()}
+            </small>
+          </span>
+        )}
+      </div>
+    </>
+  );
 };

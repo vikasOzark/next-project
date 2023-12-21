@@ -78,7 +78,10 @@ export function AssignUserAction({
   isAlreadyAssigned = false,
 }) {
   const queryClient = useQueryClient();
-  const usersResponse = useQuery("users-list", getUsersData);
+  const usersResponse = useQuery("users-list", getUsersData, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
   const usersData = usersResponse.data?.data || [];
 
   const mutationAction = useMutation({

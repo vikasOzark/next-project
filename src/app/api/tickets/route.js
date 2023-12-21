@@ -59,9 +59,14 @@ export async function GET(request) {
       include: {
         department: true,
         tags: true,
+        mergedTicket : true,
         where: userObjectId,
+        _count : {
+          select : {
+            mergedTicket : true,
+          }
+        },
       },
-      take:( 2 * Number(page)),
       
       orderBy: {
         id : "desc",
@@ -78,7 +83,6 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-      console.log(error.message);
     return ErrorResponseHandler(error);
   } finally {
     await prisma.$disconnect();

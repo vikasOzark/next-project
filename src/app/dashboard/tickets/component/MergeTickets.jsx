@@ -1,13 +1,14 @@
 import { SubmitButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
-import React, { useContext } from "react";
-import { VscAdd, VscClose, VscGitMerge, VscMerge } from "react-icons/vsc";
+import React, { useContext, useState } from "react";
+import { VscClose, VscGitMerge } from "react-icons/vsc";
 import { SelectContext } from "../page";
-import {
-  SimpleInfoMessage,
-  SimpleSuccessMessage,
-} from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { SimpleInfoMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { useMutation, useQuery } from "react-query";
+import { TagsOptions } from "./forms/TagsDropDownOptions";
+import { getDepartmentData } from "./forms/utils";
+import toast from "react-hot-toast";
 
 const MergeTickets = () => {
   const [open, setOpen] = React.useState(false);
@@ -40,9 +41,44 @@ export default MergeTickets;
 
 export const MergeForm = () => {
   const { selectedTickets } = useContext(SelectContext);
+  const [selectedTag, setSelectedTag] = useState([]);
+  const responseData = useQuery("departments", getDepartmentData);
+
+  const mergeMutation = useMutation({
+    mutationFn: async (event) => {
+      event.preventDefault();
+
+      // if (selectedTickets.length < 2) {
+      //   throw new Error("Please select at least 2 tickets to merge");
+      // }
+
+      const formData = new FormData(event.target);
+      const payload = Object.fromEntries(formData);
+      payload.tags = selectedTag.map((tag) => tag.id);
+      payload.mergingTicketIds = selectedTickets.map((ticket) => ticket.id);
+
+      const response = await fetch(`/api/tickets/merge`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      const json_response = await response.json();
+      return json_response;
+    },
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    },
+    onError: (error) => {
+      toast.error("Couldn't complete your request at the moment.");
+    },
+  });
+
   return (
-    <div>
-      <form>
+    <div className=" transition-all">
+      <form onSubmit={mergeMutation.mutate}>
         <p className="text-gray-600 text-sm font-bold line-clamp-2">
           <span className="text-gray-900">Note: </span>Merging tickets together
           will create new tickets as reference. Through you can track tickets
@@ -80,6 +116,13 @@ export const MergeForm = () => {
                 name="department"
               >
                 <option value="">select department</option>
+                {responseData.isSuccess && responseData.data?.success
+                  ? responseData.data.data?.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))
+                  : null}
               </select>
             </div>
           </div>
@@ -93,7 +136,12 @@ export const MergeForm = () => {
             Assign tags
           </label>
 
-          <div className="mt-2 relative flex items-center gap-2"></div>
+          <div className="mt-2 relative flex items-center gap-2">
+            <TagsOptions
+              setSelectedTag={setSelectedTag}
+              selectedTag={selectedTag}
+            />
+          </div>
         </div>
 
         <div>
@@ -112,7 +160,7 @@ export const MergeForm = () => {
           </div>
         </div>
 
-        <div className="">
+        <div className=" transition-all">
           <label
             htmlFor="ticketDetil"
             className="block mt-2 text-sm w-full text-black   font-medium leading-6 "

@@ -22,6 +22,7 @@ export async function GET(request, context) {
         tags: true,
         createdById: true,
         assingedUser : true,
+        mergedTicket : true,
         where: userObjectId,
       },
     });

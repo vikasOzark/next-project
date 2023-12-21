@@ -87,9 +87,11 @@ model Tickets {
 
     isMerged Boolean @default(false)
 
-    mergedWithId String?   @unique @db.ObjectId
-    parent       Tickets?  @relation("mergedWith", fields: [mergedWithId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    parentor     Tickets[] @relation("mergedWith")
+    mergedTickets Tickets[] @relation("mergeTickets", fields: [mergeTicketId], references: [id])
+    mergeTicketId String[]  @db.ObjectId
+
+    mergedTicket Tickets[] @relation("mergeTickets", fields: [mergeId], references: [id])
+    mergeId      String[]  @db.ObjectId
 }
 
 model Notes {

@@ -21,23 +21,24 @@ import { Status } from "prisma/prisma-client";
 import { TicketHoverCard } from "./HelperComponents";
 import { NotesSection } from "./components/NotesSection";
 import React from "react";
+import MergedTicketCard from "./components/MergedTicketCard";
+import { useContext } from "react";
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
   const { ticketId } = params;
   const router = useRouter();
 
-  const ticketResponse = useQuery(
-    {
-      queryKey: ticketId,
-      queryFn: () => {
-        return axios.get(`/api/tickets/${ticketId}`);
-      },
+  const ticketResponse = useQuery({
+    queryKey: ticketId,
+    queryFn: () => {
+      return axios.get(`/api/tickets/${ticketId}`);
     },
-    { refetchOnMount: false, refetchOnWindowFocus: false }
-  );
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
   const ticketData = ticketResponse.data?.data.data || {};
-
+  console.log(ticketData);
   return (
     <>
       <TicketDataContext.Provider value={{ ticketData, params }}>
@@ -62,7 +63,14 @@ export default function Page({ params }) {
             ) : (
               <>
                 {" "}
-                <TicketDataSection ticketResponse={ticketResponse} />
+                <div className="flex-row gap-2 mb-2">
+                  <TicketDataSection />
+                  <div className="">
+                    {ticketData.mergedTicket?.map((ticket) => (
+                      <MergedTicketCard key={ticket.id} ticketData={ticket} />
+                    ))}
+                  </div>
+                </div>
               </>
             )}
           </div>
@@ -81,8 +89,8 @@ export default function Page({ params }) {
   );
 }
 
-const TicketDataSection = ({ ticketResponse }) => {
-  const ticketData = ticketResponse.data?.data.data || {};
+const TicketDataSection = () => {
+  const { ticketData } = useContext(TicketDataContext);
 
   return (
     <>
@@ -198,22 +206,7 @@ const TicketDataSection = ({ ticketResponse }) => {
               Assigned
             </h3>
             <div className="flex gap-3 items-center mt-2">
-              {/* <AssignedUser ticketData={ticketData} /> */}
-
               <TicketHoverCard ticketData={ticketData} />
-
-              {/* <AssignUserAction
-                icon={<VscPersonAdd size={18} />}
-                title={"Assign people"}
-                actionData={ticketData}
-                revalidateKey={ticketData.id}
-                isAlreadyAssigned={
-                  ticketData["assingedUser"] === null ? false : true
-                }
-                className={
-                  "gap-2 hidden md:block lg:block hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
-                }
-              /> */}
             </div>
           </div>
         </div>
