@@ -13,36 +13,14 @@ import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
 import { handleRemove, handleSelect } from "./updateTicketUtils";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
+import { TagsOptions } from "./TagsDropDownOptions";
 
 export default function UpdateTicketForm({ ticketData }) {
   const formElement = useRef();
-  const [tagsIsOption, setTagsIsOption] = useState(false);
   const [formError, setFormError] = useState({});
-  const [tags, setTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState([]);
   const [ticketDataUpdate, setTicketDataUpdate] = useState({ ...ticketData });
   const queryClient = useQueryClient();
-
-  useQuery(
-    "tags-list",
-    async () => {
-      const response = await fetch("/api/tags");
-      const json_response = await response.json();
-
-      if (json_response?.success) {
-        const formatted = json_response.data?.map((item) => ({
-          name: item.title,
-          id: item.id,
-          color: item.color,
-          isSelected: false,
-        }));
-        setTags(formatted);
-      }
-
-      return json_response;
-    },
-    { refetchOnMount: false, refetchOnWindowFocus: false }
-  );
 
   const responseData = useQuery(
     "departments",
@@ -83,10 +61,6 @@ export default function UpdateTicketForm({ ticketData }) {
       }
 
       setSelectedTag([]);
-      const resetTags = tags.map((item) => {
-        return { ...item, ["isSelected"]: false };
-      });
-      setTags(resetTags);
       formElement.current.reset();
     },
 
@@ -95,13 +69,6 @@ export default function UpdateTicketForm({ ticketData }) {
       queryClient.invalidateQueries({ queryKey: ["tickets-list"] });
     },
   });
-
-  const dropdownRef = useRef(null);
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setTagsIsOption(false);
-    }
-  };
 
   useEffect(() => {
     if (ticketDataUpdate.tags) {
@@ -113,19 +80,11 @@ export default function UpdateTicketForm({ ticketData }) {
       }));
       setSelectedTag(tagsSelected);
     }
-
-    document.addEventListener("click", handleClickOutside, true);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
   }, []);
 
   return (
     <form ref={formElement} onSubmit={mutation.mutate}>
-      <div
-        ref={dropdownRef}
-        className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3">
         <div>
           <label
             htmlFor="taskTitle"
@@ -196,70 +155,17 @@ export default function UpdateTicketForm({ ticketData }) {
 
       <div>
         <label
-          htmlFor="department"
+          htmlFor="tag"
           className="block text-sm mt-2 text-black   font-medium leading-6 "
         >
-          Add Tags
+          Assign tags
         </label>
 
         <div className="mt-2 relative flex items-center gap-2">
-          <div className="">
-            <button
-              type="button"
-              onClick={() => setTagsIsOption((pre) => !pre)}
-              className="px-4 py-1 border hover:border-gray-300 flex gap-2 items-center rounded-lg hover:bg-gray-300"
-            >
-              <VscTag />
-              Add tag{" "}
-              {tagsIsOption ? (
-                <VscChevronUp className=" rotate-180 transition-transform " />
-              ) : (
-                <VscChevronUp className="transition-transform" />
-              )}
-            </button>
-          </div>
-
-          <div className="mt-2 flex  items-center gap-1 overflow-x-auto overflow-hidden">
-            {selectedTag.map((item) => (
-              <span
-                key={item.id}
-                className={`px-3 rounded-full font-bold py-1 flex text-white gap-2 items-center break-keep ${item.color}`}
-              >
-                {item.name}{" "}
-                <VscChromeClose
-                  onClick={() =>
-                    handleRemove(
-                      item,
-                      tags,
-                      setTags,
-                      selectedTag,
-                      setSelectedTag
-                    )
-                  }
-                  className=" hover:bg-gray-100 rounded-full h-5 p-[3px] cursor-pointer w-5"
-                />{" "}
-              </span>
-            ))}
-          </div>
-
-          <div
-            className={`absolute rounded-lg top-8 drop-shadow-xl border bg-white mt-2  p-1 w-[12rem] z-[100] overflow-hidden overflow-y-auto h-[8rem] ${
-              tagsIsOption ? "block" : "hidden"
-            }`}
-          >
-            {tags?.sort().map((item) => (
-              <p
-                key={item.id}
-                onClick={() =>
-                  handleSelect(item, tags, setTags, setSelectedTag, selectedTag)
-                }
-                className={`text-center hover:opacity-50 border rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color}`}
-              >
-                {item.name}
-                {item.isSelected && <VscCheck />}
-              </p>
-            ))}
-          </div>
+          <TagsOptions
+            setSelectedTag={setSelectedTag}
+            selectedTag={selectedTag}
+          />
         </div>
       </div>
 

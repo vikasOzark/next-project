@@ -1,35 +1,51 @@
 import { SelectComponent } from "@/components/DropdownButton";
 import toast, { LoaderIcon } from "react-hot-toast";
 import { createUserMutation } from "./userUtils";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getDepartmentData } from "@/app/dashboard/tickets/component/forms/utils";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Role } from "@prisma/client";
+import { LoadingState, SubmitButton } from "@/components/Buttons";
+import { VscAccount, VscPlug, VscPulse } from "react-icons/vsc";
 
-export default function UserCreateUser({ refreshFunction }) {
+export default function UserCreateUser() {
   const [formError, setFormError] = useState({});
   const [departmentMemberId, setSelectedDepartment] = useState(null);
   const [role, setSelectedRole] = useState(null);
+  const formElement = useRef();
+  const queryClient = useQueryClient();
 
   const departmentRes = useQuery("department-data", getDepartmentData);
   const mutation = useMutation({
     mutationFn: async (event) =>
       createUserMutation(event, { role, departmentMemberId }, setFormError),
 
-    onSettled: async (data) => {
-      const response = await data;
+    onSettled: (response) => {
       if (response) {
         if (response.data?.success) {
           toast.success(response.data?.message);
-          refreshFunction();
           setTimeout(() => {
             modalClose(false);
           }, 1000);
         } else {
-          toast.error(response.data?.message);
+          queryClient.invalidateQueries("users-list");
         }
       }
-      formElement.current.reset();
+    },
+    onError: (error) => {
+      const response = JSON.parse(error.request?.response);
+      toast.error(response.message);
+    },
+    onSuccess: (response) => {
+      if (response.data?.success) {
+        toast.success(response.data?.message);
+        setTimeout(() => {
+          modalClose(false);
+        }, 1000);
+        formElement.current.reset();
+      } else {
+        toast.error(response.message);
+      }
     },
   });
 
@@ -37,7 +53,11 @@ export default function UserCreateUser({ refreshFunction }) {
     <>
       {" "}
       <div className=" sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={mutation.mutate} className="space-y-4 !text-left">
+        <form
+          ref={formElement}
+          onSubmit={mutation.mutate}
+          className="space-y-4 !text-left"
+        >
           <div className=" grid grid-cols md:grid-cols-2 lg:grid-cols-2 gap-2">
             <div>
               <label
@@ -55,11 +75,11 @@ export default function UserCreateUser({ refreshFunction }) {
                   className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
-              {/* {errorResponseData && (
+              {formError?.first_name && (
                 <small className="text-red-500 capitalize font-bold">
-                  {errorResponseData.first_name}
+                  {formError.first_name}
                 </small>
-              )} */}
+              )}
             </div>
 
             <div>
@@ -79,11 +99,11 @@ export default function UserCreateUser({ refreshFunction }) {
                 />
               </div>
 
-              {/* {errorResponseData && (
+              {formError?.last_name && (
                 <small className="text-red-500 capitalize font-bold">
-                  {errorResponseData.last_name}
+                  {formError.last_name}
                 </small>
-              )} */}
+              )}
             </div>
           </div>
 
@@ -101,6 +121,11 @@ export default function UserCreateUser({ refreshFunction }) {
                   }
                 />
               </div>
+              {formError?.departmentMemberId && (
+                <small className="text-red-500 capitalize font-bold">
+                  Department field is required.
+                </small>
+              )}
             </div>
 
             <div>
@@ -119,11 +144,11 @@ export default function UserCreateUser({ refreshFunction }) {
                   className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
-              {/* {errorResponseData && (
-              <small className="text-red-500 capitalize font-bold">
-                {errorResponseData.contact_number}
-              </small>
-            )} */}
+              {formError?.contact_number && (
+                <small className="text-red-500 capitalize font-bold">
+                  {formError.contact_number}
+                </small>
+              )}
             </div>
           </div>
 
@@ -140,6 +165,11 @@ export default function UserCreateUser({ refreshFunction }) {
                 { name: Role.User, id: Role.User },
               ]}
             />
+            {formError?.role && (
+              <small className="text-red-500 capitalize font-bold">
+                {formError.role}
+              </small>
+            )}
           </div>
 
           <div>
@@ -158,11 +188,11 @@ export default function UserCreateUser({ refreshFunction }) {
                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-            {/* {errorResponseData && (
+            {formError?.email && (
               <small className="text-red-500 capitalize font-bold">
-                {errorResponseData.email}
+                {formError.email}
               </small>
-            )} */}
+            )}
           </div>
 
           <div className=" grid grid-cols md:grid-cols-2 lg:grid-cols-2 gap-2">
@@ -194,11 +224,11 @@ export default function UserCreateUser({ refreshFunction }) {
                   ) : null} */}
                 </div>
               </div>
-              {/* {errorResponseData && (
+              {formError?.password && (
                 <small className="text-red-500 capitalize font-bold">
-                  {errorResponseData.password}
+                  {formError.password}
                 </small>
-              )} */}
+              )}
             </div>
             <div>
               <div className="flex items-center justify-between">
@@ -220,26 +250,31 @@ export default function UserCreateUser({ refreshFunction }) {
                   className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
-              {/* {errorResponseData && (
+              {formError?.confirm_password && (
                 <small className="text-red-500 capitalize font-bold">
-                  {errorResponseData.confirm_password}
+                  {formError.confirm_password}
                 </small>
-              )} */}
+              )}
             </div>
           </div>
 
           <div className="flex justify-end">
-            {false ? (
-              <div className="flex w-full justify-center items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-800 dark:text-gray-800 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                <LoaderIcon className="w-[1rem] h-[1rem]" /> Singing up...
-              </div>
+            {mutation.isLoading ? (
+              <LoadingState
+                title={"Creating user..."}
+                cssClass={"border rounded-full"}
+              />
             ) : (
-              <button
-                type="submit"
-                className=" justify-center rounded-md bg-indigo-600 px-5 text-white py-1 text-sm font-semibold leading-6  dark:text-gray-800 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Create user
-              </button>
+              <SubmitButton
+                title={"Create user"}
+                icon={<VscAccount size={18} />}
+              />
+              // <button
+              //   type="submit"
+              //   className=" justify-center rounded-md bg-indigo-600 px-5 text-white py-1 text-sm font-semibold leading-6  dark:text-gray-800 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              // >
+              //   Create user
+              // </button>
             )}
           </div>
         </form>

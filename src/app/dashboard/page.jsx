@@ -1,20 +1,14 @@
 "use client";
 
-import HeroSection from "@/components/HeroSection";
-import { TutorCard } from "@/components/TutorCard";
-import { useSession, signOut } from "next-auth/react";
-export default function Dashboard() {
-  const { data, status } = useSession();
+import TicketStatusInfo from "./dashboardComponents/DashboardInfoCard";
 
+export default function Dashboard() {
   return (
     <>
-      <main className="">
-        <section>
-          <div className="grid my-3 sm:grid-cols-1 p-2 gap-2 md:grid-cols-2 lg:grid-cols-4">
-            {/* <TutorCard /> */}
-          </div>
-        </section>
-      </main>
+      <section>
+        <TicketStatusInfo />
+      </section>
+      <section></section>
     </>
   );
 }

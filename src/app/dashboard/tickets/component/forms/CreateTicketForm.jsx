@@ -116,7 +116,7 @@ export default function CreateTicketForm({ modalClose }) {
 
       <div>
         <label
-          htmlFor="department"
+          htmlFor="tag"
           className="block text-sm mt-2 text-black   font-medium leading-6 "
         >
           Assign tags

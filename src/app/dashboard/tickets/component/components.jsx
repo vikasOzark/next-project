@@ -1,6 +1,11 @@
 "use client";
 
-import { VscChromeClose, VscGear, VscGroupByRefType } from "react-icons/vsc";
+import {
+  VscChromeClose,
+  VscGear,
+  VscGroupByRefType,
+  VscKebabVertical,
+} from "react-icons/vsc";
 import { useMutation, useQuery } from "react-query";
 import {
   DropdownActionMenuButton,
@@ -12,32 +17,45 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { urlRoutes } from "@/utils/urlRoutes";
-import { SimpleInfoMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import {
+  SimpleErrorMessage,
+  SimpleInfoMessage,
+} from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { TicketDeleteButton } from "../ticketActionUtils";
 import { isLatestTicket } from "@/utils/dateTimeFormat";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Paginator } from "@/components/Pagination";
 import { SelectContext } from "../page";
+
 export const RouterContext = createContext();
 
 export const TicketTableComponent = () => {
   const param = useSearchParams();
   const router = useRouter();
+  const paramsQuery = new URLSearchParams();
+
+  if (param.get("sort")) {
+    paramsQuery.append("sort", param.get("sort"));
+  }
+
+  paramsQuery.append("sortTicket", param.get("sortTicket") || "new-to-old");
 
   const responseData = useQuery(
-    "tickets-list",
-    async () => {
-      const page = param.get("page") || 1;
-      const response = await fetch(`/api/tickets?page=${Number(page)}`);
+    ["tickets-list", paramsQuery.toString()],
+    async ({ queryKey }) => {
+      const [_, query] = queryKey;
+      const response = await fetch(`/api/tickets?${query}`);
+      if (response.status === 500) {
+        throw new Error("Couldn't load the tickets at the moment.");
+      }
       const json_response = await response.json();
       return json_response;
     },
     {
-      keepPreviousData: true,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
+      retry: false,
     }
   );
 
@@ -46,7 +64,7 @@ export const TicketTableComponent = () => {
       <RouterContext.Provider value={{ router, responseData }}>
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
           <div className="inline-block min-w-full p-2  align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden shadow-xl dark:border-gray-700 md:rounded-lg">
+            <div className="overflow-hidden dark:border-gray-700 md:rounded-lg">
               <table className="min-w-full divide-y divide-gray-400 dark:divide-gray-700 ">
                 <thead className="soft-bg text-white font-bold text-lg  ">
                   <TableHeaderRow />
@@ -62,11 +80,16 @@ export const TicketTableComponent = () => {
                   <LoadingButton title={"Loading tickets..."} />
                 </div>
               )}
+              {responseData.isError && (
+                <SimpleErrorMessage message={responseData.error?.message} />
+              )}
               {responseData.data?.data &&
                 responseData.data?.data.length === 0 && (
                   <>
-                    <div className="mt-2">
-                      <SimpleInfoMessage message={"No tickets found."} />
+                    <div className="mt-4">
+                      <SimpleInfoMessage
+                        message={"Your haven't created any tickets yet."}
+                      />
                     </div>
                   </>
                 )}
@@ -152,9 +175,9 @@ const TableRowComponent = ({ data, ticketStatus }) => {
                 />
                 <Link
                   href={`${urlRoutes.TICKETS}/${data.id}`}
-                  className="font-medium text-gray-300 dark:text-white hover:underline"
+                  className="font-medium  text-gray-300 dark:text-white hover:underline"
                 >
-                  {data.taskTitle}{" "}
+                  <p className="text-wrap">{data.taskTitle} </p>
                 </Link>
                 <TableFlag ticketData={data} />
               </div>
@@ -215,11 +238,15 @@ const TableRowComponent = ({ data, ticketStatus }) => {
             <DropdownActionMenuButton
               key={data.taskTitle}
               actionData={data}
-              title={"More action"}
+              // title={"More action"}
               icon={
-                <VscGear size={18} className="font-bold" fontWeight={800} />
+                <VscKebabVertical
+                  size={18}
+                  className="font-bold"
+                  fontWeight={800}
+                />
               }
-              styleButton="hover:bg-gray-200 bg-gray-50 rounded-full text-gray-800 "
+              styleButton="hover:bg-gray-200 bg-gray-50 rounded-lg px-2 text-gray-800 "
             />
           </div>
         </td>
@@ -285,7 +312,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.PENDING === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-yellow-200  ">
+        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-yellow-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
           <h2 className=" text-yellow-700  font-bold">{status}</h2>
         </div>
@@ -296,7 +323,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.CLOSE === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-green-200  ">
+        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-green-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
           <h2 className=" text-green-700  font-bold">{status}</h2>
         </div>
@@ -307,7 +334,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.HOLD === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-blue-200  ">
+        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-blue-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
           <h2 className=" text-blue-700  font-bold">{status}</h2>
         </div>
@@ -318,7 +345,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.REJECT === status) {
     return (
       <>
-        <div className="inline-flex items-center px-3 py-1 rounded-full gap-4 bg-red-200  ">
+        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-red-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-red-600"></span>
           <h2 className=" text-red-700  font-bold">{status}</h2>
         </div>
@@ -342,7 +369,8 @@ export const TableFlag = ({ ticketData }) => {
         {ticketData.isMerged && (
           <span>
             <small className=" bg-green-500 text-white px-3 py-1 flex gap-2 rounded-full">
-              Merged{mergedCount.toString()}
+              <span>Merged</span>
+              {mergedCount.toString()}
             </small>
           </span>
         )}

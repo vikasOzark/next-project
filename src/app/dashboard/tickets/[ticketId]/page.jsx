@@ -38,7 +38,6 @@ export default function Page({ params }) {
     refetchOnWindowFocus: false,
   });
   const ticketData = ticketResponse.data?.data.data || {};
-  console.log(ticketData);
   return (
     <>
       <TicketDataContext.Provider value={{ ticketData, params }}>

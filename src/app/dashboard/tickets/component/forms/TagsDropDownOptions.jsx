@@ -117,7 +117,7 @@ export const TagsOptions = ({ setSelectedTag, selectedTag }) => {
           <p
             key={item.id}
             onClick={() => handleSelect(item)}
-            className={`text-center hover:opacity-50 border rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color}`}
+            className={`text-center cursor-pointer hover:opacity-50 border rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color}`}
           >
             {item.name}
             {item.isSelected && <VscCheck />}

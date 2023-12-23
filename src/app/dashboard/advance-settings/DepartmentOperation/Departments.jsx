@@ -1,11 +1,15 @@
 import { LoadingState } from "../../../../components/Buttons";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { InfoMessage } from "../../../../components/Messages/NotificationMessage";
-import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import {
+  SimpleErrorMessage,
+  SimpleInfoMessage,
+} from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { VscAdd, VscTrash } from "react-icons/vsc";
 import Modal from "@/components/Modal";
 import { CreateDepartmentForm } from "@/components/Forms/CreateDepartment";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export const Departments = () => {
   const responseData = useQuery("departments", async () => {
@@ -15,16 +19,7 @@ export const Departments = () => {
   });
   return (
     <>
-      <div
-        className="overflow-y-auto overflow-hidden vikas@vikasdev-Lenovo:~/next-project$ npm run dev
-
-> main-project@0.1.0 dev
-> next dev
-
-  ▲ Next.js 13.5.6
-  - Local:        http://localhost:3000
-  - Environments: .envh-[16em]"
-      >
+      <div className="overflow-y-auto overflow-hidden h-[16em]">
         {responseData.isLoading && (
           <>
             <div className="flex justify-center ">
@@ -32,8 +27,7 @@ export const Departments = () => {
             </div>
           </>
         )}
-        {responseData.isSuccess &&
-          responseData.data?.success &&
+        {responseData.data?.success &&
           responseData.data.data?.map((item) => (
             <button
               key={item.id}
@@ -44,24 +38,22 @@ export const Departments = () => {
                 <span>{item.name}</span>
               </div>
 
-              <div className="hover:bg-gray-500 invisible group-hover:visible rounded-full p-1  hover:text-red-500">
-                <VscTrash size={18} />
-              </div>
+              <DepartmentDelete deparment={item} />
             </button>
           ))}
       </div>
       {responseData.isSuccess &&
       responseData.data?.success &&
       responseData.data?.data?.length === 0 ? (
-        <InfoMessage message={"No department found."} />
+        <SimpleInfoMessage message={"No department found."} />
       ) : null}
 
       {responseData.isError ? (
-        <SimpleErrorMessage message={"Something went wrong hello."} />
+        <SimpleErrorMessage message={"Something went wrong "} />
       ) : null}
 
       {responseData.isSuccess && !responseData.data?.success ? (
-        <SimpleErrorMessage message={"Something went wrong."} />
+        <SimpleErrorMessage message={responseData.data?.message} />
       ) : null}
     </>
   );
@@ -84,6 +76,48 @@ export const CreateDepartment = () => {
       >
         <CreateDepartmentForm />
       </Modal>
+    </>
+  );
+};
+
+const DepartmentDelete = ({ deparment }) => {
+  const queryClient = useQueryClient();
+
+  const departmentDeleteMutation = useMutation(
+    async () => {
+      const response = await fetch(`/api/departments/${deparment.id}`, {
+        method: "DELETE",
+        headers: {},
+      });
+      return await response.json();
+    },
+    {
+      onSuccess: (data) => {
+        if (data.success) {
+          queryClient.invalidateQueries("departments");
+          toast.success(data?.message);
+        } else {
+          toast.error(data.message);
+        }
+      },
+      onError: (error) => {
+        toast.error(data?.message);
+      },
+    }
+  );
+  return (
+    <>
+      {" "}
+      {departmentDeleteMutation.isLoading ? (
+        <LoadingState />
+      ) : (
+        <div
+          onClick={departmentDeleteMutation.mutate}
+          className="hover:bg-gray-500 invisible group-hover:visible rounded-full p-1  hover:text-red-500"
+        >
+          <VscTrash size={18} />
+        </div>
+      )}
     </>
   );
 };

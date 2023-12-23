@@ -1,12 +1,14 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { twMerge } from "tailwind-merge";
 import { LoadingButton, SubmitButton } from "../Buttons";
 import { VscOrganization } from "react-icons/vsc";
 import toast from "react-hot-toast";
 
 export const CreateDepartmentForm = () => {
+  const queryClient = useQueryClient();
+
   const departmentMutation = useMutation(
     async (jsonBody) => {
       const response = await fetch("/api/departments", {
@@ -18,6 +20,7 @@ export const CreateDepartmentForm = () => {
     },
     {
       onSuccess: (data) => {
+        queryClient.invalidateQueries("departments");
         toast.success(data?.message);
       },
       onError: (error) => {

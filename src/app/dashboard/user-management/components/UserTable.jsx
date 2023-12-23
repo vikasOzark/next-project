@@ -2,7 +2,10 @@
 
 import { useContext } from "react";
 import { VscGear, VscTrash } from "react-icons/vsc";
-import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import {
+  SimpleErrorMessage,
+  SimpleInfoMessage,
+} from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { UsersDataContext } from "../page";
 import { ToggleDisableUser } from "./userUtils/DeleteUser";
 import { UpdateUserRole } from "./UpdateUserRole";
@@ -50,6 +53,9 @@ export default function UserTable() {
                 ))}
             </tbody>
           </table>
+          {!usersResponse.data?.data?.length && (
+            <SimpleInfoMessage message={"You havn't created any users yet."} />
+          )}
         </>
       )}
     </>
