@@ -41,14 +41,10 @@ const handleTimeFormat = (datetime, config) => {
 
 export default handleTimeFormat;
 
-
 export const isLatestTicket = (createdAt) => {
-  const creationDate = new Date(createdAt); // Replace 'creationDate' with the actual property name in your data
+  const creationDate = new Date(createdAt);
   const currentDate = new Date();
   const timeDifference = currentDate - creationDate;
 
-  // Check if the data was created in the last 2 days (86400000 milliseconds in a day)
-  const isNewData = timeDifference < 2 * 24 * 60 * 60 * 1000;
-
-  return isNewData
-}
+  return timeDifference < 86_400_000;
+};

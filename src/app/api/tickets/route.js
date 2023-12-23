@@ -1,15 +1,19 @@
-import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import ErrorResponseHandler, {
+  ErrorResponse,
+} from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
-import getUserId from "@/utils/userByToken";
+import getUserId, { getTokenNew } from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { provideFilter } from "./ticketFilter.provider";
 
 const prisma = new PrismaClient();
 
 export async function POST(request) {
   const requestBody = await request.json();
   try {
-    const userId = await getUserId(request);
+    const userId = await getUserId();
+
     if (!userId) {
       throw new Error("self: Please re-login, and try again.");
     }
@@ -45,10 +49,8 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-
-  const page = request.nextUrl.searchParams.get("page") || 1;
   try {
-    const userObjectId = await getUserId(request);
+    const userObjectId = await getUserId();
     await prisma.$connect();
 
     const ticketsData = await prisma.tickets.findMany({
@@ -59,18 +61,15 @@ export async function GET(request) {
       include: {
         department: true,
         tags: true,
-        mergedTicket : true,
         where: userObjectId,
-        _count : {
-          select : {
-            mergedTicket : true,
-          }
+        _count: {
+          select: {
+            mergedTicket: true,
+          },
         },
       },
-      
-      orderBy: {
-        id : "desc",
-      }
+
+      orderBy: provideFilter(request),
     });
 
     return NextResponse.json(
@@ -83,7 +82,10 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    return ErrorResponseHandler(error);
+    return ErrorResponse({
+      error: error,
+      message: "Something went wrong, Please try again.",
+    });
   } finally {
     await prisma.$disconnect();
   }
@@ -117,7 +119,6 @@ export async function PATCH(request) {
       data: [createdTicket],
     });
   } catch (error) {
-     
     const errorMessage = error.message.split(":");
 
     let message = null;

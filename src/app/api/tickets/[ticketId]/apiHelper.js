@@ -2,7 +2,7 @@ import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 
 export const handleTagRemove = async (request, query, params) => {
-  const userId = await getUserId(request);
+  const userId = await getUserId();
   if (!userId) {
     throw new Error("self: Please re-login and try again.");
   }
@@ -29,7 +29,7 @@ export const handleTagRemove = async (request, query, params) => {
 };
 
 export const handleUserAssignment = async (request, query, params) => {
-  const userId = await getUserId(request);
+  const userId = await getUserId();
 
   if (!userId) {
     throw new Error("self: Please re-login and try again.");
@@ -56,59 +56,58 @@ export const handleUserAssignment = async (request, query, params) => {
   });
 };
 
-
 export const handleUserUnassign = async (request, query, params) => {
-    const userId = await getUserId(request);
-  
-    if (!userId) {
-      throw new Error("self: Please re-login and try again.");
-    }
-  
-    if (!query.assignedUserId) {
-      throw new Error("self: Something went wrong, Please try again.");
-    }
-  
-    const prisma = await new PrismaClient();
-    prisma.$connect();
-  
-    await prisma.tickets.update({
-      where: {
-        id: params?.ticketId,
-      },
-      data: {
-        assingedUser: {
-          disconnect: {
-            id: query.assignedUserId,
-          },
-        },
-      },
-    });
-  };
+  const userId = await getUserId();
 
-  export const addTicketNote = async (request, query, params) => {
-    const userId = await getUserId(request);
-  
-    if (!userId) {
-      throw new Error("self: Please re-login and try again.");
-    }
-  
-    if (!query.assignedUserId) {
-      throw new Error("self: Something went wrong, Please try again.");
-    }
-  
-    const prisma = await new PrismaClient();
-    prisma.$connect();
-  
-    await prisma.tickets.update({
-      where: {
-        id: params?.ticketId,
-      },
-      data: {
-        assingedUser: {
-          disconnect: {
-            id: query.assignedUserId,
-          },
+  if (!userId) {
+    throw new Error("self: Please re-login and try again.");
+  }
+
+  if (!query.assignedUserId) {
+    throw new Error("self: Something went wrong, Please try again.");
+  }
+
+  const prisma = await new PrismaClient();
+  prisma.$connect();
+
+  await prisma.tickets.update({
+    where: {
+      id: params?.ticketId,
+    },
+    data: {
+      assingedUser: {
+        disconnect: {
+          id: query.assignedUserId,
         },
       },
-    });
-  };
+    },
+  });
+};
+
+export const addTicketNote = async (request, query, params) => {
+  const userId = await getUserId();
+
+  if (!userId) {
+    throw new Error("self: Please re-login and try again.");
+  }
+
+  if (!query.assignedUserId) {
+    throw new Error("self: Something went wrong, Please try again.");
+  }
+
+  const prisma = await new PrismaClient();
+  prisma.$connect();
+
+  await prisma.tickets.update({
+    where: {
+      id: params?.ticketId,
+    },
+    data: {
+      assingedUser: {
+        disconnect: {
+          id: query.assignedUserId,
+        },
+      },
+    },
+  });
+};

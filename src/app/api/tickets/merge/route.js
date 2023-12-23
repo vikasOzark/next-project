@@ -1,4 +1,6 @@
-import ErrorResponseHandler, { ErrorResponse } from "@/utils/ErrorResponseHandler";
+import ErrorResponseHandler, {
+  ErrorResponse,
+} from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
@@ -9,15 +11,18 @@ const prisma = new PrismaClient();
 export async function POST(request) {
   const requestBody = await request.json();
   try {
-    const userId = await getUserId(request);
+    const userId = await getUserId();
     if (!userId) {
       throw new Error("self: Please re-login, and try again.");
     }
 
     if (!requestBody?.mergingTicketIds.length) {
-      return ErrorResponse({
-        message : "Please select at least two tickets to merge."
-      }, httpStatus.HTTP_400_BAD_REQUEST)
+      return ErrorResponse(
+        {
+          message: "Please select at least two tickets to merge.",
+        },
+        httpStatus.HTTP_400_BAD_REQUEST
+      );
     }
 
     const createdTicket = await prisma.tickets.create({
@@ -38,9 +43,11 @@ export async function POST(request) {
         tags: {
           connect: requestBody.tags?.map((tagId) => ({ id: tagId })),
         },
-        mergedTicket : {
-            connect : requestBody.mergingTicketIds?.map((ticketId) => ({ id: ticketId }))
-        }
+        mergedTicket: {
+          connect: requestBody.mergingTicketIds?.map((ticketId) => ({
+            id: ticketId,
+          })),
+        },
       },
     });
 
@@ -51,6 +58,6 @@ export async function POST(request) {
     });
   } catch (error) {
     console.log(error.message);
-    return ErrorResponse
+    return ErrorResponse({ error: error });
   }
 }

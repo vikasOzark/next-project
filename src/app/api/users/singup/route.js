@@ -1,7 +1,10 @@
-import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import ErrorResponseHandler, {
+  ErrorResponse,
+} from "@/utils/ErrorResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { v4 } from "uuid";
 const prisma = new PrismaClient();
 
 export async function POST(request) {
@@ -34,7 +37,10 @@ export async function POST(request) {
         requestBody.password,
         saltRounds
       );
+
       requestBody.password = hashedPassword;
+      requestBody.isSuperuser = true;
+      requestBody.uniqueCompanyId = v4();
 
       const user = await prisma.user.create({
         data: requestBody,
@@ -61,16 +67,14 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     await prisma.$connect;
-    const userId = await getUserId(request);
+    const userId = await getUserId();
     const users = await prisma.user.findMany({
       where: {
         parentUserId: userId,
       },
     });
-
-     
   } catch (error) {
-    return ErrorResponseHandler(error);
+    return ErrorResponse({ error: error });
   } finally {
     await prisma.$disconnect();
   }

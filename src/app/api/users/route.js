@@ -1,8 +1,13 @@
-import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import ErrorResponseHandler, {
+  ErrorResponse,
+} from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
+import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+const bcrypt = require("bcrypt");
+
 const prisma = new PrismaClient();
 
 export async function POST(request) {
@@ -10,14 +15,38 @@ export async function POST(request) {
     const requestBody = await request.json();
     await prisma.$connect();
 
-    const bcrypt = require("bcrypt");
-    const saltRounds = 10;
-
-    if (!requestBody.password) {
-      throw new Error("Password should not be empty.");
+    if (!requestBody.role) {
+      return ErrorResponse(
+        { message: "User role is not provided. " },
+        httpStatus.HTTP_400_BAD_REQUEST
+      );
     }
 
-    const isAvailable = await prisma.user.findFirst({
+    if (isNaN(Number(requestBody.contact_number))) {
+      return ErrorResponse(
+        {
+          message:
+            "Contact number potentianlly contains charactor or special charactor.",
+        },
+        httpStatus.HTTP_400_BAD_REQUEST
+      );
+    }
+
+    if (requestBody.contact_number.toString().length !== 10) {
+      return ErrorResponse(
+        { message: "Provided contact number should be 10 digit." },
+        httpStatus.HTTP_400_BAD_REQUEST
+      );
+    }
+
+    if (!requestBody.password) {
+      return ErrorResponse(
+        { message: "Password should not be empty." },
+        httpStatus.HTTP_400_BAD_REQUEST
+      );
+    }
+
+    const isAlreadyExists = await prisma.user.findFirst({
       select: {
         email: true,
         contact_number: true,
@@ -30,54 +59,61 @@ export async function POST(request) {
       },
     });
 
-    if (!isAvailable) {
-      const hashedPassword = await bcrypt.hash(
-        requestBody.password,
-        saltRounds
-      );
-      requestBody.password = hashedPassword;
+    if (isAlreadyExists) {
+      if (isAlreadyExists.contact_number === requestBody.contact_number) {
+        return ErrorResponse(
+          { message: "Phone is already exists." },
+          httpStatus.HTTP_400_BAD_REQUEST
+        );
+      }
+      if (isAlreadyExists.email === requestBody.email) {
+        return ErrorResponse(
+          { message: "Email is already exists." },
+          httpStatus.HTTP_400_BAD_REQUEST
+        );
+      }
+    }
 
-      const userId = await getUserId(request);
-      const user = await prisma.user.create({
-        data: {
-          ...requestBody,
-          parent: {
-            connect: {
-              id: userId,
-            },
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(requestBody.password, saltRounds);
+
+    const userInfo = await getUserId(true);
+
+    requestBody.password = hashedPassword;
+    requestBody.uniqueCompanyId = userInfo.uniqueCompanyId;
+
+    const user = await prisma.user.create({
+      data: {
+        ...requestBody,
+        parent: {
+          connect: {
+            id: userInfo.userId,
           },
         },
-      });
-
-      return NextResponse.json({
-        success: true,
-        message: "User created successfully.",
-        data: [],
-      });
-    } else {
-      throw new Error("self: Your Email or Contact number is already exists.");
-    }
-  } catch (error) {
-    const errorMessage = error.message.split(":");
-    let message = null;
-    if (errorMessage[0] === "self") {
-      message = errorMessage[1];
-    } else {
-      message = "Something went wrong, Please try again.";
-    }
+      },
+    });
 
     return NextResponse.json({
-      success: false,
-      message: message,
-      data: [],
+      success: true,
+      message: "User created successfully.",
+      data: [user],
     });
+  } catch (error) {
+    console.log(error.message);
+    return ErrorResponse(
+      {
+        message: "Something went wrong, Please try again.",
+        error: error,
+      },
+      httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
+    );
   }
 }
 
 export async function GET(request) {
   try {
     await prisma.$connect();
-    const userId = await getUserId(request);
+    const userId = await getUserId();
     const userList = await prisma.user.findMany({
       where: {
         parentUserId: userId,
@@ -89,7 +125,7 @@ export async function GET(request) {
 
     return SuccessResponseHandler(userList);
   } catch (error) {
-    return ErrorResponseHandler(error);
+    return ErrorResponse({ error: error });
   } finally {
     await prisma.$disconnect();
   }

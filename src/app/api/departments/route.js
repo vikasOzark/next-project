@@ -2,11 +2,12 @@ import { NextResponse, NextRequest } from "next/server";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import httpStatus from "@/utils/httpStatus";
+import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 const prisma = new PrismaClient();
 
 export async function GET(request) {
   try {
-    const userObjectId = await getUserId(request);
+    const userObjectId = await getUserId();
     await prisma.$connect();
     const departmentList = await prisma.department.findMany({
       where: {
@@ -23,7 +24,6 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-     
     return NextResponse.json(
       {
         message: "Internal server error, Please try again.",
@@ -42,7 +42,7 @@ export async function POST(request) {
       throw new Error("Name should not be empty.");
     }
     prisma.$connect();
-    const userObjectId = await getUserId(request);
+    const userObjectId = await getUserId();
 
     await prisma.department.create({
       data: {
@@ -64,13 +64,10 @@ export async function POST(request) {
       { status: httpStatus.HTTP_201_CREATED }
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        message: error.message,
-        success: false,
-        data: {},
-      },
-      { status: httpStatus.HTTP_500_INTERNAL_SERVER_ERROR }
+    console.log(error.message);
+    return ErrorResponse(
+      { message: "Something bad happend, Please try again later." },
+      httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
     );
   }
 }

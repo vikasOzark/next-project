@@ -11,7 +11,7 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 export async function PATCH(request, context) {
-  const userId = await getUserId(request);
+  const userId = await getUserId();
   const { params } = context;
   const targetUser = params.userId;
   const body = await request.json();
@@ -73,7 +73,6 @@ export async function PATCH(request, context) {
         return await handleUserAlter(body, userData, targetUser, userId);
     }
   } catch (error) {
-    console.log(error.message);
-    return ErrorResponseHandler(error);
+    return ErrorResponse({ error: error });
   }
 }

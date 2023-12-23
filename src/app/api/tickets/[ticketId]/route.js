@@ -1,4 +1,6 @@
-import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import ErrorResponseHandler, {
+  ErrorResponse,
+} from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
@@ -11,7 +13,7 @@ export async function GET(request, context) {
     await prisma.$connect();
     const { params } = context;
 
-    const userObjectId = await getUserId(request);
+    const userObjectId = await getUserId();
     const ticket = await prisma.tickets.findFirst({
       where: {
         id: params?.ticketId,
@@ -21,8 +23,8 @@ export async function GET(request, context) {
         department: true,
         tags: true,
         createdById: true,
-        assingedUser : true,
-        mergedTicket : true,
+        assingedUser: true,
+        mergedTicket: true,
         where: userObjectId,
       },
     });
@@ -42,7 +44,7 @@ export async function POST(request, context) {
     await prisma.$connect();
     const data = await prisma.tickets.update({
       where: {
-        userId: getUserId(request),
+        userId: getUserId(),
         id: params?.ticketId,
       },
       data: {
@@ -65,7 +67,7 @@ export async function DELETE(request, context) {
   await prisma.$connect();
 
   try {
-    const userId = await getUserId(request);
+    const userId = await getUserId();
     await prisma.tickets.delete({
       where: {
         userId: userId,
@@ -79,7 +81,6 @@ export async function DELETE(request, context) {
       httpStatus.HTTP_202_ACCEPTED
     );
   } catch (error) {
-     
     return ErrorResponseHandler(error);
   }
 }
@@ -96,7 +97,6 @@ export async function PATCH(request, context) {
   try {
     switch (query.operationTo.toUpperCase()) {
       case "TAG":
-
         await handleTagRemove(request, query, params);
         break;
 
@@ -107,9 +107,8 @@ export async function PATCH(request, context) {
       case "USER_UNASSIGN":
         await handleUserUnassign(request, query, params);
         break;
-        
+
       case "NOTE_ADD":
-         
         await handleUserUnassign(request, query, params);
         break;
 
@@ -117,10 +116,17 @@ export async function PATCH(request, context) {
         break;
     }
 
-    return SuccessResponseHandler([], "Person is assigned successfully.", httpStatus.HTTP_202_ACCEPTED)
+    return SuccessResponseHandler(
+      [],
+      "Person is assigned successfully.",
+      httpStatus.HTTP_202_ACCEPTED
+    );
   } catch (error) {
-     
-    return ErrorResponseHandler(error);
+    return ErrorResponse(
+      {
+        message: "Something bad happend, Please try again.",
+      },
+      httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
+    );
   }
 }
-

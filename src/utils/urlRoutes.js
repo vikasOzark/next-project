@@ -7,5 +7,4 @@ export const urlRoutes = {
   PROFILE: dashboard_prifix + "/profile",
   TICKETS: dashboard_prifix + "/tickets",
   ADVANCE_SETTINGS: dashboard_prifix + "/advance-settings",
-
 };

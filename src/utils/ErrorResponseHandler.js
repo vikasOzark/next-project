@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
 import httpStatus from "./httpStatus";
 
-
 /**
- * 
+ *
  * @param {Error} error Error object
  * @param {Map} extras pass additional such as statusCode or custom_message in dict
- * @returns 
+ * @returns
  */
 const ErrorResponseHandler = (error, extras) => {
-  const { statusCode = httpStatus.HTTP_500_INTERNAL_SERVER_ERROR, custom_message = null } =
-    extras;
+  const {
+    statusCode = httpStatus.HTTP_500_INTERNAL_SERVER_ERROR,
+    custom_message = null,
+  } = extras;
 
   const errorMessage = error.message.split(":");
   let message = null;
@@ -25,7 +26,7 @@ const ErrorResponseHandler = (error, extras) => {
   } else {
     message = custom_message;
   }
-  
+
   return NextResponse.json(
     {
       message: message,
@@ -37,20 +38,22 @@ const ErrorResponseHandler = (error, extras) => {
   );
 };
 
-
 /**
- * 
+ *
  * @param {Error} error Error object
  * @param {Map} extras pass additional such as statusCode or custom_message in dict
- * @returns 
+ * @returns
  */
-export const ErrorResponse = (config, statusCode=httpStatus.HTTP_500_INTERNAL_SERVER_ERROR) => {
+export const ErrorResponse = (
+  config,
+  statusCode = httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
+) => {
   const {
-    message = message,
+    message = "Somethin bad happend, Please try again later.",
     success = false,
     data = [],
     error = null,
-  } = config
+  } = config;
 
   return NextResponse.json(
     {

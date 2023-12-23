@@ -1,4 +1,6 @@
-import ErrorResponseHandler from "@/utils/ErrorResponseHandler";
+import ErrorResponseHandler, {
+  ErrorResponse,
+} from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
@@ -8,7 +10,7 @@ const prisma = new PrismaClient();
 export async function POST(request) {
   try {
     const requestBody = await request.json();
-    const userId = await getUserId(request);
+    const userId = await getUserId();
 
     if (!requestBody["id"]) {
       throw new Error("self : ticket id were not provided.");
@@ -16,7 +18,7 @@ export async function POST(request) {
     prisma.$connect();
     const ticket = await prisma.notes.create({
       data: {
-        note : requestBody.note,
+        note: requestBody.note,
         createdBy: { connect: { id: userId } },
         tickets: { connect: { id: requestBody.id } },
       },
@@ -28,14 +30,13 @@ export async function POST(request) {
       httpStatus.HTTP_201_CREATED
     );
   } catch (error) {
-     
     return ErrorResponseHandler(error);
   }
 }
 
 export async function GET(request, context) {
   try {
-    const userId = await getUserId(request);
+    const userId = await getUserId();
     const { params } = context;
 
     prisma.$connect();
@@ -46,22 +47,25 @@ export async function GET(request, context) {
       include: {
         createdBy: {
           select: {
-            first_name : true,
+            first_name: true,
             id: true,
             last_name: true,
             email: true,
             contact_number: this,
             role: true,
           },
-
-        }
+        },
       },
     });
 
     return SuccessResponseHandler(notes, "Notes fetched successfully.");
   } catch (error) {
-     
-    return ErrorResponseHandler(error);
+    return ErrorResponse(
+      {
+        message: "Something bad happend, Please try again later.",
+        error: error,
+      },
+      httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
+    );
   }
-
 }

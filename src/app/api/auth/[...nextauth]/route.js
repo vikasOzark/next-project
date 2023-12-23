@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -20,6 +20,7 @@ const handler = NextAuth({
             email: response.data.email,
             contact_number: response.data.contact_number,
             parent_user: response.data.parent_user,
+            uniqueCompanyId: response.data.uniqueCompanyId,
             role: response.data.role,
           };
         }
@@ -32,6 +33,8 @@ const handler = NextAuth({
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
   },
+
+  debug: process.env.NODE_ENV === "dev",
 
   session: {
     strategy: "jwt",
@@ -57,10 +60,12 @@ const handler = NextAuth({
         token.userId = user.id;
         token.userData = user;
       }
+      console.log(user);
       return token;
     },
-    
+
     async session({ session, token }) {
+      console.log(token);
       session.user.id = token.userId;
       session.user.userData = token.userData;
       return session;
@@ -70,8 +75,9 @@ const handler = NextAuth({
   pages: {
     signIn: "/login",
   },
-});
+};
 
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
 
 const handleAuthentication = async (credentials, req) => {

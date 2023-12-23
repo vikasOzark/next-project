@@ -3,29 +3,29 @@ import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export async function POST(request) {
-  const requestBody = await request.json()
+  const requestBody = await request.json();
   try {
-    const userObjectId = await getUserId(request);
+    const userObjectId = await getUserId();
     prisma.$connect();
 
-    if(!requestBody.color) {
+    if (!requestBody.color) {
       return ErrorResponse({
         message: "Color is required.",
-      })
+      });
     }
 
     const tagsData = await prisma.tags.create({
       data: {
-        title : requestBody.title,
-        color : requestBody.color,
-        createdById : {
-            connect : {
-                id: userObjectId
-            }
-        }
+        title: requestBody.title,
+        color: requestBody.color,
+        createdById: {
+          connect: {
+            id: userObjectId,
+          },
+        },
       },
     });
 
@@ -38,7 +38,6 @@ export async function POST(request) {
       { status: httpStatus.HTTP_201_CREATED }
     );
   } catch (error) {
-     
     return NextResponse.json(
       {
         message: "Internal server error, Please try again." + error.message,
@@ -52,7 +51,7 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    const userObjectId = await getUserId(request);
+    const userObjectId = await getUserId();
     prisma.$connect();
 
     const tagsData = await prisma.tags.findMany({
@@ -70,7 +69,6 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-     
     return NextResponse.json(
       {
         message: "Internal server error, Please try again.",

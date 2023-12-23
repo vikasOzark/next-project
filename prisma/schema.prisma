@@ -30,8 +30,10 @@ model User {
     role               Role    @default(User)
     password           String
     Tags               Tags[]
+    uniqueCompanyId    String?
 
-    isDisabled Boolean? @default(false)
+    isSuperuser Boolean  @default(false)
+    isDisabled  Boolean? @default(false)
 
     parentUserId String? @unique @db.ObjectId
     parent       User?   @relation("parentUser", fields: [parentUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -86,6 +88,7 @@ model Tickets {
     noteId String[] @db.ObjectId
 
     isMerged Boolean @default(false)
+    isReaded Boolean @default(false)
 
     mergedTickets Tickets[] @relation("mergeTickets", fields: [mergeTicketId], references: [id])
     mergeTicketId String[]  @db.ObjectId
