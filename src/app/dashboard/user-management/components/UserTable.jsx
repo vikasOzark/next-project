@@ -10,6 +10,7 @@ import { UsersDataContext } from "../page";
 import { ToggleDisableUser } from "./userUtils/DeleteUser";
 import { UpdateUserRole } from "./UpdateUserRole";
 import { LoadingButton } from "@/components/Buttons";
+import handleTimeFormat from "@/utils/dateTimeFormat";
 
 export default function UserTable() {
   const HEADERS = [
@@ -78,13 +79,10 @@ const TableHead = ({ title }) => {
 };
 
 const TableDataRow = ({ user }) => {
-  const dateObject = new Date(user.createdAt);
-  const year = dateObject.getFullYear();
-  const month = dateObject.getMonth() + 1;
-  const day = dateObject.getDate();
-  const hours = dateObject.getHours();
-  const minutes = dateObject.getMinutes();
-  const dateAndTime = `${hours}:${minutes} | ${day}-${month}-${year}`;
+  const dateTime = handleTimeFormat(user.createdAt, {
+    isFormated: true,
+    dateTime: true,
+  });
 
   return (
     <>
@@ -126,7 +124,7 @@ const TableDataRow = ({ user }) => {
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">
           <div className="flex items-center gap-x-6 justify-center">
-            {user?.parent?.first_name || "N/A"}
+            {dateTime}
           </div>
         </td>
 

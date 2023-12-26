@@ -1,8 +1,8 @@
 "use client";
 
 import formValidator from "@/utils/formValidator";
-import passwdValidator from "@/app/(auth)/singup/passwordValidator"
-import { PasswordValidatorConponent } from "@/app/(auth)/singup/PasswordValidatorComponent"
+import passwdValidator from "@/app/(auth)/singup/passwordValidator";
+import { PasswordValidatorConponent } from "@/app/(auth)/singup/PasswordValidatorComponent";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { LoaderIcon, toast } from "react-hot-toast";
@@ -10,20 +10,20 @@ import { LoaderIcon, toast } from "react-hot-toast";
 export default function SingUp() {
   const [loading, setLoading] = useState(false);
   const [errorResponseData, setErrorResponseData] = useState({});
-  const [validationLevel, setValidationLevel] = useState('');
+  const [validationLevel, setValidationLevel] = useState("");
 
   const passwd = useRef();
   const conformPasswd = useRef();
 
   const checkPassword = () => {
-	const passwdValue = passwd.current.value
-	
-	passwdValidator(passwdValue, setValidationLevel)
-	if (passwdValue !== conformPasswd.current.value) {
-		setErrorResponseData({confirm_password : "Please match your password."})
-	} else {
-		setErrorResponseData({})
-	}
+    const passwdValue = passwd.current.value;
+
+    passwdValidator(passwdValue, setValidationLevel);
+    if (passwdValue !== conformPasswd.current.value) {
+      setErrorResponseData({ confirm_password: "Please match your password." });
+    } else {
+      setErrorResponseData({});
+    }
   };
 
   const singupHandler = async (e) => {
@@ -84,7 +84,7 @@ export default function SingUp() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={singupHandler}>
-            <div className="flex justify-between items-center">
+            <div className="flex gap-x-2.5 justify-between items-center">
               <div>
                 <label
                   htmlFor="first_name"
@@ -98,7 +98,7 @@ export default function SingUp() {
                     name="first_name"
                     type="text"
                     autoComplete="text"
-                    className="input_css"
+                    className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
                 {errorResponseData && (
@@ -121,7 +121,7 @@ export default function SingUp() {
                     name="last_name"
                     type="text"
                     autoComplete="text"
-                    className="input_css"
+                    className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
                 {errorResponseData && (
@@ -145,7 +145,7 @@ export default function SingUp() {
                   name="contact_number"
                   type="text"
                   autoComplete="text"
-                  className="input_css"
+                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
               {errorResponseData && (
@@ -168,7 +168,7 @@ export default function SingUp() {
                   name="email"
                   type="text  "
                   autoComplete="email"
-                  className="input_css"
+                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
               {errorResponseData && (
@@ -178,15 +178,15 @@ export default function SingUp() {
               )}
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between gap-2 items-center">
               <div>
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="password"
                     className=" text-sm flex items-center gap-2 text-white font-medium leading-6 "
                   >
-                    Password 
-					{/* <ToolTip icon={<VscQuestion size={23} className="text-white" /> } text={"data display"} /> */}
+                    Password
+                    {/* <ToolTip icon={<VscQuestion size={23} className="text-white" /> } text={"data display"} /> */}
                   </label>
                 </div>
                 <div className="mt-2">
@@ -199,10 +199,13 @@ export default function SingUp() {
                     autoComplete="current-password"
                     className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
-				  <div className="mt-1">
-				  
-					{validationLevel ? <PasswordValidatorConponent validateLevel={validationLevel} /> : null}
-				  </div>
+                  <div className="mt-1">
+                    {validationLevel ? (
+                      <PasswordValidatorConponent
+                        validateLevel={validationLevel}
+                      />
+                    ) : null}
+                  </div>
                 </div>
                 {errorResponseData && (
                   <small className="text-red-500 capitalize font-bold">
@@ -222,7 +225,7 @@ export default function SingUp() {
                 <div className="mt-2">
                   <input
                     ref={conformPasswd}
-					onChange={checkPassword}
+                    onChange={checkPassword}
                     id="confirm_password"
                     name="confirm_password"
                     type="password"
