@@ -7,11 +7,13 @@ const prisma = new PrismaClient();
 
 export async function GET(request) {
   try {
-    const userObjectId = await getUserId();
+    const userObject = await getUserId(true);
     await prisma.$connect();
     const departmentList = await prisma.department.findMany({
       where: {
-        userId: userObjectId,
+        createdById: {
+          uniqueCompanyId: userObject.uniqueCompanyId,
+        },
       },
     });
 
@@ -42,14 +44,14 @@ export async function POST(request) {
       throw new Error("Name should not be empty.");
     }
     prisma.$connect();
-    const userObjectId = await getUserId();
+    const userObject = await getUserId();
 
     await prisma.department.create({
       data: {
         name: requestBody.department,
         createdById: {
           connect: {
-            id: userObjectId,
+            id: userObject,
           },
         },
       },

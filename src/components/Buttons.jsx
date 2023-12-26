@@ -7,7 +7,7 @@ export const LoadingButton = ({ title, cssClass }) => {
         disabled
         type="button"
         className={twMerge(
-          "py-2.5 px-5 mr-2 text-sm font-bold text-gray-600 bg-white rounded-full  focus:z-10 focus:ring-2 inline-flex items-center cursor-progress caret-fuchsia-400",
+          "py-2.5 px-5 mr-2 text-sm font-bold text-white  rounded-full  focus:z-10 focus:ring-2 inline-flex items-center cursor-progress caret-fuchsia-400",
           cssClass
         )}
       >

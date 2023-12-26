@@ -2,7 +2,7 @@ import { ActionButton, LoadingState } from "@/components/Buttons";
 import axios from "axios";
 import React, { use } from "react";
 import toast from "react-hot-toast";
-import { VscTrash } from "react-icons/vsc";
+import { VscCircleLarge, VscCircleSlash, VscTrash } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
 
 export const ToggleDisableUser = ({ user }) => {
@@ -39,7 +39,11 @@ export const ToggleDisableUser = ({ user }) => {
               onClick={() => mutationUser.mutate("enable_user")}
               cssClass={" rounded-full hover:bg-gray-500 transition-all gap-2"}
             >
-              <VscTrash size={18} className="font-bold" fontWeight={800} />
+              <VscCircleLarge
+                size={18}
+                className="font-bold"
+                fontWeight={800}
+              />
               Enable
             </ActionButton>
           ) : (
@@ -47,7 +51,11 @@ export const ToggleDisableUser = ({ user }) => {
               onClick={() => mutationUser.mutate("disable_user")}
               cssClass={" rounded-full hover:bg-gray-500 transition-all gap-2"}
             >
-              <VscTrash size={18} className="font-bold" fontWeight={800} />
+              <VscCircleSlash
+                size={18}
+                className="font-bold"
+                fontWeight={800}
+              />
               Disable
             </ActionButton>
           )}

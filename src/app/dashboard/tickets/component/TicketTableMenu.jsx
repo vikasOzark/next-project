@@ -72,6 +72,12 @@ export function TicketStatusUpdate({
   ticketStatus,
   revalidateKey,
 }) {
+  const router = useRouter();
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
+
   const queryClient = useQueryClient();
   const mutationAction = useMutation({
     mutationFn: async (status) => {
@@ -80,6 +86,7 @@ export function TicketStatusUpdate({
     },
     onSuccess: () => {
       queryClient.invalidateQueries(revalidateKey);
+      refreshData();
       toast.dismiss();
       toast.success("Successfully status is updated.");
     },

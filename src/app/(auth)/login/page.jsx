@@ -11,10 +11,10 @@ export default function Login() {
 
   return (
     <>
-      <div className="grid mt-auto items-center h-[100vh]">
-        <div className="">
+      <div className="grid mt-auto place-content-center items-center h-[100vh]">
+        <div className=" w-fit drop-shadow-lg soft-bg overflow-hidden rounded-xl p-4 px-6 bg-opacity-50 ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+            <h2 className="lg:mt-5 md:mt-5 mt-2 text-center text-2xl font-bold leading-9 tracking-tight text-white">
               Sign in to your account
             </h2>
           </div>
@@ -23,7 +23,7 @@ export default function Login() {
             action=""
             onSubmit={(e) => loginHandler(e, setLoading, setErrorResponseData)}
           >
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div className="mt-10  sm:mx-auto sm:w-full sm:max-w-sm">
               <div className="space-y-6">
                 <div>
                   <label
@@ -56,14 +56,14 @@ export default function Login() {
                     >
                       Password
                     </label>
-                    <div className="text-sm">
+                    {/* <div className="text-sm">
                       <a
                         href="#"
                         className="font-semibold text-indigo-600 hover:text-indigo-500"
                       >
                         Forgot password?
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="mt-2">
                     <input
@@ -98,25 +98,15 @@ export default function Login() {
                       {loading ? "Loading..." : "Sign in"}
                     </button>
                   )}
+
                   <Link
                     href={"/singup"}
                     className="text-white font-bold mt-2 flex items-center gap-2"
                   >
-                    {`Don't have a account, Sing up here`}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                      />
-                    </svg>
+                    {`Don't have a account,`}{" "}
+                    <span className="text-blue-500 hover:underline">
+                      Sing up here
+                    </span>
                   </Link>
                 </div>
               </div>

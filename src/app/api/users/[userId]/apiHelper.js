@@ -15,6 +15,7 @@ export const handleUpdateUser = async (targetUser, parentUserId, data = {}) => {
     },
     data: data,
   });
+  console.log(userDataEnabled);
   return userDataEnabled;
 };
 
@@ -25,8 +26,9 @@ export const handleUserAlter = async (body, userData, targetUser, userId) => {
       httpStatus.HTTP_401_UNAUTHORIZED
     );
   }
-
+  console.log("passes the ............");
   const isUser = await bcrypt.compare(body.password, userData.password);
+  console.log(isUser);
 
   if (!isUser) {
     return ErrorResponse(
@@ -35,23 +37,29 @@ export const handleUserAlter = async (body, userData, targetUser, userId) => {
     );
   }
 
-  if (isUser.role === Role.Admin) {
+  console.log(isUser);
+
+  if (userData.role !== Role.Admin) {
     return ErrorResponse(
       { message: "You don't have valid authorization to alter user." },
       httpStatus.HTTP_400_BAD_REQUEST
     );
   }
 
+  console.log("user passes adming check");
+
   const userDataAlter = await handleUpdateUser(targetUser, userId, {
     role: Role[body.role],
   });
+
+  console.log(userDataAlter);
 
   return SuccessResponseHandler(
     userDataAlter,
     `User's role has been updated to ${body.role} successfully.`,
     httpStatus.HTTP_202_ACCEPTED
   );
-}
+};
 
 // class UserOperation {
 //   constructor (body, userData, targetUser, userId) {

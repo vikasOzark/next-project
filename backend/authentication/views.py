@@ -57,7 +57,7 @@ class AuthenticationViewset(ViewSet):
         except:
             return Response(
                 response_helper.response_helper(
-                    message="Somethin went wrong, Internal server error.",
+                    message="Something went wrong, Internal server error.",
                     status=status.HTTP_400_BAD_REQUEST
                 ), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

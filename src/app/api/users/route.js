@@ -113,10 +113,10 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     await prisma.$connect();
-    const userId = await getUserId();
+    const userId = await getUserId(true);
     const userList = await prisma.user.findMany({
       where: {
-        parentUserId: userId,
+        uniqueCompanyId: userId.uniqueCompanyId,
       },
       include: {
         parent: true,

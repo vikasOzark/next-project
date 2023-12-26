@@ -38,7 +38,7 @@ export async function PATCH(request, context) {
       );
     }
 
-    if (isAdmin.role === Role.Admin) {
+    if (isAdmin.role !== Role.Admin) {
       return ErrorResponse(
         { message: "You don't have valid permission." },
         httpStatus.HTTP_401_UNAUTHORIZED

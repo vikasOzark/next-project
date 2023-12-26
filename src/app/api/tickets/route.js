@@ -50,18 +50,19 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    const userObjectId = await getUserId();
+    const userObjectId = await getUserId(true);
     await prisma.$connect();
 
     const ticketsData = await prisma.tickets.findMany({
       where: {
-        userId: userObjectId,
+        createdById: {
+          uniqueCompanyId: userObjectId.userObjectId,
+        },
       },
 
       include: {
         department: true,
         tags: true,
-        where: userObjectId,
         _count: {
           select: {
             mergedTicket: true,
@@ -82,6 +83,7 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
+    console.log(error.message);
     return ErrorResponse({
       error: error,
       message: "Something went wrong, Please try again.",
@@ -115,24 +117,11 @@ export async function PATCH(request) {
 
     return NextResponse.json({
       success: true,
-      message: "Ticket is created successfully.",
+      message: "Ticket is updated successfully.",
       data: [createdTicket],
     });
   } catch (error) {
-    const errorMessage = error.message.split(":");
-
-    let message = null;
-    if (errorMessage[0] === "self") {
-      message = errorMessage[1];
-    } else {
-      message = "Something went wrong.";
-    }
-
-    return NextResponse.json({
-      success: false,
-      message: message,
-      data: [],
-    });
+    return ErrorResponse({ error: error });
   } finally {
     await prisma.$disconnect();
   }

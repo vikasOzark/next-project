@@ -17,6 +17,7 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import { LoadingButton, SubmitButton } from "@/components/Buttons";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export function UpdateUserRole({ styleButton, icon, title, userData }) {
   const queryClient = useQueryClient();
@@ -90,6 +91,9 @@ export function UpdateUserRole({ styleButton, icon, title, userData }) {
 }
 
 export const AlterUserConfirm = ({ mutationFn }) => {
+  const session = useSession();
+  const userRole = session?.data?.user.userData.role;
+
   return (
     <>
       <form onSubmit={mutationFn.mutate}>
@@ -124,7 +128,11 @@ export const AlterUserConfirm = ({ mutationFn }) => {
               name="password"
               id="password"
               required
-              className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className={`block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset  ${
+                userRole === "User"
+                  ? "ring-red-600 focus:ring-red-600"
+                  : "focus:ring-green-600"
+              } sm:text-sm sm:leading-6`}
               placeholder="*********"
             />
           </div>

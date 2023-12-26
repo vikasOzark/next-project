@@ -43,6 +43,7 @@ export default function UpdateTicketForm({ ticketData }) {
         tags: selectedTag,
       };
 
+      setFormError({});
       const isError = formValidator(ticketData);
       if (isError) {
         setFormError(isError);
@@ -51,22 +52,17 @@ export default function UpdateTicketForm({ ticketData }) {
 
       return axios.patch(`/api/tickets`, ticketData);
     },
-
-    onSettled: async (data) => {
-      const response = await data;
-      if (response) {
-        if (!response.data?.success) {
-          toast.error(response.data?.message);
-        }
-      }
-
-      setSelectedTag([]);
-      formElement.current.reset();
+    onError: (error) => {
+      const err = JSON.parse(error.request.response);
+      toast.error(err.message);
     },
 
     onSuccess: () => {
       toast.success("Ticket is created.");
       queryClient.invalidateQueries({ queryKey: ["tickets-list"] });
+
+      setSelectedTag([]);
+      formElement.current.reset();
     },
   });
 

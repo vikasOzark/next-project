@@ -23,6 +23,7 @@ import { NotesSection } from "./components/NotesSection";
 import React from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
 import { useContext } from "react";
+import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
@@ -34,13 +35,17 @@ export default function Page({ params }) {
     queryFn: () => {
       return axios.get(`/api/tickets/${ticketId}`);
     },
+    retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
   const ticketData = ticketResponse.data?.data.data || {};
+
   return (
     <>
-      <TicketDataContext.Provider value={{ ticketData, params }}>
+      <TicketDataContext.Provider
+        value={{ ticketData, params, ticketResponse }}
+      >
         <div className="mb-2">
           <button
             title="Take me back"
@@ -55,24 +60,16 @@ export default function Page({ params }) {
         </div>
         <div className="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-3">
           <div className="col-span-8">
-            {ticketResponse.isLoading ? (
-              <div className="flex justify-center">
-                <LoadingButton title={"Loading your ticket..."} />
+            <div className="flex-row gap-2 mb-2">
+              <TicketDataSection />
+              <div className="">
+                {ticketData.mergedTicket?.map((ticket) => (
+                  <MergedTicketCard key={ticket.id} ticketData={ticket} />
+                ))}
               </div>
-            ) : (
-              <>
-                {" "}
-                <div className="flex-row gap-2 mb-2">
-                  <TicketDataSection />
-                  <div className="">
-                    {ticketData.mergedTicket?.map((ticket) => (
-                      <MergedTicketCard key={ticket.id} ticketData={ticket} />
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
+            </div>
           </div>
+
           <div className=" md:col-span-4">
             <div className=" font-bold text-2xl px-3 text-white">
               <h3 className="flex gap-2 items-center ">
@@ -89,7 +86,13 @@ export default function Page({ params }) {
 }
 
 const TicketDataSection = () => {
-  const { ticketData } = useContext(TicketDataContext);
+  const { ticketData, ticketResponse } = useContext(TicketDataContext);
+
+  const errorMessageProvider = () => {
+    const error = ticketResponse.error?.request.response || "{}";
+    const errorMessage = JSON.parse(error);
+    return errorMessage.message;
+  };
 
   return (
     <>
@@ -123,91 +126,107 @@ const TicketDataSection = () => {
           />
         </div>
         <div className="rounded-2xl grid grid-cols-3 gap-3 p-3 border soft-bg shadow-md border-gray-800 ">
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Ticket title
-            </h3>
-            <p className=" capitalize text-sm md:text-md lg:text-lg ">
-              {ticketData.taskTitle}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Department
-            </h3>
-            <p className=" capitalize text-sm md:text-md lg:text-lg ">
-              {ticketData?.department?.name}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Ticket status
-            </h3>
-            <p className={`${statusCss(ticketData?.status, Status, "text")}`}>
-              {ticketData?.status}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Ticket details
-            </h3>
-            <p className=" capitalize text-sm md:text-md lg:text-lg ">
-              {ticketData?.ticketDetil}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Created by
-            </h3>
-            <p className=" capitalize text-sm md:text-md lg:text-lg ">
-              {ticketData?.createdById?.first_name}{" "}
-              {ticketData?.createdById?.last_name}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Tags
-            </h3>
-            <div className=" flex gap-2 items-center">
-              {ticketData?.tags?.map((tag) => (
-                <p
-                  className={`${tag.color} rounded-full flex justify-between gap-2 px-4 py-[2px] font-bold text-white`}
-                  key={tag.id}
-                >
-                  {tag.title}
+          {ticketResponse.isLoading && (
+            <div className="col-span-3">
+              <LoadingButton title={"Loading your ticket..."} />
+            </div>
+          )}
+          {ticketResponse.isError && (
+            <div className="col-span-3">
+              <SimpleErrorMessage message={errorMessageProvider()} />
+            </div>
+          )}
+          {ticketResponse.isSuccess && (
+            <>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Ticket title
+                </h3>
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                  {ticketData.taskTitle}
                 </p>
-              ))}
-            </div>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Created at
-            </h3>
-            <p className=" capitalize text-sm md:text-md lg:text-lg ">
-              {handleTimeFormat(ticketData?.createdAt, {
-                isFormated: true,
-                datePrifix: "/",
-                dateTime: true,
-              })}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Creatd by
-            </h3>
-            <p className=" capitalize text-sm md:text-md lg:text-lg ">
-              {ticketData?.createdById?.first_name}{" "}
-              {ticketData?.createdById?.last_name}
-            </p>
-          </div>
-          <div className="">
-            <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-              Assigned
-            </h3>
-            <div className="flex gap-3 items-center mt-2">
-              <TicketHoverCard ticketData={ticketData} />
-            </div>
-          </div>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Department
+                </h3>
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                  {ticketData?.department?.name}
+                </p>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Ticket status
+                </h3>
+                <p
+                  className={`${statusCss(ticketData?.status, Status, "text")}`}
+                >
+                  {ticketData?.status}
+                </p>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Ticket details
+                </h3>
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                  {ticketData?.ticketDetil}
+                </p>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Created by
+                </h3>
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                  {ticketData?.createdById?.first_name}{" "}
+                  {ticketData?.createdById?.last_name}
+                </p>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Tags
+                </h3>
+                <div className=" flex gap-2 items-center">
+                  {ticketData?.tags?.map((tag) => (
+                    <p
+                      className={`${tag.color} rounded-full flex justify-between gap-2 px-4 py-[2px] font-bold text-white`}
+                      key={tag.id}
+                    >
+                      {tag.title}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Created at
+                </h3>
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                  {handleTimeFormat(ticketData?.createdAt, {
+                    isFormated: true,
+                    datePrifix: "/",
+                    dateTime: true,
+                  })}
+                </p>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Creatd by
+                </h3>
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                  {ticketData?.createdById?.first_name}{" "}
+                  {ticketData?.createdById?.last_name}
+                </p>
+              </div>
+              <div className="">
+                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                  Assigned
+                </h3>
+                <div className="flex gap-3 items-center mt-2">
+                  <TicketHoverCard ticketData={ticketData} />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

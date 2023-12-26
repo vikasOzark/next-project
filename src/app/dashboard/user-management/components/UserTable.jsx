@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import { VscGear, VscTrash } from "react-icons/vsc";
+import { VscCircleFilled, VscGear, VscTrash } from "react-icons/vsc";
 import {
   SimpleErrorMessage,
   SimpleInfoMessage,
@@ -107,6 +107,13 @@ const TableDataRow = ({ user }) => {
 
         <td className="px-4 py-4 text-sm  dark:text-gray-300 whitespace-nowrap">
           {user?.role}
+          {user?.isSuperuser && (
+            <>
+              <span className="text-green-700 mx-2 font-bold bg-green-300 rounded-md px-2">
+                Superuser
+              </span>
+            </>
+          )}
         </td>
 
         <td className="px-4 py-4 text-sm  dark:text-gray-300 whitespace-nowrap">
@@ -119,14 +126,14 @@ const TableDataRow = ({ user }) => {
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">
           <div className="flex items-center gap-x-6 justify-center">
-            {user?.parent.first_name}
+            {user?.parent?.first_name || "N/A"}
           </div>
         </td>
 
         <td className="px-4 py-4 text-sm whitespace-nowrap">
           <div
             className={`flex items-center gap-x-6 rounded-full py-1 font-bold  justify-center ${
-              user.isDisabled
+              user?.isDisabled
                 ? "bg-gray-400 text-gray-800"
                 : "bg-green-400 text-green-800"
             }`}

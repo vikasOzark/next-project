@@ -2,7 +2,7 @@ import ErrorResponseHandler, {
   ErrorResponse,
 } from "@/utils/ErrorResponseHandler";
 import getUserId from "@/utils/userByToken";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { v4 } from "uuid";
 const prisma = new PrismaClient();
@@ -41,6 +41,7 @@ export async function POST(request) {
       requestBody.password = hashedPassword;
       requestBody.isSuperuser = true;
       requestBody.uniqueCompanyId = v4();
+      requestBody.role = Role.Admin;
 
       const user = await prisma.user.create({
         data: requestBody,

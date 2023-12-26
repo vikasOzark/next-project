@@ -51,12 +51,14 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    const userObjectId = await getUserId();
+    const userObject = await getUserId(true);
     prisma.$connect();
 
     const tagsData = await prisma.tags.findMany({
       where: {
-        userId: userObjectId,
+        createdById: {
+          uniqueCompanyId: userObject.uniqueCompanyId,
+        },
       },
     });
 

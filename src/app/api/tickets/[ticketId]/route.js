@@ -5,7 +5,11 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
-import { handleTagRemove, handleUserAssignment } from "./apiHelper";
+import {
+  handleTagRemove,
+  handleUserAssignment,
+  handleUserUnassign,
+} from "./apiHelper";
 const prisma = await new PrismaClient();
 
 export async function GET(request, context) {
@@ -31,7 +35,7 @@ export async function GET(request, context) {
 
     return SuccessResponseHandler(ticket, "Ticket data fetched.");
   } catch (error) {
-    return ErrorResponseHandler(error);
+    return ErrorResponse({ error: error });
   } finally {
     await prisma.$disconnect();
   }
@@ -97,30 +101,20 @@ export async function PATCH(request, context) {
   try {
     switch (query.operationTo.toUpperCase()) {
       case "TAG":
-        await handleTagRemove(request, query, params);
-        break;
+        return await handleTagRemove(request, query, params);
 
       case "USER_ASSIGNMENT":
-        await handleUserAssignment(request, query, params);
-        break;
+        return await handleUserAssignment(request, query, params);
 
       case "USER_UNASSIGN":
-        await handleUserUnassign(request, query, params);
-        break;
-
-      case "NOTE_ADD":
-        await handleUserUnassign(request, query, params);
-        break;
+        return await handleUserUnassign(request, query, params);
 
       default:
-        break;
+        return ErrorResponse(
+          { message: "Did't matched any any operation type." },
+          httpStatus.HTTP_400_BAD_REQUEST
+        );
     }
-
-    return SuccessResponseHandler(
-      [],
-      "Person is assigned successfully.",
-      httpStatus.HTTP_202_ACCEPTED
-    );
   } catch (error) {
     return ErrorResponse(
       {

@@ -6,7 +6,7 @@ import {
   VscGroupByRefType,
   VscKebabVertical,
 } from "react-icons/vsc";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   DropdownActionMenuButton,
   TicketStatusUpdate,
@@ -120,6 +120,7 @@ const TableBodyRow = ({ responseData }) => {
 
 const TableRowComponent = ({ data, ticketStatus }) => {
   const { selectedTickets, setSelectedTickets } = useContext(SelectContext);
+  const queryClient = useQueryClient();
 
   const dateObject = new Date(data.createdAt);
   const year = dateObject.getFullYear();
@@ -136,18 +137,17 @@ const TableRowComponent = ({ data, ticketStatus }) => {
         `/api/tickets/${data.id}/?operationTo=tag&tagId=${tagId}`
       );
     },
-    onSettled: async (response) => {
-      if (response) {
-        toast.remove();
-        if (response.data.success) {
-          contextFunction();
-          toast.success(response.data?.message || "Tag removed Successfully.");
-        } else {
-          toast.error(
-            response.data?.message || "Something went wrong while removing tag."
-          );
-        }
+    onError: (errorResponse) => {
+      const error = JSON.parse(errorResponse.request.response);
+      console.log(error);
+      toast.error(error.message);
+    },
+    onSuccess: (response) => {
+      if (!response.success) {
+        toast.error(error.message);
       }
+      queryClient.invalidateQueries("tickets-list");
+      toast.success(response.message);
     },
   });
 

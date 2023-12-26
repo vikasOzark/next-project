@@ -1,14 +1,9 @@
 "use client";
 
-import TicketStatusInfo from "./dashboardComponents/DashboardInfoCard";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-  return (
-    <>
-      <section>
-        <TicketStatusInfo />
-      </section>
-      <section></section>
-    </>
-  );
+  const route = useRouter();
+  route.push("/dashboard/-");
+  return <></>;
 }
