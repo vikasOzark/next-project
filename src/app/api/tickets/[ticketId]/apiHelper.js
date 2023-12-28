@@ -270,17 +270,22 @@ export class ParentTicketStatusHandler {
   }
 
   /**
-   * 
+   * This method instaciate the process.
    * @param {Status} status requested status
    */
-  async init (status) {
-    const hasMerge = await this.hasMergedParentTicket()
-    
+  async init() {
+    const hasMerge = await this.hasMergedParentTicket();
     if (hasMerge && !this.currentTicketData.isMerged) {
-      const canCloseParentTicket =
-        await mergedTicketOperation.checkChildTicketStatus();
-      if (canCloseParentTicket) {
-        mergedTicketOperation.updateParentStatus(Status.CLOSE)
+      if (
+        Status.HOLD === this.requestedStatus ||
+        Status.PENDING === this.requestedStatus
+      ) {
+        this.updateParentStatus(Status.PENDING);
+      }
+
+      const canCloseParentTicket = await this.checkChildTicketStatus();
+      if (canCloseParentTicket && Status.CLOSE === this.requestedStatus) {
+        this.updateParentStatus(Status.CLOSE);
       }
     }
   }

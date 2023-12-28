@@ -77,11 +77,7 @@ export async function POST(request, context) {
       Status[status],
       data
     );
-
-    mergedTicketOperation.init()
-
-
-    
+    await mergedTicketOperation.init();
 
     return SuccessResponseHandler(
       data,
@@ -98,20 +94,25 @@ export async function DELETE(request, context) {
   await prisma.$connect();
 
   try {
-    const userId = await getUserId();
+    const userObjectId = await getUserId(true);
+    console.log(userObjectId);
+
     await prisma.tickets.delete({
       where: {
-        userId: userId,
         id: params.ticketId,
+        createdById: {
+          uniqueCompanyId: userObjectId.userObjectId,
+        },
       },
     });
-
+    // TODO need to remove depended for merge tickets or find another way to perform the same
     return SuccessResponseHandler(
       [],
       "Tickets is deleted",
       httpStatus.HTTP_202_ACCEPTED
     );
   } catch (error) {
+    console.log(error.message);
     return ErrorResponseHandler(error);
   }
 }

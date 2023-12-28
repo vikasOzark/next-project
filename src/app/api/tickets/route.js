@@ -56,7 +56,7 @@ export async function GET(request) {
     const ticketsData = await prisma.tickets.findMany({
       where: {
         createdById: {
-          uniqueCompanyId: userObjectId.userObjectId,
+          uniqueCompanyId: userObjectId.uniqueCompanyId,
         },
       },
 

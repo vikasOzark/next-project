@@ -1,6 +1,5 @@
 "use client";
 
-import Chart from "chart.js/auto";
 import React, { useRef } from "react";
 
 export default function Analytics() {

@@ -56,6 +56,8 @@ export const TicketTableComponent = () => {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       retry: false,
+      cacheTime: 0,
+      staleTime: 0,
     }
   );
 
@@ -222,7 +224,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
               revalidateKey={"tickets-list"}
               title={"Delete"}
               className={
-                "bg-red-500 py-1 hover:bg-red-600 text-white hover:text-white"
+                "bg-red-500 hover:bg-red-600 px-3 py-[3px] text-white hover:text-white"
               }
             />
 
@@ -233,7 +235,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
               ticketStatus={ticketStatus}
               actionData={data}
               revalidateKey={"tickets-list"}
-              styleButton="hover:bg-gray-200 bg-gray-50 rounded-full text-gray-800"
+              styleButton="hover:bg-gray-200 bg-gray-50 px-3 py-[3px] rounded-full text-gray-800"
             />
             <DropdownActionMenuButton
               key={data.taskTitle}
@@ -312,7 +314,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.PENDING === status) {
     return (
       <>
-        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-yellow-200  ">
+        <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-yellow-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
           <h2 className=" text-yellow-700  font-bold">{status}</h2>
         </div>
@@ -323,7 +325,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.CLOSE === status) {
     return (
       <>
-        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-green-200  ">
+        <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-green-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
           <h2 className=" text-green-700  font-bold">{status}</h2>
         </div>
@@ -334,7 +336,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.HOLD === status) {
     return (
       <>
-        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-blue-200  ">
+        <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-blue-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
           <h2 className=" text-blue-700  font-bold">{status}</h2>
         </div>
@@ -345,7 +347,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
   if (TaskStatus.REJECT === status) {
     return (
       <>
-        <div className="inline-flex items-center px-2 py-1 rounded-full gap-2 bg-red-200  ">
+        <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-red-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-red-600"></span>
           <h2 className=" text-red-700  font-bold">{status}</h2>
         </div>

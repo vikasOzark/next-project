@@ -94,6 +94,11 @@ export function TicketStatusUpdate({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
+          // disabled={}
+          title={
+            actionData.isMerged &&
+            "Ticket will automatically closed when sub child tickets will closed."
+          }
           className={twMerge(
             "px-4 flex gap-2 items-center font-bold hover-bg-gray-500",
             styleButton

@@ -61,7 +61,7 @@ export const TicketDeleteButton = ({
             className
           )}
         >
-          <VscTrash size={20} />
+          <VscTrash size={18} />
           <span className="hidden md:block lg:block">{title}</span>
         </button>
       )}
