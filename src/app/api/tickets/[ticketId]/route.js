@@ -6,9 +6,12 @@ import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
 import {
+  ParentTicketStatusHandler,
   handleTagRemove,
   handleUserAssignment,
   handleUserUnassign,
+  updateMergeTicketStatus,
+  updateParentTicketStatus,
 } from "./apiHelper";
 const prisma = await new PrismaClient();
 
@@ -45,6 +48,20 @@ export async function POST(request, context) {
   try {
     const { params } = context;
     const { status } = await request.json();
+
+    /**
+     * This block checks if current ticket has any child tickets and child tickets are closed or not.
+     * @returns This method returns true is all the child tickets status `CLOSED` else false
+     */
+    if (Status[status] === Status.CLOSE) {
+      const isMergedAllow = await updateMergeTicketStatus(request, params);
+      if (!isMergedAllow?.allowStatusUpdate) {
+        return ErrorResponse({
+          message: "Child ticket are not closed yet, Please close them first.",
+        });
+      }
+    }
+
     await prisma.$connect();
     const data = await prisma.tickets.update({
       where: {
@@ -55,6 +72,16 @@ export async function POST(request, context) {
         status: Status[status],
       },
     });
+
+    const mergedTicketOperation = new ParentTicketStatusHandler(
+      Status[status],
+      data
+    );
+
+    mergedTicketOperation.init()
+
+
+    
 
     return SuccessResponseHandler(
       data,

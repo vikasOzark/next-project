@@ -72,27 +72,19 @@ export function TicketStatusUpdate({
   ticketStatus,
   revalidateKey,
 }) {
-  const router = useRouter();
-
-  const refreshData = () => {
-    router.replace(router.asPath);
-  };
-
   const queryClient = useQueryClient();
   const mutationAction = useMutation({
     mutationFn: async (status) => {
       toast.loading(`Ticket status is updating...`);
       return axios.post(`/api/tickets/${actionData.id}`, { status: status });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(revalidateKey);
-      refreshData();
+    onSuccess: (response) => {
       toast.dismiss();
+      queryClient.invalidateQueries(revalidateKey);
       toast.success("Successfully status is updated.");
     },
     onError: async (error) => {
       const err = await error.response.data;
-
       toast.dismiss();
       toast.error(err?.message || "Something went wrong, Please try again.");
     },
