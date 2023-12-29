@@ -34,3 +34,18 @@ export const getDepartmentData = async () => {
   const json_response = await response.json();
   return json_response;
 };
+
+
+export const appendTicketCall = async (e) => {
+  e.preventDefault();
+
+  const response = await fetch(
+    `/api/tickets/merge/${ticketData.id}/append`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ ticketsIds: selectedIds }),
+    }
+  );
+  const jsonResponse = await response.json();
+  return jsonResponse;
+}

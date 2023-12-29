@@ -47,19 +47,7 @@ export const AppendChildToMergeForm = ({ ticketData }) => {
 
   const appendMutation = useMutation({
     mutationKey: "append-tickets",
-    mutationFn: async (e) => {
-      e.preventDefault();
-
-      const response = await fetch(
-        `/api/tickets/merge/${ticketData.id}/append`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({ ticketsIds: selectedIds }),
-        }
-      );
-      const jsonResponse = await response.json();
-      return jsonResponse;
-    },
+    mutationFn: (e) => appendTicketCall(e),
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response?.message);

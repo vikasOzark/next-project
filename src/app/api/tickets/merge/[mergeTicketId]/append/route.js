@@ -6,9 +6,8 @@ const prisma = new PrismaClient()
 
 export async function PATCH (request, context) {
     const {params} = context
-    const responseBody = await request.json()
-    console.log(responseBody);
-    console.log(params);
+    const requestBody = await request.json()
+    console.log(requestBody);
     
     try {
         await prisma.$connect()
@@ -33,6 +32,7 @@ export async function PATCH (request, context) {
         console.log(appendedTickets);
         return SuccessResponseHandler([], "Appended tickets into the merge ticket.")
     } catch (error) {
+        console.log(error.message);
         return ErrorResponse({error : error})
     }
 }
