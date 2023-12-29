@@ -51,7 +51,7 @@ export default function Modal({
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-white px-4 pb-2 pt-3 sm:p-4 sm:pb-2 min-w-fit max-h-fit">
                   <div className="items-start">
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                    <div className="mt-3 text-center sm:mt-0 sm:text-left">
                       <Dialog.Title
                         as="h3"
                         className="text-base font-semibold leading-6 flex items-center justify-between text-gray-900"

@@ -95,7 +95,6 @@ export async function DELETE(request, context) {
 
   try {
     const userObjectId = await getUserId(true);
-    console.log(userObjectId);
 
     await prisma.tickets.delete({
       where: {
@@ -105,7 +104,6 @@ export async function DELETE(request, context) {
         },
       },
     });
-    // TODO need to remove depended for merge tickets or find another way to perform the same
     return SuccessResponseHandler(
       [],
       "Tickets is deleted",

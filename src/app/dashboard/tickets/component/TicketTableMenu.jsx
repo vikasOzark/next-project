@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import { useState } from "react";
-import { VscCheck } from "react-icons/vsc";
+import { VscAdd, VscCheck, VscEdit, VscPlug } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
 import { twMerge } from "tailwind-merge";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
 import UpdateTicketForm from "./forms/UpdateTicketForm";
-import { useRouter } from "next/navigation";
+import { AppendChildToMergeForm } from "./forms/AppendMergeChild";
 
 export function DropdownActionMenuButton({
   styleButton,
@@ -25,6 +25,7 @@ export function DropdownActionMenuButton({
   actionData,
 }) {
   const [updateTicketModal, setTicketUpdateModal] = useState(false);
+  const [appendTicketModal, setTicketAppendModal] = useState(false);
 
   return (
     <>
@@ -45,9 +46,20 @@ export function DropdownActionMenuButton({
           <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => setTicketUpdateModal(true)}>
-              Edit ticket
+            <DropdownMenuItem
+              className={"flex gap-2 items-center cursor-pointer "}
+              onClick={() => setTicketUpdateModal(true)}
+            >
+              <VscEdit /> Edit ticket
             </DropdownMenuItem>
+            {actionData.isMerged && (
+              <DropdownMenuItem
+                className={"flex gap-2 items-center cursor-pointer "}
+                onClick={() => setTicketAppendModal(true)}
+              >
+                <VscAdd /> Append ticket
+              </DropdownMenuItem>
+            )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -59,6 +71,15 @@ export function DropdownActionMenuButton({
         modalTitle={"Update ticket"}
       >
         <UpdateTicketForm ticketData={actionData} />
+      </Modal>
+      <Modal
+        cssClass={"min-w-fit"}
+        className=" "
+        open={appendTicketModal}
+        setOpen={setTicketAppendModal}
+        modalTitle={"Update ticket"}
+      >
+        <AppendChildToMergeForm ticketData={actionData} />
       </Modal>
     </>
   );
