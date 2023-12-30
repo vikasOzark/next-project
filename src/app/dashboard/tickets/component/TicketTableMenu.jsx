@@ -77,7 +77,7 @@ export function DropdownActionMenuButton({
         className=" "
         open={appendTicketModal}
         setOpen={setTicketAppendModal}
-        modalTitle={"Update ticket"}
+        modalTitle={"Append ticket"}
       >
         <AppendChildToMergeForm ticketData={actionData} />
       </Modal>

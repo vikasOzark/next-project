@@ -36,7 +36,7 @@ export const getDepartmentData = async () => {
 };
 
 
-export const appendTicketCall = async (e) => {
+export const appendTicketCall = async (e, ticketData, selectedIds) => {
   e.preventDefault();
 
   const response = await fetch(
@@ -47,5 +47,13 @@ export const appendTicketCall = async (e) => {
     }
   );
   const jsonResponse = await response.json();
+  return jsonResponse;
+}
+
+
+export const getTicketList = async (setTicketData) => {
+  const response = await fetch("/api/tickets/merge-ticket-list/");
+  const jsonResponse = await response.json();
+  setTicketData(jsonResponse?.data || {});
   return jsonResponse;
 }

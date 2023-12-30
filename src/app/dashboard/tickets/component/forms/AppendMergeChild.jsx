@@ -1,22 +1,20 @@
+import { useQueryClient } from "react-query";
 import { LoadingState, SubmitButton } from "@/components/Buttons";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { VscAdd, VscCheck } from "react-icons/vsc";
 import { useMutation, useQuery } from "react-query";
+import { appendTicketCall, getTicketList } from "./utils";
 
 export const AppendChildToMergeForm = ({ ticketData }) => {
   const [selectedTickets, setTicket] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [ticketsData, setTicketData] = useState([]);
+  const queryClient = useQueryClient();
 
   const tickets = useQuery({
     queryKey: "tickets-list",
-    queryFn: async () => {
-      const response = await fetch("/api/tickets/merge-ticket-list/");
-      const jsonResponse = await response.json();
-      setTicketData(jsonResponse?.data || {});
-      return jsonResponse;
-    },
+    queryFn: () => getTicketList(setTicketData),
   });
 
   useEffect(() => {
@@ -47,10 +45,11 @@ export const AppendChildToMergeForm = ({ ticketData }) => {
 
   const appendMutation = useMutation({
     mutationKey: "append-tickets",
-    mutationFn: (e) => appendTicketCall(e),
+    mutationFn: (event) => appendTicketCall(event, ticketData, selectedIds),
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response?.message);
+        queryClient.invalidateQueries("tickets-list");
       } else {
         toast.error(response.message);
       }
@@ -77,7 +76,7 @@ export const AppendChildToMergeForm = ({ ticketData }) => {
           {selectedTickets.map((selected) => (
             <span
               key={selected.id + "selected"}
-              className="border rounded-full bg-green-400 text-green-900 font-bold px-3 py-1  ms-1"
+              className="rounded-full bg-green-400 text-green-900 font-bold px-3 py-1  ms-1"
             >
               {selected.taskTitle}
             </span>
