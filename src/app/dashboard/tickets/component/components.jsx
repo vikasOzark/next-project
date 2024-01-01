@@ -25,12 +25,13 @@ import { TicketDeleteButton } from "../ticketActionUtils";
 import { isLatestTicket } from "@/utils/dateTimeFormat";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Paginator } from "@/components/Pagination";
 import { SelectContext } from "../page";
+import { filteredData } from "./forms/utils";
 
 export const RouterContext = createContext();
 
 export const TicketTableComponent = () => {
+  const searchQuery = useContext(SelectContext);
   const param = useSearchParams();
   const router = useRouter();
   const paramsQuery = new URLSearchParams();
@@ -38,20 +39,28 @@ export const TicketTableComponent = () => {
   if (param.get("sort")) {
     paramsQuery.append("sort", param.get("sort"));
   }
-
   paramsQuery.append("sortTicket", param.get("sortTicket") || "new-to-old");
 
   const responseData = useQuery(
     ["tickets-list", paramsQuery.toString()],
+
     async ({ queryKey }) => {
       const [_, query] = queryKey;
+      console.count("api called");
+
       const response = await fetch(`/api/tickets?${query}`);
       if (response.status === 500) {
         throw new Error("Couldn't load the tickets at the moment.");
       }
       const json_response = await response.json();
+
+      if (searchQuery.searchQuery !== "" && json_response.success) {
+        return filteredData;
+      }
+
       return json_response;
     },
+
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
@@ -135,16 +144,19 @@ const TableRowComponent = ({ data, ticketStatus }) => {
   const mutationTagRemove = useMutation({
     mutationFn: async (tagId) => {
       toast.loading("Removing tag...");
-      return axios.patch(
-        `/api/tickets/${data.id}/?operationTo=tag&tagId=${tagId}`
+      const response = await fetch(
+        `/api/tickets/${data.id}/?operationTo=tag&tagId=${tagId}`,
+        { method: "PATCH" }
       );
+      const json_response = await response.json();
+      return json_response;
     },
     onError: (errorResponse) => {
-      const error = JSON.parse(errorResponse.request.response);
-      console.log(error);
-      toast.error(error.message);
+      toast.dismiss();
+      toast.error(errorResponse.message);
     },
     onSuccess: (response) => {
+      toast.dismiss();
       if (!response.success) {
         toast.error(error.message);
       }

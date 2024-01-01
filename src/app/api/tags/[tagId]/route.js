@@ -21,7 +21,7 @@ export async function DELETE(request, context) {
     );
   } catch (error) {
     return ErrorResponse({
-      error,
+      error: error,
       message: "Something unwanted happened, Please try again",
     });
   }

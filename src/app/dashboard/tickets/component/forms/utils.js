@@ -35,25 +35,29 @@ export const getDepartmentData = async () => {
   return json_response;
 };
 
-
 export const appendTicketCall = async (e, ticketData, selectedIds) => {
   e.preventDefault();
 
-  const response = await fetch(
-    `/api/tickets/merge/${ticketData.id}/append`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({ ticketsIds: selectedIds }),
-    }
-  );
+  const response = await fetch(`/api/tickets/merge/${ticketData.id}/append`, {
+    method: "PATCH",
+    body: JSON.stringify({ ticketsIds: selectedIds }),
+  });
   const jsonResponse = await response.json();
   return jsonResponse;
-}
-
+};
 
 export const getTicketList = async (setTicketData) => {
   const response = await fetch("/api/tickets/merge-ticket-list/");
   const jsonResponse = await response.json();
   setTicketData(jsonResponse?.data || {});
   return jsonResponse;
-}
+};
+
+export const filteredData = (json_response) => {
+  const filteredData = json_response.data.filter((ticket) =>
+    ticket.taskTitle
+      .toLowerCase()
+      .includes(searchQuery.searchQuery.toLowerCase())
+  );
+  return { ...json_response, ["data"]: filteredData };
+};

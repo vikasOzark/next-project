@@ -11,7 +11,6 @@ import {
   handleUserAssignment,
   handleUserUnassign,
   updateMergeTicketStatus,
-  updateParentTicketStatus,
 } from "./apiHelper";
 const prisma = await new PrismaClient();
 
@@ -110,7 +109,6 @@ export async function DELETE(request, context) {
       httpStatus.HTTP_202_ACCEPTED
     );
   } catch (error) {
-    console.log(error.message);
     return ErrorResponseHandler(error);
   }
 }

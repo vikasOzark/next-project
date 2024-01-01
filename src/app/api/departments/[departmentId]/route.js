@@ -44,7 +44,7 @@ export async function DELETE(request, context) {
 
     return SuccessResponseHandler([], "Successfully department is deleted.");
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
     return ErrorResponse({
       message: "Something bad happend, Please try again.",
     });

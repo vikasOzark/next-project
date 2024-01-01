@@ -60,12 +60,12 @@ export const authOptions = {
         token.userId = user.id;
         token.userData = user;
       }
-      console.log(user);
+      // console.log(user);
       return token;
     },
 
     async session({ session, token }) {
-      console.log(token);
+      // console.log(token);
       session.user.id = token.userId;
       session.user.userData = token.userData;
       return session;

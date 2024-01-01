@@ -15,6 +15,7 @@ import { urlRoutes } from "@/utils/urlRoutes";
 import { LoadingState } from "../Buttons";
 import { TfiAlignLeft } from "react-icons/tfi";
 import { FcBusinessman } from "react-icons/fc";
+import { BiPowerOff } from "react-icons/bi";
 
 export const SideNavbar = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -99,7 +100,7 @@ export const SideNavbar = ({ children }) => {
         </div>
 
         <aside
-          className={` lg:block [1412px]:hidden z-20 flex-col duration-500 transition-all globle-bg border-r border-gray-700 w-64 h-screen px-5 fixed ${
+          className={` lg:block [1412px]:hidden z-20 flex-col duration-500 transition-all globle-bg border-gray-700 w-64 h-screen px-5 fixed ${
             menuOpen
               ? "md:block left-0 "
               : "md:hidden -left-[100%] md:left-0 lg:left-0 "
@@ -114,7 +115,7 @@ export const SideNavbar = ({ children }) => {
           </div>
           <div className="flex flex-col justify-between flex-1 mt-6">
             <nav className="-mx-3 space-y-3 ">
-              <div className=" bg-blue-500 capitalize rounded-lg flex items-center gap-2 py-2 px-4 text-white font-bold md:text-lg lg:text-lg">
+              <div className=" bg-[#2c85ea36] capitalize rounded-lg flex items-center gap-2 py-2 px-4 text-white font-bold md:text-lg lg:text-lg">
                 <div className="bg-white  rounded">
                   <FcBusinessman className="lg:text-4xl" />
                 </div>
@@ -141,22 +142,21 @@ export const SideNavbar = ({ children }) => {
                       />
                     );
                   })}
+              <div className="mt-5 ">
+                {isSignout ? (
+                  <div className=" rounded border font-bold text-center py-1 mb-2">
+                    <LoadingState title={"Logging out..."} cssClass={"py-1"} />
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => handleSignout()}
+                    className="hover:bg-gray-700 cursor-pointer flex place-content-center items-center gap-2 text-gray-500 hover:text-gray-300 border hover:border-transparent border-gray-600 rounded-lg font-bold text-center py-1 mb-2"
+                  >
+                    Log out <BiPowerOff size={18} />
+                  </div>
+                )}
+              </div>
             </nav>
-
-            <div className="mb-5">
-              {isSignout ? (
-                <div className=" rounded border font-bold text-center py-1 mb-2">
-                  <LoadingState title={"Logging out..."} cssClass={"py-1"} />
-                </div>
-              ) : (
-                <div
-                  onClick={() => handleSignout()}
-                  className="hover:bg-gray-700 cursor-pointer text-gray-500 hover:text-gray-300 active:border-blue-400 border border-gray-600 rounded-2xl font-bold text-center py-1 mb-2"
-                >
-                  Log out
-                </div>
-              )}
-            </div>
           </div>
         </aside>
       </Disclosure>

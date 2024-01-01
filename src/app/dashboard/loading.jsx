@@ -2,7 +2,7 @@ export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
   return (
     <>
-      <div className="flex justify-center h-[100%] items-center mx-auto ">
+      <div className="flex justify-center max-h-[100vh] min-h-[80vh] items-center mx-auto ">
         <svg
           aria-hidden="true"
           role="status"
@@ -20,7 +20,7 @@ export default function Loading() {
             fill="#1C64F2"
           />
         </svg>
-        <p className="text-lg font-bold text-white">Loading...</p>
+        <p className="text-lg font-bold text-white">Loading ...</p>
       </div>
     </>
   );

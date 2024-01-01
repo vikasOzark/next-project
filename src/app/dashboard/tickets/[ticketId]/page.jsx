@@ -24,11 +24,11 @@ import React from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
 import { useContext } from "react";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { SetTimeFrame } from "./components/SetTimeFrame";
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
   const { ticketId } = params;
-  const router = useRouter();
 
   const ticketResponse = useQuery({
     queryKey: ticketId,
@@ -46,18 +46,6 @@ export default function Page({ params }) {
       <TicketDataContext.Provider
         value={{ ticketData, params, ticketResponse }}
       >
-        <div className="mb-2">
-          <button
-            title="Take me back"
-            onClick={() => router.back()}
-            className="text-white cursor-pointer "
-          >
-            <VscChevronLeft
-              size={32}
-              className="bg-slate-600 rounded-full hover:bg-slate-400 transition-all"
-            />
-          </button>
-        </div>
         <div className="grid lg:grid-cols-12 md:grid-cols-2 grid-cols-1 gap-3">
           <div className="col-span-8">
             <div className="flex-row gap-2 mb-2">
@@ -78,6 +66,7 @@ export default function Page({ params }) {
               </h3>
             </div>
             <NotesSection />
+            <SetTimeFrame />
           </div>
         </div>
       </TicketDataContext.Provider>
@@ -87,6 +76,7 @@ export default function Page({ params }) {
 
 const TicketDataSection = () => {
   const { ticketData, ticketResponse } = useContext(TicketDataContext);
+  const router = useRouter();
 
   const errorMessageProvider = () => {
     const error = ticketResponse.error?.request.response || "{}";
@@ -97,33 +87,48 @@ const TicketDataSection = () => {
   return (
     <>
       <div className="text-white font-bold">
-        <div className="flex justify-end mb-2 gap-2">
-          <AssignUserAction
-            icon={<VscPersonAdd size={18} />}
-            title={"Assign people"}
-            actionData={ticketData}
-            revalidateKey={ticketData.id}
-            isAlreadyAssigned={
-              ticketData["assingedUser"] === null ? false : true
-            }
-            className={
-              "gap-2   hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
-            }
-          />
-          <TicketStatusUpdate
-            title={"Status update"}
-            icon={<VscGroupByRefType />}
-            ticketStatus={Status}
-            actionData={ticketData}
-            revalidateKey={ticketData.id}
-            styleButton="hover:bg-gray-600 rounded-full hover:text-white"
-          />
-          <TicketDeleteButton
-            ticketId={ticketData.id}
-            title={"Delete"}
-            className={"bg-red-200"}
-            navigateTo={urlRoutes.TICKETS}
-          />
+        <div className="flex justify-between mb-2 gap-2">
+          <div className="mb-2">
+            <button
+              title="Take me back"
+              onClick={() => router.back()}
+              className="text-white cursor-pointer "
+            >
+              <VscChevronLeft
+                size={32}
+                className="bg-slate-600 rounded-full hover:bg-slate-400 transition-all"
+              />
+            </button>
+          </div>
+
+          <div className="flex w-auto gap-2">
+            <AssignUserAction
+              icon={<VscPersonAdd size={18} />}
+              title={"Assign people"}
+              actionData={ticketData}
+              revalidateKey={ticketData.id}
+              isAlreadyAssigned={
+                ticketData["assingedUser"] === null ? false : true
+              }
+              className={
+                "gap-2   hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
+              }
+            />
+            <TicketStatusUpdate
+              title={"Status update"}
+              icon={<VscGroupByRefType />}
+              ticketStatus={Status}
+              actionData={ticketData}
+              revalidateKey={ticketData.id}
+              styleButton="hover:bg-gray-600 rounded-full hover:text-white"
+            />
+            <TicketDeleteButton
+              ticketId={ticketData.id}
+              title={"Delete"}
+              className={"bg-red-200 p-1 px-3"}
+              navigateTo={urlRoutes.TICKETS}
+            />
+          </div>
         </div>
         <div className="rounded-2xl grid grid-cols-3 gap-3 p-3 border soft-bg shadow-md border-gray-800 ">
           {ticketResponse.isLoading && (

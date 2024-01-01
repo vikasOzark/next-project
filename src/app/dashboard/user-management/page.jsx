@@ -30,7 +30,7 @@ export default function Permissions() {
                     <div className="bg-gray-700 flex items-center px-3 rounded-full ">
                       <input
                         type="text"
-                        className="w-full p-2 px-3 text-white bg-transparent rounded-full"
+                        className="w-full p-2 px-3 text-white focus:outline-none bg-transparent rounded-full"
                         placeholder="Search"
                       />
                       <VscSearch size={28} color="white" />

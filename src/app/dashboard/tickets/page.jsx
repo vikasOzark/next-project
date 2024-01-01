@@ -1,8 +1,8 @@
 "use client";
 
 import { TicketTableComponent } from "./component/components";
-import { VscChromeClose, VscSymbolKeyword } from "react-icons/vsc";
-import React, { useState } from "react";
+import { VscChromeClose, VscSearch, VscSymbolKeyword } from "react-icons/vsc";
+import React, { useEffect, useState } from "react";
 import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
 import CreateTicketButton from "./component/forms/TicketCreateButton";
@@ -10,19 +10,49 @@ import {
   AiOutlineSortAscending,
   AiOutlineSortDescending,
 } from "react-icons/ai";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FilterByCreation } from "./component/FilterComponent";
 export const SelectContext = React.createContext();
 
 export default function Tickets() {
   const [selectedTickets, setSelectedTickets] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [typingTimeout, setTypingTimeout] = useState(null);
+
+  const handleQuery = (event) => {
+    const query = event.target.value;
+
+    // Clear previous timeout
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    setTypingTimeout(
+      setTimeout(() => {
+        setSearchQuery(query);
+      }, 500)
+    );
+  };
 
   return (
     <>
-      <SelectContext.Provider value={{ selectedTickets, setSelectedTickets }}>
+      <SelectContext.Provider
+        value={{ selectedTickets, setSelectedTickets, searchQuery }}
+      >
         <main>
           <div className="flex justify-between items-center mb-1">
             <div className="flex items-center gap-2">
+              <div className="">
+                <div className="bg-gray-700 flex items-center px-3 rounded-full ">
+                  <input
+                    type="text"
+                    onChange={handleQuery}
+                    className="w-full p-2 px-3 text-white focus:outline-none bg-transparent rounded-full"
+                    placeholder="Search"
+                  />
+                  <VscSearch size={25} color="white" />
+                </div>
+              </div>
               <SelectedDataInfo
                 selectedTickets={selectedTickets}
                 setSelectedTickets={setSelectedTickets}

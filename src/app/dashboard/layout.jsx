@@ -10,13 +10,13 @@ export default function Layout({ children }) {
     <>
       <QueryClientProvider client={queryClient}>
         <html lang="en">
-          <body className="globle-bg">
+          <body className="globle-bg h-[100vh]">
             <div className="">
               <div className="md:grid lg:grid md:grid-cols-12 lg:grid-cols-12 gap-4  ">
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-1">
                   <SideNavbar />
                 </div>
-                <div className="col-span-12 lg:col-span-10 my-4 h-full">
+                <div className="col-span-12 lg:col-span-11 py-5 overflow-y-auto min-h-screen">
                   <Toaster position="top-right" reverseOrder={false} />
                   <div className="container">{children}</div>
                 </div>

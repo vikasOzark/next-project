@@ -66,7 +66,7 @@ export const NotesSection = () => {
           />
         </div>
       ) : (
-        <div className="mt-2 px-2">
+        <div className="mt-2 px-2 overflow-scroll p-2 h-[30rem] border rounded-2xl border-gray-600">
           {notes.length > 0 ? (
             displayNotes(notes)
           ) : (
@@ -130,7 +130,7 @@ export const Note = ({ note }) => {
             <VscSymbolInterface className=" rotate-180" />
             <div className="flex items-center gap-4">
               {note?.createdBy.first_name} {note?.createdBy.last_name}
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-400">
                 {handleTimeFormat(note?.createdAt, {
                   isFormated: true,
                   datePrifix: "/",
@@ -140,7 +140,7 @@ export const Note = ({ note }) => {
             </div>
           </div>
           <div className="bg-gray-800 p-2 border border-blue-600 rounded-lg ">
-            {note?.note}
+            <pre>{note?.note}</pre>
           </div>
         </div>
       </div>
@@ -178,7 +178,7 @@ export const CreateNote = () => {
 
   useEffect(() => {
     const handleClose = (event) => {
-      if (!createFormRef.current.contains(event.target)) {
+      if (!createFormRef.current?.contains(event.target)) {
         setModalOpen(false);
       }
     };
@@ -187,11 +187,17 @@ export const CreateNote = () => {
     return () => document.removeEventListener("mousedown", handleClose);
   });
 
+  const focusRef = useRef(null);
+  useEffect(() => {
+    focusRef.current.scrollIntoView(true);
+  }, []);
+
   return (
     <>
       <div className="relative mb-4 flex gap-2">
         <div className="flex w-full  gap-2">
           <div
+            ref={focusRef}
             onClick={() => setModalOpen((pre) => !pre)}
             className=" border h-10 w-10 hover:bg-slate-400 cursor-pointer rounded-full z-10 flex  items-center justify-center bg-gray-700"
           >
@@ -320,6 +326,10 @@ export const CreateFirstNote = () => {
 };
 
 export const NoteCreateForm = ({ mutate }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    ref.current.scrollIntoView(true);
+  }, []);
   return (
     <>
       <form onSubmit={mutate}>
@@ -333,6 +343,7 @@ export const NoteCreateForm = ({ mutate }) => {
             </label>
             <div className="mt-2">
               <textarea
+                ref={ref}
                 id="note"
                 name="note"
                 type="text"

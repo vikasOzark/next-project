@@ -1,5 +1,6 @@
 import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
+import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
 import { NextRequest } from "next/server";
@@ -37,7 +38,11 @@ export const handleTagRemove = async (request, query, params) => {
         },
       },
     });
-    return SuccessResponseHandler([], "Successfully tag removed.");
+    return SuccessResponseHandler(
+      [],
+      "Successfully tag removed.",
+      httpStatus.HTTP_202_ACCEPTED
+    );
   } catch (error) {
     return ErrorResponse({ error: error });
   }

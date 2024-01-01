@@ -83,7 +83,6 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
-    console.log(error.message);
     return ErrorResponse({
       error: error,
       message: "Something went wrong, Please try again.",

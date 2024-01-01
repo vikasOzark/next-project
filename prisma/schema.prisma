@@ -99,6 +99,9 @@ model Tickets {
 
     mergedTicket Tickets[] @relation("mergeTickets", fields: [mergeId], references: [id])
     mergeId      String[]  @db.ObjectId
+
+    startDate DateTime?
+    endDate   DateTime?
 }
 
 model Notes {

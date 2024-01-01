@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { VscGitCommit, VscTrash } from "react-icons/vsc";
+import { VscDiscard, VscGitCommit, VscTrash } from "react-icons/vsc";
 import { TicketDataContext } from "../page";
 import { statusCss } from "../../component/TicketTableMenu";
 import { Status } from "@prisma/client";
@@ -10,11 +10,12 @@ import { useMutation, useQueryClient } from "react-query";
 import { LoadingState } from "@/components/Buttons";
 import toast from "react-hot-toast";
 import { HiArrowUpRight } from "react-icons/hi2";
+import { RxScissors } from "react-icons/rx";
 
 export default function MergedTicketCard({ ticketData }) {
   return (
     <>
-      <div className="flex group justify-end transition-all gap-2 relative ">
+      <div className="flex group justify-end items-center transition-all gap-2 relative ">
         <div className="flex items-center">
           <div className="text-white top-10 grid items-center place-content-center">
             {/* <p className="text-lg font-bold text-green-500">Merged Ticket</p> */}
@@ -22,7 +23,7 @@ export default function MergedTicketCard({ ticketData }) {
           </div>
         </div>
 
-        <div className="soft-bg md:w-2/3 lg:w-2/3 flex justify-between border-transparent hover:border-green-500 rounded-lg mt-2 p-2 text-white font-bold">
+        <div className="soft-bg md:w-2/3 lg:w-2/3 flex justify-between items-center border-transparent hover:border-green-500 rounded-lg mt-2 p-2 text-white font-bold">
           <div className="grid grid-cols-3 gap-3">
             <div className="">
               <h3
@@ -63,12 +64,12 @@ export default function MergedTicketCard({ ticketData }) {
 
           <div className="flex-row items-center  place-content-center ">
             <RemoveMergeTicket ticketData={ticketData} />
-            <div className="mt-2">
+            <div className="mt-2 flex justify-center">
               <Link
-                className="text-center hover:underline flex items-center hover:text-blue-500 "
+                className="text-center hover:underline flex items-center gap-2 hover:text-blue-500 "
                 href={`${urlRoutes.TICKETS}/${ticketData.id}`}
               >
-                See more <HiArrowUpRight />
+                <HiArrowUpRight /> See details
               </Link>
             </div>
           </div>
@@ -121,7 +122,7 @@ export const RemoveMergeTicket = ({ ticketData }) => {
           onClick={removeChildTicket.mutate}
           className=" hover:border-red-600 hover:border border border-transparent px-4 cursor-pointer transition-all top-5 flex gap-1 items-center rounded-full right-3 p-1 hover:text-red-500"
         >
-          <VscTrash size={20} /> Remove
+          <RxScissors size={18} /> Remove
         </div>
       )}
     </>

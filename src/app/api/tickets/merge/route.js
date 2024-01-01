@@ -57,7 +57,7 @@ export async function POST(request) {
       data: [createdTicket],
     });
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
     return ErrorResponse({ error: error });
   }
 }

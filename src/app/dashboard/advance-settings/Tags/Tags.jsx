@@ -48,7 +48,7 @@ const DeleteTagButton = ({ tagId }) => {
       queryClient.invalidateQueries("tags-list");
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
       toast.error(error.message);
     },
   });
