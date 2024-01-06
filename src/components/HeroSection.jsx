@@ -13,8 +13,8 @@ export default function HeroSection() {
 
   return (
     <div className="">
-      <div className="relative isolate px-6 lg:px-8">
-        <div className="mx-auto max-w-[67rem]  min-w-min py-32 sm:py-35 md:py-56 lg:py-64 ">
+      <div className="relative h-screen grid place-content-center mx-auto  isolate px-6 lg:px-8">
+        <div className="mx-auto min-w-min py-32 sm:py-35 md:py-56 lg:p-64 ">
           <div
             className="absolute inset-x-0 -z-10 top-0 transform-gpu overflow-hidden blur-3xl "
             aria-hidden="true"
@@ -27,7 +27,7 @@ export default function HeroSection() {
               }}
             />
           </div>
-          <div className="hidden sm:mb-8 sm:flex sm:justify-center">
+          {/* <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-200 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Read our blogs.{" "}
               <a href="#" className="font-semibold text-indigo-600">
@@ -35,7 +35,7 @@ export default function HeroSection() {
                 Read more <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
-          </div>
+          </div> */}
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-100 sm:text-6xl">
               Streamline Your Support Experience with Our Ticket Tracker
