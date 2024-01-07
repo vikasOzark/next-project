@@ -11,6 +11,7 @@ import { ToggleDisableUser } from "./userUtils/DeleteUser";
 import { UpdateUserRole } from "./UpdateUserRole";
 import { LoadingButton } from "@/components/Buttons";
 import handleTimeFormat from "@/utils/dateTimeFormat";
+import Link from "next/link";
 
 export default function UserTable() {
   const HEADERS = [
@@ -88,7 +89,10 @@ const TableDataRow = ({ user }) => {
     <>
       <tr className={`text-white ${user.isDisabled && "bg-gray-500"} `}>
         <td className="px-4 py-4 text-sm font-medium  whitespace-nowrap">
-          <div className="inline-flex items-center gap-x-3">
+          <Link
+            href={`/dashboard/user-management/${user.id}`}
+            className="inline-flex items-center gap-x-3"
+          >
             <div className="flex items-center gap-x-2">
               <div>
                 <h2 className="  font-bold text-lg dark: ">
@@ -96,7 +100,7 @@ const TableDataRow = ({ user }) => {
                 </h2>
               </div>
             </div>
-          </div>
+          </Link>
         </td>
 
         <td className="px-4 py-4 text-sm  dark:text-gray-300 whitespace-nowrap">
