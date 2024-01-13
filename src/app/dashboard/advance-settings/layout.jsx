@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Layout({ children }) {
   return (
     <>
-      <div className="">
+      {/* <div className="">
         <div className="border border-gray-700 rounded-lg p-3">
           <Link
             href={`/dashboard/advance-settings/department`}
@@ -12,7 +12,7 @@ export default function Layout({ children }) {
             Department
           </Link>
         </div>
-      </div>
+      </div> */}
       {children}
     </>
   );

@@ -31,7 +31,7 @@ export const Departments = () => {
           responseData.data.data?.map((item) => (
             <button
               key={item.id}
-              className="flex group mb-2 soft-bg hover:bg-gray-900 text-white items-center justify-between min-h-max w-1/3 px-3 py-2 text-xs font-medium transition-colors duration-300 transform rounded-lg   dark:text-gray-200"
+              className="flex group mb-2 soft-bg hover:bg-gray-900 text-white items-center justify-between px-3 py-2 text-xs font-medium transition-colors duration-300 transform rounded-lg   dark:text-gray-200"
             >
               <div className="flex items-center gap-x-2 ">
                 <span className="w-2 h-2 rounded-full bg-slate-500"></span>
