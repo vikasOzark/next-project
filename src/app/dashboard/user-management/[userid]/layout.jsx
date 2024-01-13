@@ -17,13 +17,13 @@ export default function Layout({
         >
           {tickets}
         </BaseAdvancedCardLayout>
-        <BaseAdvancedCardLayout className={"p-3"}>
+        <BaseAdvancedCardLayout title={"Tags"} className={"p-3"}>
           {tags}
         </BaseAdvancedCardLayout>
-        <BaseAdvancedCardLayout className={"p-3"}>
+        <BaseAdvancedCardLayout title={"Activity"} className={"p-3"}>
           {activity}
         </BaseAdvancedCardLayout>
-        <BaseAdvancedCardLayout className={"p-3"}>
+        <BaseAdvancedCardLayout title={"Change password"} className={"p-3"}>
           {changepassword}
         </BaseAdvancedCardLayout>
       </div>

@@ -1,3 +1,7 @@
 export default function Page() {
-  return <>Activity</>;
+  return (
+    <>
+      <div className="grid place-content-center">Comming soon...</div>
+    </>
+  );
 }

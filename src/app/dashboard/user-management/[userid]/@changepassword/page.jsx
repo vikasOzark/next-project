@@ -1,3 +1,7 @@
 export default function Page() {
-  return <>change password</>;
+  return (
+    <>
+      <div className=""></div>
+    </>
+  );
 }

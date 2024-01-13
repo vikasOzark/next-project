@@ -40,22 +40,24 @@ export default function Page({ params }) {
           <SimpleInfoMessage message={"No tickets found."} />
         </div>
       )}
-      {ticketData?.map((ticket) => (
-        <>
-          <Link href={`/dashboard/tickets/${ticket.id}`}>
-            <div className="bg-white flex gap-2 rounded-lg px-3 py-1 mb-2">
-              <div className="h-100 w-2 bg-blue-400 rounded-xl"></div>
-              <div className="w-full">
-                <div className="text-sm text-gray-600">2/3/2024</div>
-                <div className=" flex justify-between text-gray-600">
-                  <div className="">{ticket.taskTitle}</div>
-                  <div className="">{ticket.status}</div>
+      <div className="grid grid-cols-12 gap-2">
+        {ticketData?.map((ticket) => (
+          <div key={ticket.id} className="col-span-6">
+            <Link href={`/dashboard/tickets/${ticket.id}`}>
+              <div className="bg-white flex gap-2 rounded-lg px-3 py-1 mb-2">
+                <div className="h-100 w-2 bg-blue-400 rounded-xl"></div>
+                <div className="w-full">
+                  <div className="text-xs text-gray-600">2/3/2024</div>
+                  <div className=" flex justify-between text-gray-600">
+                    <div className="text-sm">{ticket.taskTitle}</div>
+                    <div className="text-xs">{ticket.status}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        </>
-      ))}
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
