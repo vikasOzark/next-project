@@ -2,21 +2,18 @@
 
 import { TicketTableComponent } from "./component/components";
 import { VscChromeClose, VscSearch, VscSymbolKeyword } from "react-icons/vsc";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
 import CreateTicketButton from "./component/forms/TicketCreateButton";
-import {
-  AiOutlineSortAscending,
-  AiOutlineSortDescending,
-} from "react-icons/ai";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FilterByCreation } from "./component/FilterComponent";
 export const SelectContext = React.createContext();
 
-export default function Tickets() {
+export default function Tickets({ searchParams }) {
+  const query = new URLSearchParams(searchParams);
+
   const [selectedTickets, setSelectedTickets] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(query.toString());
   const [typingTimeout, setTypingTimeout] = useState(null);
 
   const handleQuery = (event) => {
@@ -57,7 +54,6 @@ export default function Tickets() {
                 selectedTickets={selectedTickets}
                 setSelectedTickets={setSelectedTickets}
               />
-              <Filtering />
               <FilterByCreation />
             </div>
             <div className="flex items-center gap-2">
@@ -106,28 +102,28 @@ const SelectedDataInfo = ({ selectedTickets, setSelectedTickets }) => {
   return null;
 };
 
-const Filtering = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const sorting = searchParams.get("sort") || "desc";
+// const Filtering = () => {
+//   const router = useRouter();
+//   const searchParams = useSearchParams();
+//   const sorting = searchParams.get("sort") || "desc";
 
-  const handleSort = (sorting) => {
-    router.push(`?sort=${sorting}`);
-    router.refresh();
-  };
+//   const handleSort = (sorting) => {
+//     router.push(`?sort=${sorting}`);
+//     router.refresh();
+//   };
 
-  return (
-    <>
-      <div className=" items-center flex text-white cursor-pointer hover:bg-gray-500 rounded-md">
-        {sorting === "desc" ? (
-          <AiOutlineSortAscending onClick={() => handleSort("asc")} size={28} />
-        ) : (
-          <AiOutlineSortDescending
-            onClick={() => handleSort("desc")}
-            size={28}
-          />
-        )}
-      </div>
-    </>
-  );
-};
+//   return (
+//     <>
+//       <div className=" items-center flex text-white cursor-pointer hover:bg-gray-500 rounded-md">
+//         {sorting === "desc" ? (
+//           <AiOutlineSortAscending onClick={() => handleSort("asc")} size={28} />
+//         ) : (
+//           <AiOutlineSortDescending
+//             onClick={() => handleSort("desc")}
+//             size={28}
+//           />
+//         )}
+//       </div>
+//     </>
+//   );
+// };

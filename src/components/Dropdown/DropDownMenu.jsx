@@ -38,9 +38,6 @@ export function DropdownMenuButton({ styleButton, icon, title }) {
             <DropdownMenuItem onClick={() => setTagsModalOpen((pre) => !pre)}>
               Create Tag
             </DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

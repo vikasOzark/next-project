@@ -32,18 +32,11 @@ import { Status } from "@prisma/client";
 export const RouterContext = createContext();
 
 export const TicketTableComponent = () => {
-  const searchQuery = useContext(SelectContext);
-  const param = useSearchParams();
+  const { searchQuery } = useContext(SelectContext);
   const router = useRouter();
-  const paramsQuery = new URLSearchParams();
-
-  if (param.get("sort")) {
-    paramsQuery.append("sort", param.get("sort"));
-  }
-  paramsQuery.append("sortTicket", param.get("sortTicket") || "new-to-old");
 
   const responseData = useQuery(
-    ["tickets-list", paramsQuery.toString()],
+    ["tickets-list", searchQuery],
 
     async ({ queryKey }) => {
       const [_, query] = queryKey;
@@ -54,11 +47,6 @@ export const TicketTableComponent = () => {
         throw new Error("Couldn't load the tickets at the moment.");
       }
       const json_response = await response.json();
-
-      if (searchQuery.searchQuery !== "" && json_response.success) {
-        return filteredData;
-      }
-
       return json_response;
     },
 
