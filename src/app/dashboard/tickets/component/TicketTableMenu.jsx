@@ -171,6 +171,8 @@ export const statusCss = (status, ticketStatus, classType = "bg") => {
       return "bg-red-300";
     } else if (ticketStatus.CLOSE === status) {
       return "bg-green-300";
+    } else if (ticketStatus.PROCESS === status) {
+      return "bg-violet-300";
     } else {
       return "bg-blue-300";
     }
@@ -183,6 +185,8 @@ export const statusCss = (status, ticketStatus, classType = "bg") => {
       return "text-red-300";
     } else if (ticketStatus.CLOSE === status) {
       return "text-green-300";
+    } else if (ticketStatus.PROCESS === status) {
+      return "text-violet-300";
     } else {
       return "text-blue-300";
     }

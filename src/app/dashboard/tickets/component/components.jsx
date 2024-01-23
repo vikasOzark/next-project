@@ -27,6 +27,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { SelectContext } from "../page";
 import { filteredData } from "./forms/utils";
+import { Status } from "@prisma/client";
 
 export const RouterContext = createContext();
 
@@ -129,7 +130,7 @@ const TableBodyRow = ({ responseData }) => {
   );
 };
 
-const TableRowComponent = ({ data, ticketStatus }) => {
+const TableRowComponent = ({ data }) => {
   const { selectedTickets, setSelectedTickets } = useContext(SelectContext);
   const queryClient = useQueryClient();
 
@@ -200,7 +201,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
         </td>
 
         <td className="px-12 py-4  font-medium  whitespace-nowrap">
-          <TaskStatus status={data.status} TaskStatus={ticketStatus} />
+          <TaskStatus status={data.status} TaskStatus={Status} />
         </td>
 
         <td className="px-4 py-4   dark:text-gray-300 whitespace-nowrap">
@@ -244,7 +245,7 @@ const TableRowComponent = ({ data, ticketStatus }) => {
               key={data.id}
               title={"Status update"}
               icon={<VscGroupByRefType />}
-              ticketStatus={ticketStatus}
+              ticketStatus={Status}
               actionData={data}
               revalidateKey={"tickets-list"}
               styleButton="hover:bg-gray-200 bg-gray-50 px-3 py-[3px] rounded-full text-gray-800"
@@ -328,7 +329,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-yellow-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-yellow-600"></span>
-          <h2 className=" text-yellow-700  font-bold">{status}</h2>
+          <h2 className=" text-yellow-700  font-bold text-sm">{status}</h2>
         </div>
       </>
     );
@@ -339,7 +340,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-green-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
-          <h2 className=" text-green-700  font-bold">{status}</h2>
+          <h2 className=" text-green-700  font-bold text-sm">{status}</h2>
         </div>
       </>
     );
@@ -350,7 +351,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-blue-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
-          <h2 className=" text-blue-700  font-bold">{status}</h2>
+          <h2 className=" text-blue-700  font-bold text-sm">{status}</h2>
         </div>
       </>
     );
@@ -361,7 +362,18 @@ const TaskStatus = ({ TaskStatus, status }) => {
       <>
         <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-red-200  ">
           <span className="h-1.5 w-1.5 rounded-full bg-red-600"></span>
-          <h2 className=" text-red-700  font-bold">{status}</h2>
+          <h2 className=" text-red-700  font-bold text-sm">{status}</h2>
+        </div>
+      </>
+    );
+  }
+
+  if (TaskStatus.PROCESS === status) {
+    return (
+      <>
+        <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-violet-500  ">
+          <span className="h-1.5 w-1.5 rounded-full bg-white"></span>
+          <h2 className=" text-white font-bold text-sm">{status}</h2>
         </div>
       </>
     );
