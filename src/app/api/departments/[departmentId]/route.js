@@ -50,3 +50,21 @@ export async function DELETE(request, context) {
     });
   }
 }
+
+export async function GET(request, context) {
+  try {
+    const { departmentId } = context.params;
+    const prisma = new PrismaClient();
+    await prisma.$connect();
+    const departmentData = await prisma.department.findFirst({
+      where: {
+        id: departmentId,
+      },
+    });
+
+    return SuccessResponseHandler(departmentData);
+  } catch (error) {
+    console.log(error.message);
+    return ErrorResponse({ error: error });
+  }
+}

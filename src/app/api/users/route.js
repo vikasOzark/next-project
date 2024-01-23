@@ -26,7 +26,7 @@ export async function POST(request) {
       return ErrorResponse(
         {
           message:
-            "Contact number potentianlly contains charactor or special charactor.",
+            "Contact number potentially contains character or special character.",
         },
         httpStatus.HTTP_400_BAD_REQUEST
       );

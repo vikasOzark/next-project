@@ -68,7 +68,7 @@ export async function POST(request) {
   } catch (error) {
     // console.log(error.message);
     return ErrorResponse(
-      { message: "Something bad happend, Please try again later." },
+      { message: "Something bad happened, Please try again later." },
       httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
     );
   }

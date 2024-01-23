@@ -1,15 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { AiOutlineLogin } from "react-icons/ai";
+import { ActionButton, LoadingState } from "./Buttons";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const data = useSession();
-  // const { data: session } = data;
-  //
-  //
+  const session = useSession();
+  const route = useRouter();
+
+  useEffect(() => {
+    setTimeout(() => {
+      route.push("/dashboard/-");
+    }, [1000]);
+  }, [route]);
 
   return (
     <div className="">
@@ -44,14 +49,26 @@ export default function HeroSection() {
               – Effortlessly Manage, Monitor, and Resolve your Inquiries, All in
               One Place!
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <div
-                onClick={() => signIn()}
-                className="rounded-md flex items-center cursor-pointer gap-2 bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in here
-                <AiOutlineLogin size={20} />
-              </div>
+            <div className="mt-10 py-2 px-5 flex items-center justify-center gap-x-6">
+              {session.status === "loading" && (
+                <LoadingState
+                  cssClass={"border rounded-full text-white"}
+                  title={"Checking..."}
+                />
+              )}
+              {session.status === "unauthenticated" && (
+                <ActionButton cssClass={" border"} onClick={() => signIn()}>
+                  Sign in here
+                  <AiOutlineLogin size={20} />
+                </ActionButton>
+              )}
+              {session.status === "authenticated" && (
+                <LoadingState
+                  cssClass={"border rounded-full text-white"}
+                  title={"Redirecting..."}
+                />
+              )}
+
               <a
                 href="#"
                 className="text-sm font-semibold leading-6 text-gray-200"

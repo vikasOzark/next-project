@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Provider from "@/app/providers/CredentialsProvider";
 export const metadata = {

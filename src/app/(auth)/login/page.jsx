@@ -10,8 +10,6 @@ import { useSession } from "next-auth/react";
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorResponseData, setErrorResponseData] = useState({});
-  const router = useRouter();
-  const session = useSession();
 
   return (
     <>

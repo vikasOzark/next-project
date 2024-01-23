@@ -6,7 +6,7 @@ import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Role } from "@prisma/client";
 import { handleUpdateUser, handleUserAlter } from "./apiHelper";
-import bcrypt from "bcrypt";
+import exclude from "@/lib/exclude";
 
 const prisma = new PrismaClient();
 
@@ -73,6 +73,25 @@ export async function PATCH(request, context) {
         return await handleUserAlter(body, userData, targetUser, userId);
     }
   } catch (error) {
+    return ErrorResponse({ error: error });
+  }
+}
+
+export async function GET(request, context) {
+  try {
+    const { userId } = context.params;
+    await prisma.$connect();
+    const userData = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    const filteredUserData = exclude(userData, ["password"]);
+
+    return SuccessResponseHandler(filteredUserData);
+  } catch (error) {
+    console.log(error.message);
     return ErrorResponse({ error: error });
   }
 }

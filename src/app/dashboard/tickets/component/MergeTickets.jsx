@@ -48,10 +48,6 @@ export const MergeForm = () => {
     mutationFn: async (event) => {
       event.preventDefault();
 
-      // if (selectedTickets.length < 2) {
-      //   throw new Error("Please select at least 2 tickets to merge");
-      // }
-
       const formData = new FormData(event.target);
       const payload = Object.fromEntries(formData);
       payload.tags = selectedTag.map((tag) => tag.id);
