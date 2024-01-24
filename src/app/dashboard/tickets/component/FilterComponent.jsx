@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { CreateTagForm } from "@/components/Forms/CreateTagForm";
 import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
@@ -18,22 +19,88 @@ import {
 import { Status } from "@prisma/client";
 import { CgReorder } from "react-icons/cg";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   AiOutlineSortAscending,
   AiOutlineSortDescending,
 } from "react-icons/ai";
-import { VscFilter, VscListFilter } from "react-icons/vsc";
+import { VscChromeClose, VscFilter, VscListFilter } from "react-icons/vsc";
 import { twMerge } from "tailwind-merge";
 
 export function FilterByCreation() {
-  const router = useRouter();
-  const pathName = usePathname();
+  const search = useSearchParams();
+  const query = new URLSearchParams(search);
+  const [modified, setModified] = useState({});
+  const newStatusObject = { ...Status };
+  newStatusObject.all = "all";
 
-  const handleOrderBy = (query) => {};
-  const handleSort = (query) => {};
-  const handleFilter = (query) => {
-    console.log(query);
+  const sorting = query.get("sort");
+  const router = useRouter();
+
+  /**
+   * This effect check is any search param is changed or not if changed then add to modified state
+   */
+  useEffect(() => {
+    const sorting = query.get("sort");
+    const filter = query.get("filter");
+    const order = query.get("order");
+
+    let check = {};
+    if (sorting !== "asc") {
+      check.sort = sorting;
+    }
+
+    if (filter !== "all") {
+      check.filter = filter;
+    }
+
+    if (order !== "desc") {
+      check.order = order;
+    }
+    if (query.toString()) {
+      setModified(check);
+    }
+  }, []);
+
+  /**
+   * This method is used reset search string if modified or remove from the search url.
+   * @param {Boolean} all To reset all at once
+   * @param {String} resetName Individual reset search param
+   */
+  const handleSearchReset = (all, resetName = null) => {
+    if (all) {
+      query.set("order", "desc");
+      query.set("sort", "asc");
+      query.set("filter", "all");
+      router.push(`?${query.toString()}`);
+      setModified({});
+      return;
+    }
+
+    const modifiedCopy = { ...modified };
+    delete modifiedCopy[resetName];
+    setModified(modifiedCopy);
+  };
+
+  const handleOrderBy = (order) => {
+    query.set("order", order);
+    router.push(`?${query.toString()}`);
+    setModified({ ...modified, ["order"]: order });
+  };
+
+  /**
+   * @param {String} sortType
+   */
+  const handleSort = (sortType) => {
+    query.set("sort", sortType);
+    router.push(`?${query.toString()}`);
+    setModified({ ...modified, ["sort"]: sortType });
+  };
+
+  const handleFilter = (filter) => {
+    query.set("filter", filter);
+    router.push(`?${query.toString()}`);
+    setModified({ ...modified, ["filter"]: filter });
   };
 
   return (
@@ -55,14 +122,14 @@ export function FilterByCreation() {
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className={"gap-2"}>
-                <VscListFilter size={20} /> Order by
+                <VscListFilter size={20} /> Order by creation
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem onClick={() => handleOrderBy("new-to-old")}>
+                  <DropdownMenuItem onClick={() => handleOrderBy("desc")}>
                     New to old
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleOrderBy("old-to-new")}>
+                  <DropdownMenuItem onClick={() => handleOrderBy("asc")}>
                     Old to new
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
@@ -76,14 +143,14 @@ export function FilterByCreation() {
                 className={"gap-2"}
                 onClick={() => handleSort("asc")}
               >
-                <AiOutlineSortAscending size={20} /> Asc
+                <AiOutlineSortAscending size={20} /> Title Asc
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem
                 className={"gap-2"}
                 onClick={() => handleSort("desc")}
               >
-                <AiOutlineSortDescending size={20} /> Desc
+                <AiOutlineSortDescending size={20} /> Title Desc
               </DropdownMenuItem>
             )}
           </DropdownMenuGroup>
@@ -92,11 +159,11 @@ export function FilterByCreation() {
             <DropdownMenuSub>
               <DropdownMenuSubTrigger size={20} className={"gap-2"}>
                 <CgReorder />
-                Filter by
+                Filter by Status
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  {Object.entries(Status).map((status) => (
+                  {Object.entries(newStatusObject).map((status) => (
                     <DropdownMenuItem
                       onClick={() => handleFilter(status[0])}
                       key={status[0]}
@@ -110,6 +177,28 @@ export function FilterByCreation() {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+      <div className="flex gap-2">
+        {Object.entries(modified).map((item) => (
+          <>
+            <div className="text-white border border-gray-600 flex gap-2 items-center justify-between rounded-full  px-4">
+              {item[0]} {" : "} {item[1]}{" "}
+              <VscChromeClose
+                className=" hover:bg-gray-100 hover:text-black rounded-full h-5 p-[1px] cursor-pointer w-5"
+                onClick={() => handleSearchReset(false, item[0])}
+              />{" "}
+            </div>
+          </>
+        ))}
+        {Object.keys(modified).length > 0 && (
+          <div className="text-white border border-gray-600 flex gap-2 items-center justify-between rounded-full  px-4">
+            Reset
+            <VscChromeClose
+              className=" hover:bg-gray-100 hover:text-black rounded-full h-5 p-[1px] cursor-pointer w-5"
+              onClick={() => handleSearchReset(true)}
+            />{" "}
+          </div>
+        )}
+      </div>
     </>
   );
 }

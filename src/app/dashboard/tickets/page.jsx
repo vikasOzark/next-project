@@ -7,13 +7,17 @@ import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
 import CreateTicketButton from "./component/forms/TicketCreateButton";
 import { FilterByCreation } from "./component/FilterComponent";
+import { useSearchParams, useRouter } from "next/navigation";
+
 export const SelectContext = React.createContext();
 
 export default function Tickets({ searchParams }) {
-  const query = new URLSearchParams(searchParams);
+  const search = useSearchParams();
+  const query = new URLSearchParams(search);
+  const router = useRouter();
 
   const [selectedTickets, setSelectedTickets] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(query.toString());
+  const [queryTicketTitle, setSearchQuery] = useState("");
   const [typingTimeout, setTypingTimeout] = useState(null);
 
   const handleQuery = (event) => {
@@ -26,7 +30,8 @@ export default function Tickets({ searchParams }) {
 
     setTypingTimeout(
       setTimeout(() => {
-        setSearchQuery(query);
+        query.set("q", query);
+        router.push(query);
       }, 500)
     );
   };
@@ -34,7 +39,12 @@ export default function Tickets({ searchParams }) {
   return (
     <>
       <SelectContext.Provider
-        value={{ selectedTickets, setSelectedTickets, searchQuery }}
+        value={{
+          selectedTickets,
+          setSelectedTickets,
+          queryTicketTitle,
+          searchParams,
+        }}
       >
         <main>
           <div className="flex justify-between items-center mb-1">

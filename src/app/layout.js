@@ -11,7 +11,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="globle-bg">
         <Provider>{children}</Provider>
-        <div id="modal-portal" />
       </body>
     </html>
   );

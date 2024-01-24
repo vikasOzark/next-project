@@ -26,21 +26,20 @@ import { isLatestTicket } from "@/utils/dateTimeFormat";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { SelectContext } from "../page";
-import { filteredData } from "./forms/utils";
 import { Status } from "@prisma/client";
 
 export const RouterContext = createContext();
 
 export const TicketTableComponent = () => {
-  const { searchQuery } = useContext(SelectContext);
-  const router = useRouter();
+  const query = useSearchParams();
 
+  const router = useRouter();
   const responseData = useQuery(
-    ["tickets-list", searchQuery],
+    ["tickets-list", query.toString()],
 
     async ({ queryKey }) => {
       const [_, query] = queryKey;
-      console.count("api called");
+      console.count("api called ", query);
 
       const response = await fetch(`/api/tickets?${query}`);
       if (response.status === 500) {

@@ -48,17 +48,27 @@ export async function POST(request) {
   }
 }
 
-export async function GET(request) {
+export async function GET(request, context) {
+  const sortByTitle = request.nextUrl.searchParams.get("sort") || "asc";
+  const orderCreated = request.nextUrl.searchParams.get("order") || "desc";
+  const filterByStatus = request.nextUrl.searchParams.get("filter");
+
   try {
     const userObjectId = await getUserId(true);
     await prisma.$connect();
 
-    const ticketsData = await prisma.tickets.findMany({
-      where: {
-        createdById: {
-          uniqueCompanyId: userObjectId.uniqueCompanyId,
-        },
+    const filtering = {
+      createdById: {
+        uniqueCompanyId: userObjectId.uniqueCompanyId,
       },
+    };
+
+    if (filterByStatus !== "all") {
+      filtering.status = Status[filterByStatus];
+    }
+
+    const ticketsData = await prisma.tickets.findMany({
+      where: filtering,
 
       include: {
         department: true,
@@ -70,7 +80,7 @@ export async function GET(request) {
         },
       },
 
-      orderBy: provideFilter(request),
+      orderBy: [{ taskTitle: sortByTitle }, { createdAt: orderCreated }],
     });
 
     return NextResponse.json(
@@ -83,6 +93,7 @@ export async function GET(request) {
       { status: httpStatus.HTTP_200_OK }
     );
   } catch (error) {
+    console.log(error.message);
     return ErrorResponse({
       error: error,
       message: "Something went wrong, Please try again.",
