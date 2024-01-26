@@ -13,7 +13,7 @@ export const SelectContext = React.createContext();
 
 export default function Tickets({ searchParams }) {
   const search = useSearchParams();
-  const query = new URLSearchParams(search);
+  const queryParams = new URLSearchParams(search);
   const router = useRouter();
 
   const [selectedTickets, setSelectedTickets] = useState([]);
@@ -30,8 +30,8 @@ export default function Tickets({ searchParams }) {
 
     setTypingTimeout(
       setTimeout(() => {
-        query.set("q", query);
-        router.push(query);
+        queryParams.set("q", query);
+        router.push("?" + queryParams.toString());
       }, 500)
     );
   };
