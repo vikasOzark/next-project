@@ -14,7 +14,9 @@ export default function CreateTicketButton() {
         cssClass=" hover:bg-slate-600 transition-all flex items-center gap-2"
       >
         <VscAdd />
-        <span className="hidden md:block lg:block xl:block">Create ticket</span>
+        <span className="hidden hover:title-white md:block lg:block xl:block">
+          Create ticket
+        </span>
       </ActionButton>
       <Modal
         open={createModalOpen}

@@ -52,6 +52,7 @@ export async function GET(request, context) {
   const sortByTitle = request.nextUrl.searchParams.get("sort") || "asc";
   const orderCreated = request.nextUrl.searchParams.get("order") || "desc";
   const filterByStatus = request.nextUrl.searchParams.get("filter");
+  const queryTicketTitle = request.nextUrl.searchParams.get("q");
 
   try {
     const userObjectId = await getUserId(true);
@@ -65,6 +66,12 @@ export async function GET(request, context) {
 
     if (filterByStatus !== "all") {
       filtering.status = Status[filterByStatus];
+    }
+
+    if (queryTicketTitle) {
+      filtering.taskTitle = {
+        contains: queryTicketTitle,
+      };
     }
 
     const ticketsData = await prisma.tickets.findMany({

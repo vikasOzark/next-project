@@ -46,15 +46,15 @@ export function FilterByCreation() {
     const order = query.get("order");
 
     let check = {};
-    if (sorting !== "asc") {
+    if (sorting !== "asc" && sorting) {
       check.sort = sorting;
     }
 
-    if (filter !== "all") {
+    if (filter !== "all" && filter) {
       check.filter = filter;
     }
 
-    if (order !== "desc") {
+    if (order !== "desc" && order) {
       check.order = order;
     }
     if (query.toString()) {

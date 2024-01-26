@@ -39,7 +39,6 @@ export const TicketTableComponent = () => {
 
     async ({ queryKey }) => {
       const [_, query] = queryKey;
-      console.count("api called ", query);
 
       const response = await fetch(`/api/tickets?${query}`);
       if (response.status === 500) {
@@ -87,7 +86,7 @@ export const TicketTableComponent = () => {
                   <>
                     <div className="mt-4">
                       <SimpleInfoMessage
-                        message={"Your haven't created any tickets yet."}
+                        message={"Oops..! No tickets found."}
                       />
                     </div>
                   </>
