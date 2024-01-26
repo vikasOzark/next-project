@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { CreateTagForm } from "@/components/Forms/CreateTagForm";
-import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -109,11 +107,12 @@ export function FilterByCreation() {
         <DropdownMenuTrigger asChild>
           <Button
             className={twMerge(
-              "px-2 flex gap-2 bg-transparent items-center font-bold hover:bg-gray-500",
+              "px-4 flex gap-2 bg-transparent rounded-full items-center font-bold hover:bg-gray-600",
               ""
             )}
           >
-            <VscFilter size={25} />
+            <VscFilter size={18} />
+            <span className="hidden lg:block md:block">Filter</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 border-0">

@@ -262,7 +262,7 @@ export const CreateFirstNote = () => {
 
   useEffect(() => {
     const handleClose = (event) => {
-      if (!createFormRef.current.contains(event.target)) {
+      if (!createFormRef.current?.contains(event.target)) {
         setModalOpen(false);
       }
     };

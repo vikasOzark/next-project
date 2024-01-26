@@ -10,6 +10,7 @@ import { TagsOptions } from "./TagsDropDownOptions";
 
 export default function CreateTicketForm({ modalClose }) {
   const formElement = useRef();
+  const defaultDepartmentId = localStorage.getItem("ticket_defaultDepartment");
 
   const [formError, setFormError] = useState({});
   const queryClient = useQueryClient();
@@ -99,7 +100,15 @@ export default function CreateTicketForm({ modalClose }) {
               <option value="">select department</option>
               {responseData.isSuccess && responseData.data?.success
                 ? responseData.data.data?.map((item) => (
-                    <option key={item.id} value={item.id}>
+                    <option
+                      selected={item.id == defaultDepartmentId}
+                      className="text-black"
+                      defaultValue={defaultDepartmentId}
+                      id={item.id}
+                      name={item.name}
+                      value={item.id}
+                      key={item.id}
+                    >
                       {item.name}
                     </option>
                   ))

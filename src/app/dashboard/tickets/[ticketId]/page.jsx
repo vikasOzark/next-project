@@ -20,7 +20,7 @@ import { TicketStatusUpdate, statusCss } from "../component/TicketTableMenu";
 import { Status } from "prisma/prisma-client";
 import { TicketHoverCard } from "./HelperComponents";
 import { NotesSection } from "./components/NotesSection";
-import React from "react";
+import React, { useEffect } from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
 import { useContext } from "react";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
@@ -40,6 +40,10 @@ export default function Page({ params }) {
     refetchOnWindowFocus: false,
   });
   const ticketData = ticketResponse.data?.data.data || {};
+
+  useEffect(() => {
+    document.title = `${ticketData?.taskTitle || ticketId}`;
+  }, [ticketData]);
 
   return (
     <>

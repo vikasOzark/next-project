@@ -11,12 +11,10 @@ export default function CreateTicketButton() {
     <>
       <ActionButton
         onClick={() => setCreateModalOpen(true)}
-        cssClass=" hover:bg-slate-600 transition-all flex items-center gap-2"
+        cssClass=" hover:bg-slate-600 hover:text-white transition-all flex items-center gap-2"
       >
         <VscAdd />
-        <span className="hidden hover:title-white md:block lg:block xl:block">
-          Create ticket
-        </span>
+        <span className="hidden md:block lg:block xl:block">Create ticket</span>
       </ActionButton>
       <Modal
         open={createModalOpen}

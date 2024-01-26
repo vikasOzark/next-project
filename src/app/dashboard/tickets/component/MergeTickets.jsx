@@ -17,7 +17,7 @@ const MergeTickets = () => {
     <>
       <Button
         onClick={() => setOpen((pre) => !pre)}
-        className="bg-transparent gap-2 hover:bg-gray-600"
+        className="bg-transparent gap-2 rounded-full hover:bg-gray-600"
       >
         <VscGitMerge size={18} />
         <span className="hidden md:block lg:block">Merge Tickets</span>
@@ -43,6 +43,7 @@ export const MergeForm = () => {
   const { selectedTickets } = useContext(SelectContext);
   const [selectedTag, setSelectedTag] = useState([]);
   const responseData = useQuery("departments", getDepartmentData);
+  const defaultDepartmentId = localStorage.getItem("ticket_defaultDepartment");
 
   const mergeMutation = useMutation({
     mutationFn: async (event) => {
@@ -114,7 +115,15 @@ export const MergeForm = () => {
                 <option value="">select department</option>
                 {responseData.isSuccess && responseData.data?.success
                   ? responseData.data.data?.map((item) => (
-                      <option key={item.id} value={item.id}>
+                      <option
+                        selected={item.id == defaultDepartmentId}
+                        className="text-black"
+                        defaultValue={defaultDepartmentId}
+                        id={item.id}
+                        name={item.name}
+                        value={item.id}
+                        key={item.id}
+                      >
                         {item.name}
                       </option>
                     ))

@@ -22,7 +22,7 @@ export function DropdownMenuButton({ styleButton, icon, title }) {
         <DropdownMenuTrigger asChild>
           <Button
             className={twMerge(
-              "px-4 flex gap-2 items-center font-bold hover:bg-gray-500",
+              "px-4 flex gap-2 items-center rounded-full font-bold hover:bg-gray-500",
               styleButton
             )}
           >

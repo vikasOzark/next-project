@@ -21,8 +21,6 @@ export default function Tickets({ searchParams }) {
   const [selectedTickets, setSelectedTickets] = useState([]);
   const [queryTicketTitle, setSearchQuery] = useState("");
 
-  console.log(queryTicketTitle);
-
   return (
     <>
       <SelectContext.Provider
@@ -50,7 +48,7 @@ export default function Tickets({ searchParams }) {
               <MergeTickets />
               <CreateTicketButton />
               <DropdownMenuButton
-                title={"Actions"}
+                title={"Quick Actions"}
                 icon={<VscSymbolKeyword />}
                 styleButton="hover:bg-slate-600 bg-transparent"
               />

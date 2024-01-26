@@ -69,9 +69,9 @@ export const TagsOptions = ({ setSelectedTag, selectedTag }) => {
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside, true);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside, true);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
@@ -97,7 +97,7 @@ export const TagsOptions = ({ setSelectedTag, selectedTag }) => {
         {selectedTag.map((item) => (
           <span
             key={item.id}
-            className={`px-3 rounded-full font-bold py-1 flex text-white gap-2 items-center break-keep ${item.color}`}
+            className={`px-3 text-sm rounded-full font-bold py-1 flex text-white gap-2 items-center break-keep ${item.color}`}
           >
             {item.name}{" "}
             <VscChromeClose
@@ -109,7 +109,8 @@ export const TagsOptions = ({ setSelectedTag, selectedTag }) => {
       </div>
 
       <div
-        className={`absolute rounded-lg top-8 drop-shadow-xl border bg-white mt-2  p-1 w-[12rem] z-[100] overflow-hidden overflow-y-auto h-[8rem] ${
+        ref={dropdownRef}
+        className={`absolute rounded-lg top-8 drop-shadow-xl border bg-gray-500 mt-2  p-2 w-[12rem] z-[100] overflow-hidden overflow-y-auto h-[8rem] ${
           tagsIsOption ? "block" : "hidden"
         }`}
       >
@@ -117,7 +118,7 @@ export const TagsOptions = ({ setSelectedTag, selectedTag }) => {
           <p
             key={item.id}
             onClick={() => handleSelect(item)}
-            className={`text-center cursor-pointer hover:opacity-50 border rounded-full px-3 mb-1 flex items-center text-white justify-between ${item.color}`}
+            className={`text-center cursor-pointer hover:opacity-50 rounded-full px-3 mb-1 flex items-center text-white justify-between text-sm ${item.color}`}
           >
             {item.name}
             {item.isSelected && <VscCheck />}

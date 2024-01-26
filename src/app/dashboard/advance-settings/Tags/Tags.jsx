@@ -26,15 +26,17 @@ export default function ManageTags() {
           </div>
         </>
       )}
-      {tags.data?.data?.sort().map((item) => (
-        <div
-          key={item.id}
-          className={`text-center group cursor-pointer mb-2 peer rounded-full px-3 p-1 flex items-center text-white justify-between ${item.color}`}
-        >
-          <p>{item.title}</p>
-          <DeleteTagButton tagId={item.id} />
-        </div>
-      ))}
+      <div className="grid gap-2 grid-cols-2">
+        {tags.data?.data?.sort().map((item) => (
+          <div
+            key={item.id}
+            className={`text-center text-ellipsis text-accent text-sm group cursor-pointer mb-2 peer rounded-full px-3 p-1 flex items-center text-white justify-between ${item.color}`}
+          >
+            <p>{item.title}</p>
+            <DeleteTagButton tagId={item.id} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
