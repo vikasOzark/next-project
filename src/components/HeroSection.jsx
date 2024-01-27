@@ -11,9 +11,11 @@ export default function HeroSection() {
   const route = useRouter();
 
   useEffect(() => {
-    setTimeout(() => {
-      route.push("/dashboard/-");
-    }, [1000]);
+    if (session?.status === "authenticated") {
+      setTimeout(() => {
+        route.push("/dashboard/-");
+      }, [1000]);
+    }
   }, [route]);
 
   return (
@@ -32,18 +34,12 @@ export default function HeroSection() {
               }}
             />
           </div>
-          {/* <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-200 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              Read our blogs.{" "}
-              <a href="#" className="font-semibold text-indigo-600">
-                <span className="absolute inset-0" aria-hidden="true" />
-                Read more <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
-          </div> */}
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-100 sm:text-6xl">
-              Streamline Your Support Experience with Our Ticket Tracker
+              <span className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
+                Streamline
+              </span>{" "}
+              Your Support Experience with Our Ticket Tracker
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               – Effortlessly Manage, Monitor, and Resolve your Inquiries, All in
@@ -57,8 +53,13 @@ export default function HeroSection() {
                 />
               )}
               {session.status === "unauthenticated" && (
-                <ActionButton cssClass={" border"} onClick={() => signIn()}>
-                  Sign in here
+                <ActionButton
+                  cssClass={
+                    " border text-white hover:text-blue-600 bg-blue-600 border-transparent text-lg"
+                  }
+                  onClick={() => signIn()}
+                >
+                  Get started
                   <AiOutlineLogin size={20} />
                 </ActionButton>
               )}
@@ -69,12 +70,12 @@ export default function HeroSection() {
                 />
               )}
 
-              <a
+              {/* <a
                 href="#"
                 className="text-sm font-semibold leading-6 text-gray-200"
               >
                 Learn more <span aria-hidden="true">→</span>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

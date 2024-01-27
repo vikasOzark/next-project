@@ -8,6 +8,8 @@ import {
 } from "@/app/dashboard/tickets/ticketActionUtils";
 import axios from "axios";
 import {
+  VscAdd,
+  VscCheck,
   VscChevronLeft,
   VscGroupByRefType,
   VscPersonAdd,
@@ -20,11 +22,12 @@ import { TicketStatusUpdate, statusCss } from "../component/TicketTableMenu";
 import { Status } from "prisma/prisma-client";
 import { TicketHoverCard } from "./HelperComponents";
 import { NotesSection } from "./components/NotesSection";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
 import { useContext } from "react";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { SetTimeFrame } from "./components/SetTimeFrame";
+import TagsPopover from "@/components/Popover";
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
@@ -71,13 +74,18 @@ export default function Page({ params }) {
             </div>
             <NotesSection />
             <SetTimeFrame />
+            <div
+              className={`border border-gray-600 rounded-2xl  mt-4 p-2 soft-bg`}
+            >
+              <TagsPopover />
+            </div>
           </div>
         </div>
       </TicketDataContext.Provider>
     </>
   );
 }
-
+// TagsPopover
 const TicketDataSection = () => {
   const { ticketData, ticketResponse } = useContext(TicketDataContext);
   const router = useRouter();
@@ -91,8 +99,8 @@ const TicketDataSection = () => {
   return (
     <>
       <div className="text-white font-bold">
-        <div className="flex justify-between mb-2 gap-2">
-          <div className="mb-2">
+        <div className="flex justify-between mb-1 gap-2">
+          <div className="mb-1">
             <button
               title="Take me back"
               onClick={() => router.back()}
@@ -129,7 +137,7 @@ const TicketDataSection = () => {
             <TicketDeleteButton
               ticketId={ticketData.id}
               title={"Delete"}
-              className={"bg-red-200 p-1 px-3"}
+              className={" p-1 px-3"}
               navigateTo={urlRoutes.TICKETS}
             />
           </div>

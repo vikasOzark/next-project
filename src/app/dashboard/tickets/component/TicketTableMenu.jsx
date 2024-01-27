@@ -121,7 +121,7 @@ export function TicketStatusUpdate({
             "Ticket will automatically closed when sub child tickets will closed."
           }
           className={twMerge(
-            "px-4 flex gap-2 items-center font-bold hover-bg-gray-500",
+            "px-4 flex gap-2 items-center font-bold hover:bg-gray-500",
             styleButton
           )}
         >

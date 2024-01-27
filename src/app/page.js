@@ -1,26 +1,23 @@
-"use client"
+"use client";
 
-import { Card } from '@/components/Card'
-import { VscArrowRight, VscBook, VscOrganization } from "react-icons/vsc"
-import { TutorCard } from '@/components/TutorCard'
-import { redirect, useRouter } from 'next/navigation'
-import Link from 'next/link'
-import HeroSection from '@/components/HeroSection'
-import TestimonialSection from '@/components/Testimonial'
-
+import { Card } from "@/components/Card";
+import { VscArrowRight, VscBook, VscOrganization } from "react-icons/vsc";
+import { TutorCard } from "@/components/TutorCard";
+import { redirect, useRouter } from "next/navigation";
+import Link from "next/link";
+import HeroSection from "@/components/HeroSection";
+import TestimonialSection from "@/components/Testimonial";
 
 export default function Home() {
-    const { push } = useRouter()
-    const redirectFunction = () => {
-        push("/courses/test-hh")
-        
-    }
-    
+  const { push } = useRouter();
+
   return (
     <>
-        <section>
-            <HeroSection />
-        </section>
+      <section>
+        {/* <TracingBeam> */}
+        <HeroSection />
+        {/* </TracingBeam> */}
+      </section>
       {/* <section className='container mx-auto'>
         <div className="grid grid-cols-1 gap-2 mt-2 md:grid-cols-12 lg:grid-cols-12">
             <div className="p-2 md:col-span-8 lg:col-span-8">
@@ -62,5 +59,5 @@ export default function Home() {
         <TestimonialSection />
       </section> */}
     </>
-  )
+  );
 }

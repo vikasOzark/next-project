@@ -58,7 +58,7 @@ export const TicketDeleteButton = ({
           <button
             onClick={() => mutationAction.mutate()}
             className={twMerge(
-              `text-red-500 bg-red-100 flex gap-2 py-0  px-3 items-center  rounded-full transition-colors duration-200 text-lg dark:hover:text-red-500 dark:text-gray-300 hover:text-red-800 focus:outline-none`,
+              `hover:bg-red-400 text-red-400 flex gap-2 px-3 items-center  rounded-full transition-colors duration-200  hover:text-white focus:outline-none`,
               className
             )}
           >
