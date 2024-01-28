@@ -4,26 +4,25 @@ import next from "next";
 import { useContext } from "react";
 import { RouterContext } from "@/app/dashboard/tickets/component/components";
 
-export const Paginator = ({ totalPages = 5 }) => {
-  // const router = useRouter();
-  const { router, responseData } = useContext(RouterContext);
+export const Paginator = ({ totalPages, cursor }) => {
+  const router = useRouter();
+  const searchParams = new URLSearchParams(useSearchParams());
 
-  const searchParams = useSearchParams();
   const current = searchParams.get("page") || 1;
 
   const handleNextPage = () => {
     const nex_page = Number(current);
     if (current < totalPages) {
-      router.push(`?page=${nex_page + 1}`);
-      responseData.refetch();
+      // router.push(`?page=${nex_page + 1}`);
+      // responseData.refetch();
     }
   };
 
   const handlePreviousPage = () => {
     const previous = Number(current);
     if (previous !== 1) {
-      router.push(`?page=${previous - 1}`);
-      responseData.refetch();
+      // router.push(`?page=${previous - 1}`);
+      // responseData.refetch();
     }
   };
 

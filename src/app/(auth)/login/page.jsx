@@ -16,6 +16,13 @@ export default function Login() {
       <div className="grid mt-auto place-content-center items-center h-[100vh]">
         <div className=" w-fit drop-shadow-lg soft-bg overflow-hidden rounded-xl p-4 px-6 bg-opacity-50 ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            {/* <Image
+              src="/logo.png"
+              alt="logo"
+              width={100}
+              height={100}
+              className="mx-auto"
+            /> */}
             <h2 className="lg:mt-5 md:mt-5 mt-2 text-center text-2xl font-bold leading-9 tracking-tight text-white">
               Sign in to your account
             </h2>

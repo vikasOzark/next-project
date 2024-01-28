@@ -14,6 +14,7 @@ import CreateTicketButton from "./component/forms/TicketCreateButton";
 import { FilterByCreation } from "./component/FilterComponent";
 import { useSearchParams, useRouter } from "next/navigation";
 import TicketSearch from "./component/TicketSearch";
+import { Paginator } from "@/components/Pagination";
 
 export const SelectContext = React.createContext();
 
@@ -56,6 +57,9 @@ export default function Tickets({ searchParams }) {
           </div>
           <div className="mt-2 w-full">
             <TicketTableComponent />
+            <div className=" flex justify-center">
+              <Paginator />
+            </div>
           </div>
         </main>
       </SelectContext.Provider>
