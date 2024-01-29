@@ -16,6 +16,8 @@ import { LoadingState } from "../Buttons";
 import { TfiAlignLeft } from "react-icons/tfi";
 import { FcBusinessman } from "react-icons/fc";
 import { BiPowerOff } from "react-icons/bi";
+import { Role } from "@prisma/client";
+import { TfiReceipt } from "react-icons/tfi";
 
 export const SideNavbar = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,11 +51,6 @@ export const SideNavbar = ({ children }) => {
       icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
       route: urlRoutes.PERMISSIONS,
     },
-    {
-      title: "Advance Settings",
-      icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
-      route: urlRoutes.ADVANCE_SETTINGS,
-    },
   ];
 
   const ADMIN_VIEW_LINKS = [
@@ -76,6 +73,11 @@ export const SideNavbar = ({ children }) => {
       title: "Advance Settings",
       icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
       route: urlRoutes.ADVANCE_SETTINGS,
+    },
+    {
+      title: "Billing",
+      icon: <TfiReceipt size={20} className="h-5 w-5" title="hello" />,
+      route: urlRoutes.BILLING,
     },
   ];
 
@@ -121,7 +123,7 @@ export const SideNavbar = ({ children }) => {
                 </div>
                 {userSession.name}
               </div>
-              {USER_ROLE === "admin"
+              {USER_ROLE === Role.Admin
                 ? ADMIN_VIEW_LINKS.map((item) => {
                     return (
                       <NavigationLink
