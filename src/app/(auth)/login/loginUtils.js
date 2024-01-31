@@ -1,8 +1,11 @@
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import formValidator from "@/utils/formValidator";
+import { urlRoutes } from "@/utils/urlRoutes";
 
-export const loginHandler = async (event, setLoading, setErrorResponseData) => {
+export const loginHandler = async (event, config) => {
+  const { setLoading, setErrorResponseData, router, params } = config;
+
   setLoading(true);
   event.preventDefault();
   setErrorResponseData({});
@@ -26,6 +29,7 @@ export const loginHandler = async (event, setLoading, setErrorResponseData) => {
         email,
         password,
       }).then((response) => {
+        console.log(response);
         if (!response.ok) {
           setErrorResponseData(response);
           setLoading(false);
@@ -33,7 +37,7 @@ export const loginHandler = async (event, setLoading, setErrorResponseData) => {
         }
         toast.success("Successfully signed in.");
         setTimeout(() => {
-          window.location.href = "/dashboard";
+          router.push(urlRoutes.DASHBOARD);
         }, 500);
       });
     }

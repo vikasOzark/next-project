@@ -1,3 +1,15 @@
 export default function OnboardingPage() {
-  return null;
+  return (
+    <>
+      <form>
+        <script
+          src="https://checkout.razorpay.com/v1/payment-button.js"
+          data-payment_button_id="pl_IjtAtudKqJ4XHs"
+          async
+        >
+          {" "}
+        </script>{" "}
+      </form>
+    </>
+  );
 }

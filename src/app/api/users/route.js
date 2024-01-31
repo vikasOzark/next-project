@@ -92,11 +92,12 @@ export async function POST(request) {
         },
       },
     });
+    delete user.password;
 
     return NextResponse.json({
       success: true,
       message: "User created successfully.",
-      data: [user],
+      data: user,
     });
   } catch (error) {
     // console.log(error.message);

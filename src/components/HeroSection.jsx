@@ -5,6 +5,7 @@ import { signIn, useSession } from "next-auth/react";
 import { AiOutlineLogin } from "react-icons/ai";
 import { ActionButton, LoadingState } from "./Buttons";
 import { useRouter } from "next/navigation";
+import { urlRoutes } from "@/utils/urlRoutes";
 
 export default function HeroSection() {
   const session = useSession();
@@ -13,8 +14,8 @@ export default function HeroSection() {
   useEffect(() => {
     if (session?.status === "authenticated") {
       setTimeout(() => {
-        route.push("/dashboard/-");
-      }, [1000]);
+        route.push(urlRoutes.DASHBOARD);
+      }, 1000);
     }
   }, [route]);
 
@@ -69,13 +70,6 @@ export default function HeroSection() {
                   title={"Redirecting..."}
                 />
               )}
-
-              {/* <a
-                href="#"
-                className="text-sm font-semibold leading-6 text-gray-200"
-              >
-                Learn more <span aria-hidden="true">→</span>
-              </a> */}
             </div>
           </div>
         </div>

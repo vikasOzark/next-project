@@ -1,3 +1,11 @@
+import PricingSection from "@/components/Pricing/Pricing";
+
 export default function SelectPlan() {
-  return <>Select</>;
+  return (
+    <>
+      <div className="">
+        <PricingSection />
+      </div>
+    </>
+  );
 }

@@ -45,7 +45,7 @@ export const authOptions = {
 
   callbacks: {
     async signIn({ user }) {
-      if (!user.is_active) {
+      if (user.isDisabled) {
         return Promise.reject(
           new Error(
             "Your account is not active, Please contact the administrator."
@@ -60,12 +60,10 @@ export const authOptions = {
         token.userId = user.id;
         token.userData = user;
       }
-      // console.log(user);
       return token;
     },
 
     async session({ session, token }) {
-      // console.log(token);
       session.user.id = token.userId;
       session.user.userData = token.userData;
       return session;

@@ -8,4 +8,8 @@ export const urlRoutes = {
   TICKETS: dashboard_prifix + "/tickets",
   ADVANCE_SETTINGS: dashboard_prifix + "/advance-settings",
   BILLING: dashboard_prifix + "/billing",
+  PAYMENT: "/payment",
+  SELECT_PLAN: "/plan-select",
+  LOGIN_IN: "/login",
+  REGISTER: "/singup",
 };

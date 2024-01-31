@@ -26,6 +26,15 @@ enum PLAN {
     PREMIUM
 }
 
+enum ON_BORDING_STATUS {
+    PENDING
+    COMPLETED
+    ATTEMPTS_BUT_NO_COMPLITED
+    NEVER_ATTEMPTS
+    PAYMENT_FAILD
+    ALREADY_MEMBER
+}
+
 model User {
     id                 String  @id @default(auto()) @map("_id") @db.ObjectId
     first_name         String
@@ -41,6 +50,8 @@ model User {
     plan        PLAN?
     planExpairy DateTime?
     planStarted DateTime?
+
+    onbordingStatus ON_BORDING_STATUS @default(PENDING)
 
     isSuperuser Boolean  @default(false)
     isDisabled  Boolean? @default(false)
@@ -60,6 +71,12 @@ model User {
     Activity  Activity[]
     Payment   Payment[]
 }
+
+// model CompanyDetail {
+//     id              String  @id @default(auto()) @map("_id") @db.ObjectId
+//     uniqueCompanyId String?
+//     teamSize        String?
+// }
 
 model Department {
     id          String @id @default(auto()) @map("_id") @db.ObjectId

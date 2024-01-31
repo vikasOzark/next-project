@@ -1,7 +1,11 @@
+"use client";
+
 export default function Layout({ children, select, detail }) {
   return (
     <>
-      {children} {select} {detail}
+      <div className="h-screen w-screen">
+        <div className="grid place-content-center mx-auto">{select}</div>
+      </div>
     </>
   );
 }

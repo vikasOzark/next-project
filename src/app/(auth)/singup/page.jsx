@@ -6,11 +6,19 @@ import { PasswordValidatorConponent } from "@/app/(auth)/singup/PasswordValidato
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { LoaderIcon, toast } from "react-hot-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import { urlRoutes } from "@/utils/urlRoutes";
 
 export default function SingUp() {
   const [loading, setLoading] = useState(false);
   const [errorResponseData, setErrorResponseData] = useState({});
   const [validationLevel, setValidationLevel] = useState("");
+
+  const router = useRouter();
+  const params = useSearchParams();
+  const query = new URLSearchParams(params);
+
+  const plan = params.get("plan");
 
   const passwd = useRef();
   const conformPasswd = useRef();
@@ -58,6 +66,16 @@ export default function SingUp() {
 
           if (response.success) {
             toast.success(response.message);
+            query.set(
+              "token",
+              `${response.data?.id}_${response.data?.uniqueCompanyId}`
+            );
+            setTimeout(() => {
+              if (plan) {
+                router.push(urlRoutes.PAYMENT + `?${query.toString()}`);
+              }
+              router.push(urlRoutes.SELECT_PLAN + `?${query.toString()}`);
+            }, 500);
           }
         })
         .finally(() => {
@@ -275,6 +293,7 @@ export default function SingUp() {
                     />
                   </svg>
                 </Link>
+                <a href="/plan-select">select plan</a>
               </div>
             </form>
           </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { LoaderIcon } from "react-hot-toast";
@@ -10,6 +10,15 @@ import { useSession } from "next-auth/react";
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorResponseData, setErrorResponseData] = useState({});
+  const router = useRouter();
+  const params = useSearchParams();
+
+  const config = {
+    setLoading,
+    setErrorResponseData,
+    router,
+    params,
+  };
 
   return (
     <>
@@ -28,10 +37,7 @@ export default function Login() {
             </h2>
           </div>
 
-          <form
-            action=""
-            onSubmit={(e) => loginHandler(e, setLoading, setErrorResponseData)}
-          >
+          <form action="" onSubmit={(event) => loginHandler(event, config)}>
             <div className="mt-10  sm:mx-auto sm:w-full sm:max-w-sm">
               <div className="space-y-6">
                 <div>
