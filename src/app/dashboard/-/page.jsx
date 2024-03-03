@@ -1,8 +1,12 @@
 "use client";
+import CustomEditor from "@/components/Editor";
+
 export default function Dashboard() {
-  return (
-    <>
-      <section>next data</section>
-    </>
-  );
+    return (
+        <>
+            <section className="bg-white p-5">
+                <CustomEditor />
+            </section>
+        </>
+    );
 }
