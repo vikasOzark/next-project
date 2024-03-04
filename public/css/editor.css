@@ -53,7 +53,7 @@
 
 .bn-container[data-color-scheme="dark"] {
     --bn-colors-editor-text: #cfcfcf;
-    --bn-colors-editor-background: #1f1f1f;
+    --bn-colors-editor-background: transparent;
     --bn-colors-menu-text: #cfcfcf;
     --bn-colors-menu-background: #1f1f1f;
     --bn-colors-tooltip-text: #cfcfcf;

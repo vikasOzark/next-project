@@ -8,12 +8,13 @@ import toast from "react-hot-toast";
 import { getDepartmentData } from "./utils";
 import { TagsOptions } from "./TagsDropDownOptions";
 import dynamic from "next/dynamic";
+import CustomEditor from "@/components/Editor";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 export default function CreateTicketForm({ modalClose }) {
     const formElement = useRef();
-
+    const [detail, setDetail] = useState("");
     const [formError, setFormError] = useState({});
     const queryClient = useQueryClient();
 
@@ -25,12 +26,12 @@ export default function CreateTicketForm({ modalClose }) {
             event.preventDefault();
             const ticketData = {
                 taskTitle: event.target.taskTitle.value,
-                ticketDetil: event.target.ticketDetil.value,
+                ticketDetil: detail,
                 department: event.target.department.value,
                 tags: selectedTag,
             };
 
-            const isError = formValidator(ticketData);
+            const isError = formValidator(ticketData, ["ticketDetil"]);
             if (isError) {
                 setFormError(isError);
                 throw new Error();
@@ -67,7 +68,7 @@ export default function CreateTicketForm({ modalClose }) {
                 <div>
                     <label
                         htmlFor="taskTitle"
-                        className="block text-sm text-black dark:text-white font-medium leading-6 "
+                        className="block text-sm text-white dark:text-white font-medium leading-6 "
                     >
                         Ticket title
                     </label>
@@ -89,7 +90,7 @@ export default function CreateTicketForm({ modalClose }) {
                 <div>
                     <label
                         htmlFor="department"
-                        className="block text-sm text-black   font-medium leading-6 "
+                        className="block text-sm text-white   font-medium leading-6 "
                     >
                         Department
                     </label>
@@ -121,7 +122,7 @@ export default function CreateTicketForm({ modalClose }) {
             <div>
                 <label
                     htmlFor="tag"
-                    className="block text-sm mt-2 text-black   font-medium leading-6 "
+                    className="block text-sm mt-2 text-white   font-medium leading-6 "
                 >
                     Assign tags
                 </label>
@@ -137,17 +138,12 @@ export default function CreateTicketForm({ modalClose }) {
             <div>
                 <label
                     htmlFor="ticketDetil"
-                    className="block mt-2 text-sm w-full text-black   font-medium leading-6 "
+                    className="block mt-2 text-sm w-full text-white   font-medium leading-6 "
                 >
                     Ticket Detail
                 </label>
                 <div className="mt-2">
-                    <Editor />
-                    {/* <textarea
-                      id="ticketDetil"
-                      name="ticketDetil"
-                      className="py-2 bg-white border w-full rounded-lg px-2"
-                  /> */}
+                    <CustomEditor onChange={setDetail} />
                     {mutation.isError && formError?.ticketDetil && (
                         <small className="text-red-500 font-bold">
                             {formError?.ticketDetil}
@@ -156,7 +152,7 @@ export default function CreateTicketForm({ modalClose }) {
                 </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-2">
                 {mutation.isLoading ? (
                     <LoadingButton title={"Creating..."} />
                 ) : (
