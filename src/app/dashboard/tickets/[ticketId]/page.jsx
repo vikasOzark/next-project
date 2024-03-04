@@ -252,7 +252,11 @@ const TicketDataSection = () => {
                 {Object.keys(ticketData).length > 0 && (
                     <>
                         <TicketDetailSection ticketData={ticketData} />
-                        <UpdateTicketButtonModal ticketData={ticketData} />
+                        <UpdateTicketButtonModal
+                            title={"Update ticket"}
+                            className={"mt-2"}
+                            ticketData={ticketData}
+                        />
                     </>
                 )}
             </div>
