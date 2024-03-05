@@ -9,20 +9,14 @@ import {
     HomeIcon,
     LifebuoyIcon,
 } from "@heroicons/react/20/solid";
-import {
-    VscAdd,
-    VscCheck,
-    VscChevronUp,
-    VscChromeClose,
-    VscClose,
-} from "react-icons/vsc";
+import { VscChromeClose } from "react-icons/vsc";
 import { useSession, signOut } from "next-auth/react";
 import { urlRoutes } from "@/utils/urlRoutes";
 import { LoadingState } from "../Buttons";
 import { TfiAlignLeft } from "react-icons/tfi";
 import { FcBusinessman } from "react-icons/fc";
 import { BiPowerOff } from "react-icons/bi";
-import CreateNote from "../Forms/CreateNote";
+import { NotesNavBarTab } from "../SideNavNotesTab";
 
 export const SideNavbar = ({ children }) => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -152,7 +146,7 @@ export const SideNavbar = ({ children }) => {
                                           />
                                       );
                                   })}
-                            <NotesNavBar />
+                            <NotesNavBarTab />
                             <div className="mt-5 ">
                                 {isSignout ? (
                                     <div className=" rounded border font-bold text-center py-1 mb-2">
@@ -198,52 +192,3 @@ function NavigationLink({ href, text, icon }) {
         </Link>
     );
 }
-
-const NotesNavBar = () => {
-    const [creating, setCreating] = useState(false);
-
-    return (
-        <>
-            <div className="">
-                <div
-                    className={`${
-                        creating && "bg-gray-500 text-white"
-                    } text-gray-400 mb-1 cursor-pointer font-bold justify-between flex items-center gap-2 px-3 py-1 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-800 dark:hover:text-gray-200 `}
-                >
-                    <div className="flex transition-all items-center gap-2">
-                        <span
-                            className={`${
-                                creating && "rotate-180"
-                            } transition-all duration-500`}
-                        >
-                            <VscChevronUp size={22} />
-                        </span>
-                        <span className="mx-2 text-sm font-medium">Notes</span>
-                    </div>
-                    <div
-                        onClick={() => setCreating((pre) => !pre)}
-                        className={`${
-                            creating && "bg-gray-700 hover:bg-gray-800 "
-                        } hover:bg-gray-700 rounded-md p-1`}
-                    >
-                        <span className={`transition-all duration-500`}>
-                            {creating ? (
-                                <VscClose size={22} />
-                            ) : (
-                                <VscAdd size={22} />
-                            )}
-                        </span>
-                    </div>
-                </div>
-
-                <div
-                    className={`${
-                        creating ? "block" : "hidden"
-                    } border-s-2 border-gray-500 duration-400 relative ms-6 transition-opacity `}
-                >
-                    <CreateNote />
-                </div>
-            </div>
-        </>
-    );
-};

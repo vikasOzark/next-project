@@ -91,7 +91,6 @@ export async function GET(request, context) {
 
     return SuccessResponseHandler(filteredUserData);
   } catch (error) {
-    console.log(error.message);
     return ErrorResponse({ error: error });
   }
 }

@@ -28,8 +28,6 @@ export const useUpdateTicket = (
         },
 
         onSuccess: (data, data2, data3) => {
-            console.log(data, data2, data3);
-
             toast.success("Ticket is created.");
             queryClient.invalidateQueries({
                 queryKey: ["ticket-detail", ticketId],

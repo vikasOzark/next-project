@@ -18,7 +18,6 @@ export default function TicketSearch({ setSearchQuery, queryTicketTitle }) {
 
     useEffect(() => {
         const q = queryParams.get("q");
-        console.log(q);
         if (q && q !== "") {
             setSearchQuery(q);
         }

@@ -15,7 +15,6 @@ const ErrorResponseHandler = (error, extras) => {
 
   const errorMessage = error.message.split(":");
   let message = null;
-  // console.log(errorMessage);
 
   if (!custom_message) {
     if (errorMessage[0] === "self") {
