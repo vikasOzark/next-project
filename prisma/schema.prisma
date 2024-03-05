@@ -66,16 +66,18 @@ model User {
     ticketAssingedUsers Tickets[] @relation(name: "assingedUser")
     Notes               Notes[]
 
-    createdAt DateTime   @default(now())
-    updatedAt DateTime?  @updatedAt
+    createdAt DateTime    @default(now())
+    updatedAt DateTime?   @updatedAt
     Activity  Activity[]
     Payment   Payment[]
+    UserNotes UserNotes[]
 }
 
 // model CompanyDetail {
 //     id              String  @id @default(auto()) @map("_id") @db.ObjectId
 //     uniqueCompanyId String?
 //     teamSize        String?
+//     UserNotes UserNotes[] @relation(name: "noteCreatedBy")
 // }
 
 model Department {
@@ -129,8 +131,10 @@ model Tickets {
     mergedTicket Tickets[] @relation("mergeTickets", fields: [mergeId], references: [id])
     mergeId      String[]  @db.ObjectId
 
-    startDate DateTime?
-    endDate   DateTime?
+    startDate   DateTime?
+    endDate     DateTime?
+    UserNotes   UserNotes? @relation(fields: [userNotesId], references: [id])
+    userNotesId String?    @db.ObjectId
 }
 
 model Notes {
@@ -190,4 +194,17 @@ model Payment {
     amount          String
     paymentStatus   PAYMENT_STATUS @default(PENDING)
     createdAt       DateTime       @default(now())
+}
+
+model UserNotes {
+    id           String      @id @default(auto()) @map("_id") @db.ObjectId
+    title        String      @default("Untitled")
+    content      String?
+    userId       String      @db.ObjectId
+    createdBy    User        @relation(fields: [userId], references: [id], name: "noteCreatedBy")
+    ticketsRef   Tickets[]
+    createdAt    DateTime    @default(now())
+    parentNoteId String?     @unique @db.ObjectId
+    parent       UserNotes?  @relation("parentNotes", fields: [parentNoteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentor     UserNotes[] @relation("parentNotes")
 }

@@ -47,7 +47,6 @@ export async function POST(request, context) {
   try {
     const { params } = context;
     const { status } = await request.json();
-    console.log(status);
 
     /**
      * This block checks if current ticket has any child tickets and child tickets are closed or not.
@@ -73,7 +72,6 @@ export async function POST(request, context) {
       },
     });
 
-    console.log(Status);
     const mergedTicketOperation = new ParentTicketStatusHandler(
       Status[status],
       data

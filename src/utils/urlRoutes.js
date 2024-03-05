@@ -12,4 +12,5 @@ export const urlRoutes = {
   SELECT_PLAN: "/plan-select",
   LOGIN_IN: "/login",
   REGISTER: "/singup",
+  NOTES: dashboard_prifix + "/notes"
 };

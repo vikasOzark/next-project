@@ -100,7 +100,7 @@ export async function POST(request) {
       data: user,
     });
   } catch (error) {
-    // console.log(error.message);
+
     return ErrorResponse(
       {
         message: "Something went wrong, Please try again.",

@@ -1,63 +1,46 @@
 "use client";
 
-import {
-  MDXEditor,
-  UndoRedo,
-  BoldItalicUnderlineToggles,
-  toolbarPlugin,
-  directivesPlugin,
-  AdmonitionDirectiveDescriptor,
-} from "@mdxeditor/editor";
-import { FC } from "react";
-
-const admonitionMarkdown = `
-
-:::note
-foo
-:::
-
-:::tip
-Some **content** with _Markdown_ syntax. Check [this component](https://virtuoso.dev/).
-:::
-
-:::info
-Some **content** with _Markdown_ syntax. 
-:::
-
-:::caution
-Some **content** with _Markdown_ syntax.
-:::
-
-:::danger
-Some **content** with _Markdown_ syntax.
-:::
-`;
+import "@blocknote/react/style.css";
+import { twMerge } from "tailwind-merge";
+import "../../public/css/editor.css";
+import { BlockNoteView, useBlockNote } from "@blocknote/react";
 
 /**
- * Extend this Component further with the necessary plugins or props you need.
- * proxying the ref is necessary. Next.js dynamically imported components don't support refs.
+ * Editor
+ * @component
+ * @param {string} prop.className
+ * @param {string<"dark" | "light">} props.theme
+ * @param {() => void} props.onChange
+ * @param {useBlockNote} props.editorProps
+ * @returns
  */
-const Editor = ({ markdown, editorRef }) => {
-  return (
-    <MDXEditor
-      className="bg-white p-5 m-5"
-      markdown={admonitionMarkdown}
-      plugins={[
-        directivesPlugin({
-          directiveDescriptors: [AdmonitionDirectiveDescriptor],
-        }),
-        toolbarPlugin({
-          toolbarContents: () => (
-            <>
-              {" "}
-              <UndoRedo />
-              <BoldItalicUnderlineToggles />
-            </>
-          ),
-        }),
-      ]}
-    />
-  );
+const CustomEditor = ({
+    className,
+    theme = "dark",
+    onChange,
+    editable,
+    editorProps,
+}) => {
+    const editor = useBlockNote({
+        onEditorContentChange: (dataNew) => {
+            const data = JSON.stringify(dataNew.topLevelBlocks);
+            onChange(data);
+        },
+        editable: editable,
+        ...editorProps,
+    });
+
+    return (
+        <BlockNoteView
+            className={twMerge(
+                "h-[20rem] overflow-hidden overflow-y-auto border rounded-xl border-gray-500 p-1",
+                className
+            )}
+            placeholder="Ticket details..."
+            theme={theme}
+            editor={editor}
+        />
+    );
 };
 
-export default Editor;
+export default CustomEditor;

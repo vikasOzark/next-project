@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@blocknote/core": "^0.11.2",
+    "@blocknote/react": "^0.11.2",
+    "@editorjs/editorjs": "^2.29.0",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@mdxeditor/editor": "^1.14.3",

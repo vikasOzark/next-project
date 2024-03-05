@@ -15,7 +15,6 @@ export const handleUpdateUser = async (targetUser, parentUserId, data = {}) => {
     },
     data: data,
   });
-  // console.log(userDataEnabled);
   return userDataEnabled;
 };
 
@@ -26,9 +25,7 @@ export const handleUserAlter = async (body, userData, targetUser, userId) => {
       httpStatus.HTTP_401_UNAUTHORIZED
     );
   }
-  // console.log("passes the ............");
   const isUser = await bcrypt.compare(body.password, userData.password);
-  // console.log(isUser);
 
   if (!isUser) {
     return ErrorResponse(
@@ -37,7 +34,6 @@ export const handleUserAlter = async (body, userData, targetUser, userId) => {
     );
   }
 
-  // console.log(isUser);
 
   if (userData.role !== Role.Admin) {
     return ErrorResponse(
@@ -46,13 +42,11 @@ export const handleUserAlter = async (body, userData, targetUser, userId) => {
     );
   }
 
-  // console.log("user passes adming check");
 
   const userDataAlter = await handleUpdateUser(targetUser, userId, {
     role: Role[body.role],
   });
 
-  // console.log(userDataAlter);
 
   return SuccessResponseHandler(
     userDataAlter,

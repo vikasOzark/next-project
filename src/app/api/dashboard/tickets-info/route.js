@@ -16,7 +16,7 @@ export async function GET() {
       "Successfully get ticket data."
     );
   } catch (error) {
-    // console.log(error.message);
+
     return ErrorResponse({ error: error });
   }
 }
