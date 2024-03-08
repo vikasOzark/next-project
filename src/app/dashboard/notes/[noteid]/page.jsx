@@ -8,7 +8,6 @@ import {
 } from "@/hooks/user-notes.hook";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import { isJSONString } from "@/utils/validateJsonString";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { VscEdit, VscLoading } from "react-icons/vsc";
 

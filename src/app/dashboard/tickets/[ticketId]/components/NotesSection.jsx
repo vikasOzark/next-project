@@ -25,9 +25,7 @@ export const NotesSection = () => {
     const { params } = useContext(TicketDataContext);
 
     const notesResponse = useQuery({
-        queryFn: () => {
-            return axios.get(`/api/tickets/${params?.ticketId}/notes`);
-        },
+        queryFn: () => axios.get(`/api/tickets/${params?.ticketId}/notes`),
         queryKey: "notes",
         refetchOnMount: false,
         refetchOnWindowFocus: false,
@@ -70,15 +68,12 @@ export const NotesSection = () => {
                     />
                 </div>
             ) : (
-                <div className="mt-2 px-2 overflow-scroll p-2 h-[30rem] border rounded-2xl border-gray-600">
+                <div className="mt-2 px-2 overflow-scroll p-2 max-h-[30rem] border rounded-2xl border-gray-600">
                     {notes.length > 0 ? (
                         displayNotes(notes)
                     ) : (
                         <>
-                            <div className="text-center">
-                                <p className="text-2xl flex justify-center items-center gap-2 text-gray-400 mb-4 font-bold">
-                                    <VscExtensions /> No note available
-                                </p>
+                            <div className="">
                                 <CreateFirstNote />
                             </div>
                         </>
@@ -247,7 +242,8 @@ export const CreateNote = () => {
 
 export const CreateFirstNote = () => {
     const ticketData = useContext(TicketDataContext);
-    const createFormRef = useRef();
+    const createFormRef = useRef(null);
+    const buttonRef = useRef(null);
 
     const id = ticketData.params?.ticketId;
     const [modalOpen, setModalOpen] = useState(false);
@@ -276,30 +272,35 @@ export const CreateFirstNote = () => {
     useEffect(() => {
         const handleClose = (event) => {
             if (!createFormRef.current?.contains(event.target)) {
+                console.log(buttonRef?.current);
                 setModalOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClose);
-
         return () => document.removeEventListener("mousedown", handleClose);
     });
 
     return (
         <>
-            <ActionButton
-                onClick={() => setModalOpen((pre) => !pre)}
-                cssClass={"bg-gray-700 rounded-full hover:bg-gray-600"}
-            >
-                {modalOpen ? (
-                    <>
-                        <VscEdit size={23} /> Add now
-                    </>
-                ) : (
-                    <>
-                        <VscAdd size={23} /> Add first note
-                    </>
-                )}
-            </ActionButton>
+            <div className="flex justify-center">
+                <ActionButton
+                    ref={buttonRef}
+                    onClick={() => setModalOpen((pre) => !pre)}
+                    cssClass={
+                        "bg-gray-700 rounded-full hover:bg-gray-600 hover:text-gray-200"
+                    }
+                >
+                    {modalOpen ? (
+                        <>
+                            <VscEdit size={23} /> Add now
+                        </>
+                    ) : (
+                        <>
+                            <VscAdd size={23} /> Start now
+                        </>
+                    )}
+                </ActionButton>
+            </div>
 
             <div className="relative mb-4 mt-4 flex gap-2">
                 <div className="flex w-full  gap-2">
@@ -350,11 +351,11 @@ export const NoteCreateForm = ({ mutate }) => {
     return (
         <>
             <form onSubmit={mutate}>
-                <div className="p-5">
+                <div className="">
                     <div>
                         <label
                             htmlFor="note"
-                            className=" text-lg mb-4 text-white dark:text-white font-bold leading-6 "
+                            className=" text-lg mb-2 text-white dark:text-white font-bold leading-6 "
                         >
                             Write note here
                         </label>
