@@ -14,6 +14,7 @@ import {
 } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/react/style.css";
+
 import "../../public/css/editor.css";
 
 import { Mention } from "./Mention";
