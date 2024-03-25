@@ -49,6 +49,8 @@ export const useGetUserNote = () => {
         select: (data) => {
             return data.data;
         },
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
     });
 };
 
@@ -65,6 +67,8 @@ export const useGetUserNoteWithId = (noteId) => {
         select: (data) => {
             return data.data;
         },
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
     });
 };
 

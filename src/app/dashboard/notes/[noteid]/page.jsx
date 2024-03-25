@@ -75,7 +75,7 @@ export default function NotesPage({ params }) {
                                 isSaving
                                     ? "text-green-500 flex font-medium items-center gap-2 border-green-500"
                                     : "border-gray-700"
-                            }  border rounded-full px-2 `}
+                            }  border rounded-full px-2 text-sm `}
                         >
                             {isSaving ? (
                                 <>
