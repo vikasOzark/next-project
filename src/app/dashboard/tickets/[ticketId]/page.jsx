@@ -32,6 +32,7 @@ import CustomEditor from "@/components/Editor";
 import { isJSONString } from "@/utils/validateJsonString";
 import TicketDetailSection from "./components/detailSection";
 import UpdateTicketButtonModal from "../component/UpdateTicketButtonModal";
+import Tag from "@/components/Tag";
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
@@ -211,12 +212,15 @@ const TicketDataSection = () => {
                                 </h3>
                                 <div className=" flex gap-2 items-center">
                                     {ticketData?.tags?.map((tag) => (
-                                        <p
-                                            className={`${tag.color} rounded-full flex justify-between gap-2 px-4 py-[2px] font-bold text-white`}
-                                            key={tag.id}
-                                        >
-                                            {tag.title}
-                                        </p>
+                                        <Tag
+                                            key={tag?.id}
+                                            tag={tag}
+                                            ticketId={ticketData.id}
+                                            queryKey={[
+                                                "ticket-detail",
+                                                ticketData.id,
+                                            ]}
+                                        />
                                     ))}
                                 </div>
                             </div>

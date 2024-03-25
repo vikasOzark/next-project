@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { SelectContext } from "../page";
 import { Status } from "@prisma/client";
 import UpdateTicketButtonModal from "./UpdateTicketButtonModal";
+import Tag from "@/components/Tag";
 
 export const RouterContext = createContext();
 
@@ -125,7 +126,6 @@ const TableBodyRow = ({ responseData }) => {
 
 const TableRowComponent = ({ data }) => {
     const { selectedTickets, setSelectedTickets } = useContext(SelectContext);
-    const queryClient = useQueryClient();
 
     const dateObject = new Date(data.createdAt);
     const year = dateObject.getFullYear();
@@ -134,30 +134,6 @@ const TableRowComponent = ({ data }) => {
     const hours = dateObject.getHours();
     const minutes = dateObject.getMinutes();
     const dateAndTime = `${hours}:${minutes} | ${day}-${month}-${year}`;
-
-    const mutationTagRemove = useMutation({
-        mutationFn: async (tagId) => {
-            toast.loading("Removing tag...");
-            const response = await fetch(
-                `/api/tickets/${data.id}/?operationTo=tag&tagId=${tagId}`,
-                { method: "PATCH" }
-            );
-            const json_response = await response.json();
-            return json_response;
-        },
-        onError: (errorResponse) => {
-            toast.dismiss();
-            toast.error(errorResponse.message);
-        },
-        onSuccess: (response) => {
-            toast.dismiss();
-            if (!response.success) {
-                toast.error(error.message);
-            }
-            queryClient.invalidateQueries("tickets-list");
-            toast.success(response.message);
-        },
-    });
 
     const handleSelect = (event) => {
         if (event.target.checked) {
@@ -210,18 +186,12 @@ const TableRowComponent = ({ data }) => {
                 <td className="px-4 py-4   dark:text-gray-300 whitespace-nowrap">
                     <div className=" flex gap-2 items-center">
                         {data?.tags?.map((tag) => (
-                            <p
-                                className={`${tag.color} rounded-full flex justify-between gap-2 px-4 py-[2px] font-bold text-white`}
+                            <Tag
                                 key={tag.id}
-                            >
-                                {tag.title}
-                                <VscChromeClose
-                                    onClick={() =>
-                                        mutationTagRemove.mutate(tag.id)
-                                    }
-                                    className=" hover:bg-gray-100 hover:text-black rounded-full h-5 p-[3px] cursor-pointer w-5"
-                                />{" "}
-                            </p>
+                                ticketId={data.id}
+                                queryKey={"tickets-list"}
+                                tag={tag}
+                            />
                         ))}
                     </div>
                 </td>

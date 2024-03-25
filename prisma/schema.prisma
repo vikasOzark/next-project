@@ -47,12 +47,6 @@ model User {
     Tags               Tags[]
     uniqueCompanyId    String?
 
-    plan        PLAN?
-    planExpairy DateTime?
-    planStarted DateTime?
-
-    onbordingStatus ON_BORDING_STATUS @default(PENDING)
-
     isSuperuser Boolean  @default(false)
     isDisabled  Boolean? @default(false)
 
@@ -69,8 +63,8 @@ model User {
     createdAt DateTime    @default(now())
     updatedAt DateTime?   @updatedAt
     Activity  Activity[]
+    UserNotes UserNotes[] @relation(name: "noteCreatedBy")
     Payment   Payment[]
-    UserNotes UserNotes[]
 }
 
 // model CompanyDetail {

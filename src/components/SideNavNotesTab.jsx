@@ -12,7 +12,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteNoteWithId, useGetUserNote } from "@/hooks/user-notes.hook";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
     VscAdd,
     VscChevronUp,
@@ -68,13 +68,13 @@ export const NotesNavBarTab = () => {
                     </div>
                 </div>
 
-                <div
-                    className={`${
-                        creating ? "block" : "hidden"
-                    } border-s-2 border-gray-500 duration-400 relative ms-6 transition-opacity `}
-                >
-                    <CreateNote setCreating={setCreating} />
-                </div>
+                {creating && (
+                    <div
+                        className={`border-s-2 border-gray-500 duration-400 relative ms-6 transition-opacity `}
+                    >
+                        <CreateNote setCreating={setCreating} />
+                    </div>
+                )}
                 <ShowNotesList setCreating={setCreating} showList={showList} />
             </div>
         </>

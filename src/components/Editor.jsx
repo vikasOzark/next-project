@@ -1,9 +1,23 @@
 "use client";
-
-import "@blocknote/react/style.css";
+import "@blocknote/core/fonts/inter.css";
+import {
+    BlockNoteView,
+    useEditorChange,
+    useCreateBlockNote,
+    SuggestionMenuController,
+} from "@blocknote/react";
 import { twMerge } from "tailwind-merge";
+
+import {
+    BlockNoteSchema,
+    defaultInlineContentSpecs,
+    filterSuggestionItems,
+} from "@blocknote/core";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/react/style.css";
 import "../../public/css/editor.css";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+
+import { Mention } from "./Mention";
 
 /**
  * Editor
@@ -21,26 +35,68 @@ const CustomEditor = ({
     editable,
     editorProps,
 }) => {
-    const editor = useBlockNote({
-        onEditorContentChange: (dataNew) => {
-            const data = JSON.stringify(dataNew.topLevelBlocks);
-            onChange(data);
-        },
+    const editor = useCreateBlockNote({
+        schema,
         editable: editable,
         ...editorProps,
     });
 
+    async function saveContent(jsonBlocks) {
+        const content = JSON.stringify(jsonBlocks);
+        onChange(content);
+    }
+
     return (
         <BlockNoteView
+            data-changing-font-demo
+            editor={editor}
             className={twMerge(
-                "h-[20rem] overflow-hidden overflow-y-auto border rounded-xl border-gray-500 p-1",
+                "h-[20rem] bg-transparent overflow-hidden overflow-y-auto border rounded-xl border-gray-500 p-1",
                 className
             )}
             placeholder="Ticket details..."
             theme={theme}
-            editor={editor}
-        />
+            onChange={() => {
+                saveContent(editor.document);
+            }}
+            sideMenu={false}
+        >
+            {/* Adds a mentions menu which opens with the "@" key */}
+            <SuggestionMenuController
+                triggerCharacter={"@"}
+                getItems={async (query) =>
+                    // Gets the mentions menu items
+                    filterSuggestionItems(getMentionMenuItems(editor), query)
+                }
+            />
+        </BlockNoteView>
     );
 };
 
 export default CustomEditor;
+
+const schema = BlockNoteSchema.create({
+    inlineContentSpecs: {
+        ...defaultInlineContentSpecs,
+        mention: Mention,
+    },
+});
+
+const getMentionMenuItems = (editor) => {
+    const users = ["Steve", "Bob", "Joe", "Mike"];
+
+    return users.map((user) => ({
+        title: user,
+        onItemClick: () => {
+            editor.insertInlineContent([
+                {
+                    type: "mention",
+                    props: {
+                        user,
+                    },
+                },
+                " ",
+            ]);
+        },
+    }));
+};

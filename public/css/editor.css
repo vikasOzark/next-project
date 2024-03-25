@@ -1,3 +1,6 @@
+/* @import url("./mantineStyles.css"); */
+/* @import url("@blocknote/core/style.css"); */
+
 /* Default theme params */
 .bn-container {
     --bn-colors-editor-text: #3f3f3f;
@@ -53,7 +56,7 @@
 
 .bn-container[data-color-scheme="dark"] {
     --bn-colors-editor-text: #cfcfcf;
-    --bn-colors-editor-background: transparent;
+    --bn-colors-editor-background: #1f1f1f;
     --bn-colors-menu-text: #cfcfcf;
     --bn-colors-menu-background: #1f1f1f;
     --bn-colors-tooltip-text: #cfcfcf;
@@ -135,7 +138,7 @@
     box-shadow: var(--bn-shadow-medium);
     box-sizing: border-box;
     color: var(--bn-colors-menu-text);
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 2px;
 }
 
@@ -207,7 +210,7 @@
 }
 
 /* Mantine Tooltip component base styles */
-.mantine-Tooltip-tooltip {
+.bn-container .mantine-Tooltip-tooltip {
     background-color: transparent;
     border: none;
     border-radius: 0;
@@ -218,8 +221,9 @@
 /* Editor body styling */
 
 /* Editor styling */
+/* ? changed background color to transparent from var(--bn-colors-editor-background) */
 .bn-editor {
-    background-color: var(--bn-colors-editor-background);
+    background-color: transparent;
     border-radius: var(--bn-border-radius-large);
     color: var(--bn-colors-editor-text);
     font-family: var(--bn-font-family);
@@ -233,8 +237,7 @@
 }
 
 /* Placeholder styling */
-.bn-is-empty .bn-inline-content:before,
-.bn-is-filter .bn-inline-content:before {
+.bn-inline-content:has(> .ProseMirror-trailingBreak):before {
     color: var(--bn-colors-side-menu);
 }
 
@@ -481,6 +484,15 @@
 
 .bn-container .bn-slash-menu .mantine-Menu-itemLabel .mantine-Stack-root {
     gap: 0;
+}
+
+.bn-container .bn-slash-menu .bn-slash-menu-loader {
+    height: 20px;
+    width: 100%;
+}
+
+.bn-container .bn-slash-menu .bn-slash-menu-loader span {
+    background-color: var(--bn-colors-side-menu);
 }
 
 /* Side Menu & Drag Handle styling */
