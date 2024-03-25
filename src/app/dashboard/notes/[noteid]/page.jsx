@@ -8,7 +8,6 @@ import {
 } from "@/hooks/user-notes.hook";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import { isJSONString } from "@/utils/validateJsonString";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { VscEdit, VscLoading } from "react-icons/vsc";
 
@@ -75,7 +74,7 @@ export default function NotesPage({ params }) {
                                 isSaving
                                     ? "text-green-500 flex font-medium items-center gap-2 border-green-500"
                                     : "border-gray-700"
-                            }  border rounded-full px-2 text-sm `}
+                            }  border rounded-full px-2 `}
                         >
                             {isSaving ? (
                                 <>

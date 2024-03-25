@@ -1,18 +1,23 @@
 import { useCreateUserNote } from "@/hooks/user-notes.hook";
 import { QUERY_KEYS } from "@/queryKeys";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef } from "react";
 import { VscCheck, VscLoading } from "react-icons/vsc";
 import { toast } from "react-hot-toast";
 import { urlRoutes } from "@/utils/urlRoutes";
 
-export default function CreateNote({ setCreating }) {
+const CreateNote = forwardRef(({ setCreating }, ref) => {
     const router = useRouter();
     const formRef = useRef(null);
+    const inputRef = useRef(null);
 
     const { mutate, isLoading, isError, isSuccess, data } = useCreateUserNote(
         QUERY_KEYS.USER_NOTE_LIST
     );
+
+    useEffect(() => {
+        inputRef.current.focus();
+    }, []);
 
     useEffect(() => {
         if (isSuccess && "id" in data.data) {
@@ -36,10 +41,12 @@ export default function CreateNote({ setCreating }) {
                     className="p-1 border flex items-center ms-2 rounded border-gray-700"
                 >
                     <input
+                        ref={inputRef}
+                        autoFocus
                         className="bg-transparent w-full text-gray-300 focus:outline-none"
                         type="text"
                         name="noteTitle"
-                        placeholder="note title..."
+                        defaultValue={"Untitled"}
                     />
                     {isLoading ? (
                         <button
@@ -60,4 +67,6 @@ export default function CreateNote({ setCreating }) {
             </div>
         </>
     );
-}
+});
+CreateNote.displayName = "create_user_note";
+export default CreateNote;
