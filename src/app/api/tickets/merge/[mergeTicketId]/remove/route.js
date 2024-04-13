@@ -3,10 +3,14 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 
 export async function PATCH(request, context) {
   try {
-    const prisma = new PrismaClient();
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance;
     const { mergeTicketId } = context.params;
     const userObject = await getUserId(true);
     const requestBody = await request.json();

@@ -2,8 +2,12 @@ import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 import { NextResponse } from "next/server";
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function POST(request) {
   const requestBody = await request.json();

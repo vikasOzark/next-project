@@ -2,7 +2,10 @@ import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function GET() {
   try {

@@ -1,5 +1,6 @@
 import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 import { verifyAdminPassword } from "@/utils/userVerify";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import bcrypt from "bcrypt";
@@ -12,7 +13,10 @@ export async function POST(request, context) {
       return ErrorResponse({ message: "All fields are required." });
     }
 
-    const prisma = new PrismaClient();
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance;
     await prisma.$connect();
 
     const { userId } = context.params;

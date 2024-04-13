@@ -2,7 +2,11 @@ import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prismaInstance from "@/lib/dbController";
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function PATCH(request, context) {
   const { params } = context;

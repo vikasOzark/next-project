@@ -5,13 +5,17 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 
 export async function PATCH(request, context) {
   try {
     const { params } = context;
     const requestBody = await request.json();
     const userId = await getUserId(true);
-    const prisma = new PrismaClient();
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance;
 
     prisma.$connect();
     const ticket = await prisma.tickets.update({

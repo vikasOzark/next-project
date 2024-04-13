@@ -8,7 +8,10 @@ import { PrismaClient, Role } from "@prisma/client";
 import { handleUpdateUser, handleUserAlter } from "./apiHelper";
 import exclude from "@/lib/exclude";
 
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function PATCH(request, context) {
   const userId = await getUserId();

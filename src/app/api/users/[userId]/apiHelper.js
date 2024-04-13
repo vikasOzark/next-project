@@ -4,7 +4,10 @@ import httpStatus from "@/utils/httpStatus";
 import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export const handleUpdateUser = async (targetUser, parentUserId, data = {}) => {
   await prisma.$connect();

@@ -6,7 +6,10 @@ import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 export async function GET(request, context) {
   const { params } = context;
 

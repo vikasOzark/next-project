@@ -7,7 +7,10 @@ import { PrismaClient, Role } from "@prisma/client";
 export async function DELETE(request, context) {
   try {
     const { params } = context;
-    const prisma = new PrismaClient();
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance;
     const userId = getUserId();
 
     if (!userId) {
@@ -54,7 +57,10 @@ export async function DELETE(request, context) {
 export async function GET(request, context) {
   try {
     const { departmentId } = context.params;
-    const prisma = new PrismaClient();
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance;
     await prisma.$connect();
     const departmentData = await prisma.department.findFirst({
       where: {

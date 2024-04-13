@@ -5,10 +5,14 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 import { NextResponse } from "next/server";
 const bcrypt = require("bcrypt");
 
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function POST(request) {
   try {

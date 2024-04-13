@@ -1,15 +1,20 @@
+import prismaInstance from "@/lib/dbController";
 import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 
 export async function POST(request) {
-    const prismaClient = new PrismaClient()
     const response = await request.json()
     const userId = await getUserId();
 
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance
+
     try {
-        const taskBoard = await prismaClient.tasks.create({
+        const taskBoard = await prisma.tasks.create({
             data: {
                 taskTitle: response.taskTitle,
                 User: {
@@ -28,6 +33,6 @@ export async function POST(request) {
     } catch (error) {
         return ErrorResponse({ error: error })
     } finally {
-        prismaClient.$disconnect()
+        // prismaClient.$disconnect()
     }
 }

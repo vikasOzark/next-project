@@ -4,7 +4,10 @@ import getUserId from "./userByToken";
 import bcrypt from "bcrypt";
 
 export async function verifyIsAdmin() {
-  const prisma = new PrismaClient();
+  /**
+ * @type {PrismaClient}
+ */
+  const prisma = prismaInstance;
 
   try {
     await prisma.$connect();
@@ -40,7 +43,10 @@ export async function verifyIsAdmin() {
  * throw 401 : Provided admin password is not matched.
  */
 export async function verifyAdminPassword(password) {
-  const prisma = new PrismaClient();
+  /**
+ * @type {PrismaClient}
+ */
+  const prisma = prismaInstance;
 
   try {
     await prisma.$connect();

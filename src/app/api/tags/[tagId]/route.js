@@ -2,10 +2,14 @@ import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 
 export async function DELETE(request, context) {
   const { params } = context;
-  const prisma = new PrismaClient();
+  /**
+ * @type {PrismaClient}
+ */
+  const prisma = prismaInstance;
 
   try {
     await prisma.$connect();

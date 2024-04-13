@@ -2,9 +2,13 @@ import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 
 export async function DELETE(request, context) {
-    const prisma = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance
     const { params } = context;
     try {
         const userObjectId = await getUserId();
@@ -25,7 +29,10 @@ export async function DELETE(request, context) {
 }
 
 export async function GET(request, context) {
-    const prisma = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance
     const { params } = context;
     try {
         const userObjectId = await getUserId();
@@ -47,7 +54,10 @@ export async function GET(request, context) {
 
 export async function PATCH(request, context) {
     const response = await request.json()
-    const prisma = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance
     const { params } = context;
     try {
         const userObjectId = await getUserId();

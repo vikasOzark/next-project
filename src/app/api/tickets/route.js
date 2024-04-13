@@ -7,7 +7,10 @@ import { PrismaClient, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { provideFilter } from "./ticketFilter.provider";
 
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function POST(request) {
   const requestBody = await request.json();

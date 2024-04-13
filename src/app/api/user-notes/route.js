@@ -2,10 +2,14 @@ import ErrorResponseHandler, { ErrorResponse } from "@/utils/ErrorResponseHandle
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 
 export async function POST(request) {
     const requestBody = await request.json();
-    const prisma = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance
     try {
         const userId = await getUserId();
 
@@ -31,7 +35,10 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-    const prisma = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance
     try {
         const userObject = await getUserId(true);
         await prisma.$connect();

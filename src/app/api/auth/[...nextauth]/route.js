@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
@@ -80,7 +81,10 @@ export { handler as GET, handler as POST };
 
 const handleAuthentication = async (credentials, req) => {
   try {
-    const prisma = new PrismaClient();
+    /**
+ * @type {PrismaClient}
+ */
+    const prisma = prismaInstance;
     const userData = await prisma.user.findFirst({
       where: {
         email: credentials.email,

@@ -2,6 +2,7 @@ import ErrorResponseHandler, { ErrorResponse } from "@/utils/ErrorResponseHandle
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 
 export async function POST(request) {
     const prismaClient = new PrismaClient()

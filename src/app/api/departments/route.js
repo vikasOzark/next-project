@@ -1,9 +1,13 @@
 import { NextResponse, NextRequest } from "next/server";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
+import prismaInstance from "@/lib/dbController";
 import httpStatus from "@/utils/httpStatus";
 import { ErrorResponse } from "@/utils/ErrorResponseHandler";
-const prisma = new PrismaClient();
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function GET(request) {
   try {

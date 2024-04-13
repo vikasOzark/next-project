@@ -1,5 +1,17 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+let prismaInstance;
 
-module.exports = prisma;
+if (process.env.NODE_ENV === 'production') {
+    // Connect to the database in production
+    prismaInstance = new PrismaClient();
+} else {
+    // Use a development-specific database (optional)
+    if (!global.prismaInstance) {
+        global.prismaInstance = new PrismaClient();
+    }
+    prismaInstance = global.prismaInstance;
+}
+
+export default prismaInstance;
+

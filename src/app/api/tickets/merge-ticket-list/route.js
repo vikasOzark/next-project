@@ -3,7 +3,11 @@ import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prismaInstance from "@/lib/dbController";
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function GET(request) {
   try {
