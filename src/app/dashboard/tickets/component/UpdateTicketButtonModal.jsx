@@ -16,7 +16,7 @@ export default function UpdateTicketButtonModal({
                 <button
                     onClick={() => setTicketUpdateModal((pre) => !pre)}
                     className={twMerge(
-                        "text-gray-500 bg-gray-100 flex gap-2 py-1  px-4 items-center  rounded-lg transition-colors duration-200 text-lg dark:hover:gray-red-500 dark:text-gray-300 hover:text-gray-800 focus:outline-none",
+                        "text-white flex gap-2 py-1  px-4 items-center  rounded-full transition-colors duration-200 text-lg hover:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-300 hover:text-gray-800 focus:outline-none",
                         className
                     )}
                 >

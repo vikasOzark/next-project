@@ -27,8 +27,6 @@ import MergedTicketCard from "./components/MergedTicketCard";
 import { useContext } from "react";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
 import { SetTimeFrame } from "./components/SetTimeFrame";
-import TagsPopover from "@/components/Popover";
-import CustomEditor from "@/components/Editor";
 import { isJSONString } from "@/utils/validateJsonString";
 import TicketDetailSection from "./components/detailSection";
 import UpdateTicketButtonModal from "../component/UpdateTicketButtonModal";

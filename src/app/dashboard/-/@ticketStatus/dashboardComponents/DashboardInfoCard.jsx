@@ -14,6 +14,14 @@ export default function TicketStatusInfo() {
             return jsonResponse;
         },
     });
+    const ticketData = useQuery({
+        queryKey: "ticketData",
+        queryFn: async () => {
+            const response = await fetch("/api/dashboard/tickets-info");
+            const jsonResponse = await response.json();
+            return jsonResponse;
+        },
+    });
 
     return (
         <>
@@ -70,20 +78,20 @@ export default function TicketStatusInfo() {
 
 const DashboardInfoCard = ({ className, title, value, loading }) => (
     <div
-        className={cn(
+        class={cn(
             ` bg-white px-2 py-1 md:px-4 lg:px-4 md:py-2 lg:py-2 shadow-xl ring-1 rounded-lg `,
             className
         )}
     >
-        <div className="">
+        <div class="">
             <div className="flex gap-2 items-center">
                 <BsTicketDetailed className="md:text-2xl lg:text-3xl" />
                 <span className=" text-sm md:text-2xl lg:text-2xl font-medium">
                     {title}
                 </span>
             </div>
-            <div className="divide-y divide-gray-300/50">
-                <div className="space-y-6 md:py-4 lg:py-4 text-base leading-7 text-gray-600">
+            <div class="divide-y divide-gray-300/50">
+                <div class="space-y-6 md:py-4 lg:py-4 text-base leading-7 text-gray-600">
                     {loading ? (
                         <LoadingState title={"Loading..."} />
                     ) : (
