@@ -48,7 +48,7 @@ export default function ColorPickerDropDown({
                                         <div
                                             onClick={() => setColor(color)}
                                             style={{ backgroundColor: color }}
-                                            class={`h-8 w-8 rounded-md bg-slate-700 ${
+                                            className={`h-8 w-8 rounded-md bg-slate-700 ${
                                                 color === selectedColor &&
                                                 " ring-gray-400"
                                             }`}
@@ -58,7 +58,7 @@ export default function ColorPickerDropDown({
                             })}
                             <div
                                 onClick={() => setColor("")}
-                                class={`h-8 w-8 rounded-md soft-bg softer-bg softer-bg-hover grid place-content-center`}
+                                className={`h-8 w-8 rounded-md soft-bg softer-bg softer-bg-hover grid place-content-center`}
                             >
                                 <VscCircleSlash size={20} />
                             </div>
