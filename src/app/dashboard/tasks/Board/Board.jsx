@@ -9,8 +9,10 @@ import { useMutation, useQueryClient } from "react-query";
 import { deleteBoard } from "@/app/apiFunctions/kanbanBord.api";
 import { QUERY_KEYS } from "@/queryKeys";
 import toast from "react-hot-toast";
+import { VscTarget } from "react-icons/vsc";
+
 export default function Board({ board }) {
-    const { Tasks = [], id, boardTitle } = board;
+    const { Tasks = [], id, boardTitle, boardColor } = board;
     const queryClient = useQueryClient();
     const [show, setShow] = useState(false);
     const [dropdown, setDropdown] = useState(false);
@@ -41,17 +43,25 @@ export default function Board({ board }) {
 
     return (
         <div className="board softer-bg min-w-[20rem] w-[25] max-w-[27rem] rounded-lg">
-            <div className="board__top">
-                <div>
-                    <input
-                        className="title__input px-2 bg-transparent text-white"
-                        type={"text"}
-                        defaultValue={boardTitle}
-                        onChange={(e) => {
-                            props.setName(e.target.value, id);
-                        }}
-                    />
+            <div className="board__top gap-2">
+                <div className="gap-1 text-lg  mt-2 mb-4 flex items-center">
+                    <VscTarget style={{ color: boardColor }} size={20} />
+                    <div className="">
+                        <input
+                            className=" capitalize focus:outline-none px-2 bg-transparent text-white"
+                            autoCapitalize="on"
+                            type={"text"}
+                            defaultValue={boardTitle}
+                            onChange={(e) => {
+                                props.setName(e.target.value, id);
+                            }}
+                        />
+                        <span className="soft-bg rounded-full text-sm p-1">
+                            {Tasks.length}
+                        </span>
+                    </div>
                 </div>
+
                 <div
                     onClick={() => {
                         setDropdown(true);
@@ -88,7 +98,7 @@ export default function Board({ board }) {
                                 id={items.id}
                                 index={index}
                                 key={items.id}
-                                title={items.title}
+                                title={items.taskTitle}
                                 tags={items.tags}
                                 card={items}
                             />

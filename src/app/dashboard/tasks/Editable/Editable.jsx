@@ -6,10 +6,12 @@ import { createBoard } from "@/app/apiFunctions/kanbanBord.api";
 import toast from "react-hot-toast";
 import { QUERY_KEYS } from "@/queryKeys";
 import { useOnClickOutside } from "@/hooks/modalClose.hook";
-import { VscLoading } from "react-icons/vsc";
+import { VscAdd, VscLoading } from "react-icons/vsc";
+import ColorPickerDropDown from "@/components/Dropdown/ColorPickerDropdown";
 
 const Editable = () => {
     const [show, setShow] = useState(false);
+    const [color, setColor] = useState("");
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
@@ -25,31 +27,35 @@ const Editable = () => {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         const boardTitle = e.target.boardName.value;
+
         if (boardTitle) {
-            mutation.mutate({ boardTitle });
+            mutation.mutate({ boardTitle, color });
         }
         setShow(false);
     };
 
-    const inputRef = useRef(null);
-    useOnClickOutside({ ref: inputRef, handler: () => setShow(false) });
-
     return (
-        <div className={``} ref={inputRef}>
+        <div className={``}>
             {show && (
                 <form onSubmit={handleOnSubmit}>
                     <div
                         className={`min-w-[20rem] w-[25] softer-bg p-1 rounded-md max-w-[27rem]`}
                     >
-                        <input
-                            placeholder={"Board title"}
-                            autoFocus
-                            id={"edit-input"}
-                            name="boardName"
-                            className="w-full bg-transparent outline-none  px-3"
-                            type={"text"}
-                        />
-                        <div className="flex gap-2 items-center justify-end">
+                        <div className="flex">
+                            <input
+                                placeholder={"Board title"}
+                                autoFocus
+                                id={"edit-input"}
+                                name="boardName"
+                                className="w-full bg-transparent outline-none  px-3"
+                                type={"text"}
+                            />
+                            <ColorPickerDropDown
+                                color={color}
+                                setColor={setColor}
+                            />
+                        </div>
+                        <div className="flex gap-2 mt-1 items-center justify-end">
                             <X
                                 size={18}
                                 className="text-red-400 text-sm hover:soft-bg cursor-pointer rounded"
@@ -67,11 +73,10 @@ const Editable = () => {
             )}
             {!mutation.isLoading && !show && (
                 <div
-                    className=" cursor-pointer  justify-center p-1 min-w-[20rem] w-[25] max-w-[27rem] flex gap-2 items-center softer-bg rounded-md px-2"
-                    onClick={() => {
-                        setShow(true);
-                    }}
+                    className=" cursor-pointer h-10 justify-center p-1 min-w-[20rem] w-[25] max-w-[27rem] flex gap-2 items-center softer-bg rounded-md px-2"
+                    onClick={() => setShow(true)}
                 >
+                    <VscAdd size={20} />
                     Add board
                 </div>
             )}

@@ -3,6 +3,8 @@ import { useOnClickOutside } from "@/hooks/modalClose.hook";
 import { QUERY_KEYS } from "@/queryKeys";
 import { useRef, useState } from "react";
 import { Plus, X } from "react-feather";
+import toast from "react-hot-toast";
+import { VscLoading } from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
 
 export default function CreateTaskCard({ boardId }) {
@@ -10,12 +12,15 @@ export default function CreateTaskCard({ boardId }) {
     const queryClient = useQueryClient();
     const inputRef = useRef(null);
 
-    const { mutate } = useMutation({
+    const { mutate, isLoading } = useMutation({
         mutationFn: (formData) => createTask(formData),
         onSuccess: (data) => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.KANBAN_BOARDS],
             });
+            data.success
+                ? toast.success(data.message)
+                : toast.error(data.message);
         },
     });
 
@@ -31,13 +36,14 @@ export default function CreateTaskCard({ boardId }) {
             boardId,
         };
         mutate(taskPayload);
+        setShow(false);
     };
 
     useOnClickOutside({ ref: inputRef, handler: () => setShow(false) });
 
     return (
         <div className={``} ref={inputRef}>
-            {show ? (
+            {show && !isLoading && (
                 <form onSubmit={handleOnSubmit}>
                     <div
                         className={`soft-bg rounded-md m-1 p-1 text-center flex items-center justify-center cursor-pointer `}
@@ -67,7 +73,8 @@ export default function CreateTaskCard({ boardId }) {
                         </div>
                     </div>
                 </form>
-            ) : (
+            )}
+            {!isLoading && !show && (
                 <div className="w-full">
                     <div
                         className="flex gap-2 items-center soft-bg rounded-md m-1 p-1 text-center justify-center cursor-pointer hover:bg-gray-600`"
@@ -76,6 +83,13 @@ export default function CreateTaskCard({ boardId }) {
                         }}
                     >
                         <Plus /> Add
+                    </div>
+                </div>
+            )}
+            {isLoading && (
+                <div className="w-full">
+                    <div className="flex gap-2 items-center soft-bg rounded-md m-1 p-1 text-center justify-center cursor-pointer hover:bg-gray-600`">
+                        <VscLoading className=" animate-spin" /> Adding...
                     </div>
                 </div>
             )}

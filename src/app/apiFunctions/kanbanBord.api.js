@@ -47,3 +47,18 @@ export async function updateBoard(formData) {
             .catch((error) => reject(error.data));
     });
 }
+
+export async function updateBoardWithId(boardId, formData) {
+    return new Promise((resolve, reject) => {
+        return fetch(`/api/boards/${boardId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((data) => data.json())
+            .then(resolve)
+            .catch((error) => reject(error.data));
+    });
+}

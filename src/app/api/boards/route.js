@@ -11,6 +11,7 @@ export async function POST(request) {
         const taskBoard = await prismaClient.board.create({
             data: {
                 boardTitle: response.boardTitle,
+                boardColor: response.color,
                 userId: userObject,
             }
         })
@@ -47,7 +48,16 @@ export async function PATCH(request) {
     const response = await request.json()
     const userObject = await getUserId();
     try {
-        console.log(response);
+        await prismaClient.tasks.update({
+            data: {
+                boardId: response?.destination.droppableId
+            },
+            where: {
+                id: response?.draggableId,
+                userId: userObject
+            }
+        })
+
         return SuccessResponseHandler(taskBoard, "Created successfully.")
     } catch (error) {
         return ErrorResponse({ error: error })

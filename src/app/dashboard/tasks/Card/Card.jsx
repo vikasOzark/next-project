@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { MoreHorizontal } from "react-feather";
+import { VscSymbolField } from "react-icons/vsc";
 
 const Card = (props) => {
     const [dropdown, setDropdown] = useState(false);
@@ -20,7 +21,10 @@ const Card = (props) => {
                         ref={provided.innerRef}
                     >
                         <div className="card__text">
-                            <p>{props.title}</p>
+                            <p className=" flex gap-2 text-lg items-center">
+                                <VscSymbolField />
+                                {props.title}
+                            </p>
                             <MoreHorizontal
                                 className="car__more"
                                 onClick={() => {
