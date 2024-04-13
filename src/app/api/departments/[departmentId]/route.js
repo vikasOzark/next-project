@@ -46,7 +46,7 @@ export async function DELETE(request, context) {
   } catch (error) {
 
     return ErrorResponse({
-      message: "Something bad happend, Please try again.",
+      message: "Something bad happened, Please try again.",
     });
   }
 }

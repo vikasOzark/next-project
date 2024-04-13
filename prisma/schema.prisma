@@ -65,6 +65,8 @@ model User {
     Activity  Activity[]
     UserNotes UserNotes[] @relation(name: "noteCreatedBy")
     Payment   Payment[]
+    Tasks     Tasks[]
+    Board     Board[]
 }
 
 // model CompanyDetail {
@@ -94,6 +96,7 @@ model Tags {
     userId      String    @db.ObjectId
     tickets     Tickets[] @relation(fields: [ticketId], references: [id])
     ticketId    String[]  @db.ObjectId
+    Tasks       Tasks[]
 }
 
 model Tickets {
@@ -201,4 +204,24 @@ model UserNotes {
     parentNoteId String?     @unique @db.ObjectId
     parent       UserNotes?  @relation("parentNotes", fields: [parentNoteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     parentor     UserNotes[] @relation("parentNotes")
+}
+
+model Board {
+    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId     String  @db.ObjectId
+    User       User    @relation(fields: [userId], references: [id])
+    boardTitle String
+    Tasks      Tasks[]
+}
+
+model Tasks {
+    id          String  @id @default(auto()) @map("_id") @db.ObjectId
+    taskTitle   String
+    taskBody    String?
+    userId      String  @db.ObjectId
+    User        User    @relation(fields: [userId], references: [id])
+    boardId     String  @db.ObjectId
+    originBoard Board   @relation(fields: [boardId], references: [id])
+    tagId       String? @db.ObjectId
+    tags        Tags?   @relation(fields: [tagId], references: [id])
 }

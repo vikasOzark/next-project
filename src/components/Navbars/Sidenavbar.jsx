@@ -22,7 +22,7 @@ import { NotesNavBarTab } from "../SideNavNotesTab";
 
 export const SideNavbar = ({ children }) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isSignout, setSignout] = useState(false);
+    const [isSingout, setSingout] = useState(false);
 
     const session = useSession();
     const data = session;
@@ -85,16 +85,21 @@ export const SideNavbar = ({ children }) => {
             icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
             route: urlRoutes.BILLING,
         },
+        {
+            title: "Tasks",
+            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+            route: urlRoutes.TASKS,
+        },
     ];
 
-    const handleSignout = () => {
-        setSignout(true);
+    const handleSingout = () => {
+        setSingout(true);
         try {
             setTimeout(() => {
                 signOut();
             }, 1000);
         } finally {
-            setSignout(false);
+            setSingout(false);
         }
     };
 
@@ -155,7 +160,7 @@ export const SideNavbar = ({ children }) => {
                                   })}
                             <NotesNavBarTab />
                             <div className="mt-5 ">
-                                {isSignout ? (
+                                {isSingout ? (
                                     <div className=" rounded border font-bold text-center py-1 mb-2">
                                         <LoadingState
                                             title={"Logging out..."}
@@ -164,7 +169,7 @@ export const SideNavbar = ({ children }) => {
                                     </div>
                                 ) : (
                                     <div
-                                        onClick={() => handleSignout()}
+                                        onClick={() => handleSingout()}
                                         className="hover:bg-gray-700 cursor-pointer flex place-content-center items-center gap-2 text-gray-500 hover:text-gray-300 border hover:border-transparent border-gray-600 rounded-lg font-bold text-center py-1 mb-2"
                                     >
                                         Log out <BiPowerOff size={18} />

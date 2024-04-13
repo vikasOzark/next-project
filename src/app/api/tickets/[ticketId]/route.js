@@ -142,7 +142,7 @@ export async function PATCH(request, context) {
   } catch (error) {
     return ErrorResponse(
       {
-        message: "Something bad happend, Please try again.",
+        message: "Something bad happened, Please try again.",
       },
       httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
     );

@@ -62,7 +62,7 @@ export async function GET(request, context) {
   } catch (error) {
     return ErrorResponse(
       {
-        message: "Something bad happend, Please try again later.",
+        message: "Something bad happened, Please try again later.",
         error: error,
       },
       httpStatus.HTTP_500_INTERNAL_SERVER_ERROR

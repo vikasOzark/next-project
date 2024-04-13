@@ -6,9 +6,6 @@ import { PrismaClient } from "@prisma/client";
 export async function POST(request, context) {
   try {
     const body = await request.json();
-
-    console.log(body);
-
     const prisma = new PrismaClient();
     const users = await prisma.user.findFirst({
       where: {

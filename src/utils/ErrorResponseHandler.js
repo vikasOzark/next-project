@@ -48,7 +48,7 @@ export const ErrorResponse = (
   statusCode = httpStatus.HTTP_500_INTERNAL_SERVER_ERROR
 ) => {
   const {
-    message = "Something bad happend, Please try again later.",
+    message = "Something bad happened, Please try again later.",
     error = null,
   } = config;
 
@@ -59,7 +59,8 @@ export const ErrorResponse = (
       data: [],
       error: error,
     },
-    { status: statusCode }
+
+    { status: statusCode, }
   );
 };
 
