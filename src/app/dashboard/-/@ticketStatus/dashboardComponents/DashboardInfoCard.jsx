@@ -14,14 +14,6 @@ export default function TicketStatusInfo() {
             return jsonResponse;
         },
     });
-    const ticketData = useQuery({
-        queryKey: "ticketData",
-        queryFn: async () => {
-            const response = await fetch("/api/dashboard/tickets-info");
-            const jsonResponse = await response.json();
-            return jsonResponse;
-        },
-    });
 
     return (
         <>
