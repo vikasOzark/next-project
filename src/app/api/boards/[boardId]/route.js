@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import prismaInstance from "@/lib/dbController";
 
 export async function DELETE(request, context) {
-    const prismaClient = new PrismaClient()
+    const prismaClient = prismaInstance
     const { params } = context
     const userObject = await getUserId();
     try {
@@ -27,44 +27,45 @@ export async function DELETE(request, context) {
         })
         return SuccessResponseHandler(taskBoard, "Boards has been delete successfully.")
     } catch (error) {
-        console.log(error.message);
         return ErrorResponse({ error: error })
-    } finally {
-        prismaClient.$disconnect()
     }
 }
 
-export async function PATCH(request) {
-    const prismaClient = new PrismaClient()
-    const { boardTitle, boardColor } = await request.json()
-
-    const updatingData = {}
-    if (boardTitle) {
-        updatingData.boardTitle = boardTitle
-    }
-
-    if (boardTitle) {
-        updatingData.boardColor = boardColor
-    }
-
-    const userObject = await getUserId();
+export async function PATCH(request, context) {
     try {
+        const { params } = context
+        /**
+         * @type {PrismaClient}
+         */
+        const prismaClient = prismaInstance
+        const response = await request.json()
+
+        const updatingData = {}
+        if (response.boardTitle) {
+            updatingData.boardTitle = response.boardTitle
+        }
+
+        if (response.boardTitle) {
+            updatingData.boardColor = response.boardColor
+        }
+
+        const userObject = await getUserId();
         if (Object.keys(updatingData).length === 0) {
             throw new Error("Not a valid value.")
         }
 
-        await prismaClient.tasks.update({
-            data: response,
+        const taskBoard = await prismaClient.board.update({
+            data: { ...response },
             where: {
-                id: response?.draggableId,
-                userId: userObject
+                id: params.boardId,
+                AND: {
+                    userId: userObject
+                }
             }
         })
 
         return SuccessResponseHandler(taskBoard, "board updated successfully.")
     } catch (error) {
         return ErrorResponse({ error: error })
-    } finally {
-        prismaClient.$disconnect()
     }
 }

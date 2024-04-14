@@ -82,7 +82,7 @@ export default function CreateTaskCard({ boardId }) {
                             setShow(true);
                         }}
                     >
-                        <Plus /> Add
+                        <Plus /> Add task
                     </div>
                 </div>
             )}

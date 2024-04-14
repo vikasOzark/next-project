@@ -1,10 +1,13 @@
 import { useOnClickOutside } from "@/hooks/modalClose.hook";
+import { cn } from "@/utils/cn";
 import { useRef, useState } from "react";
 import { VscActivateBreakpoints, VscCircleSlash } from "react-icons/vsc";
 
 export default function ColorPickerDropDown({
     color: selectedColor,
     setColor,
+    className,
+    icon,
 }) {
     const [showColorPicker, setShowColorPicker] = useState(false);
     const niceColors = [
@@ -12,12 +15,16 @@ export default function ColorPickerDropDown({
         "#FFCE56", // Sunflower
         "#4CAF50", // Green teal
         "#2196F3", // Royal blue
-        "#9C27B0", // Wisteria purple
         "#3F51B5", // Indigo
         "#E91E63", // Cerise pink
         "#F44336", // Red
         "#FFEB3B", // Canary yellow
         "#C0CA33", // Lime green
+        "#4477CE",
+        "#074173",
+        "#1679AB",
+        "#5DEBD7",
+        "#C5FF95",
     ];
 
     const inputRef = useRef(null);
@@ -35,9 +42,12 @@ export default function ColorPickerDropDown({
                     onClick={() => setShowColorPicker((pre) => !pre)}
                     type="button"
                     style={selectedColor !== "" ? bg : {}}
-                    className="soft-bg soft-bg-hover p-2 rounded-md cursor-pointer"
+                    className={cn(
+                        "soft-bg soft-bg-hover p-2 rounded-md cursor-pointer",
+                        className
+                    )}
                 >
-                    <VscActivateBreakpoints size={20} />
+                    <VscActivateBreakpoints {...icon} size={18} />
                 </div>
                 {showColorPicker && (
                     <div className="absolute mt-1 soft-bg p-3 rounded-lg w-[12rem] right-0 cursor-pointer z-50">

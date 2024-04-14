@@ -48,7 +48,7 @@ export async function updateBoard(formData) {
     });
 }
 
-export async function updateBoardWithId(boardId, formData) {
+export async function updateBoardWithId({ boardId, formData }) {
     return new Promise((resolve, reject) => {
         return fetch(`/api/boards/${boardId}`, {
             method: "PATCH",

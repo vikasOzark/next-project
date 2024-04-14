@@ -22,7 +22,10 @@ export default function Login() {
 
     return (
         <>
-            <div className="grid mt-auto place-content-center items-center h-[100vh]">
+            <div className="grid mt-auto relative place-content-center  items-center h-[100vh]">
+                <div className="absolute pattern h-[30em] rounded-full left-[50%] top-10 w-[30em] zoom-in-100 "></div>
+                {/* <div className="absolute pattern h-[30em] rounded-full left-[30%] top-[50%] w-[30em] "></div> */}
+
                 <div className=" w-fit drop-shadow-lg soft-bg overflow-hidden rounded-xl p-4 px-6 bg-opacity-50 ">
                     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                         {/* <Image
@@ -32,7 +35,7 @@ export default function Login() {
               height={100}
               className="mx-auto"
             /> */}
-                        <h2 className="lg:mt-5 md:mt-5 mt-2 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+                        <h2 className=" text-center text-2xl font-bold leading-9 tracking-tight text-white">
                             Welcome back
                         </h2>
                     </div>
@@ -41,7 +44,7 @@ export default function Login() {
                         action=""
                         onSubmit={(event) => loginHandler(event, config)}
                     >
-                        <div className="mt-10  sm:mx-auto sm:w-full sm:max-w-sm">
+                        <div className="mt-5  sm:mx-auto sm:w-full sm:max-w-sm">
                             <div className="space-y-6">
                                 <div>
                                     <label

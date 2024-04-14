@@ -12,3 +12,17 @@ export async function createTask(formData) {
             .catch((error) => reject(error.data));
     });
 }
+
+export async function deleteTask(taskId) {
+    return new Promise((resolve, reject) => {
+        return fetch(`/api/boards/tasks/${taskId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((data) => data.json())
+            .then(resolve)
+            .catch((error) => reject(error.data));
+    });
+}

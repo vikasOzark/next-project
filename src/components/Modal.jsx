@@ -2,11 +2,11 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { twMerge } from "tailwind-merge";
 import { VscAdd, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
 import { useQuery } from "react-query";
 import { Square2StackIcon, UserPlusIcon } from "@heroicons/react/20/solid";
+import { cn } from "@/lib/utils";
 
 export default function Modal({
     open,
@@ -14,6 +14,8 @@ export default function Modal({
     cssClass,
     children,
     modalTitle,
+    className,
+    dialogClass,
 }) {
     const cancelButtonRef = useRef(null);
 
@@ -21,7 +23,7 @@ export default function Modal({
         <Transition.Root show={open} as={Fragment}>
             <Dialog
                 as="div"
-                className={twMerge("relative z-30", cssClass)}
+                className={twMerge("relative z-30 text-white", cssClass)}
                 initialFocus={cancelButtonRef}
                 onClose={setOpen}
             >
@@ -48,8 +50,18 @@ export default function Modal({
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all max-w-[60rem] w-screen min-w-[40rem]">
-                                <div className="softer-bg px-4 pb-2 pt-3 sm:p-4 sm:pb-2 min-w-fit max-h-fit">
+                            <Dialog.Panel
+                                className={cn(
+                                    "relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all max-w-[60rem] w-screen min-w-[40rem]",
+                                    dialogClass
+                                )}
+                            >
+                                <div
+                                    className={cn(
+                                        "softer-bg px-4 pb-2 pt-3 sm:p-4 sm:pb-2 min-w-fit max-h-fit",
+                                        className
+                                    )}
+                                >
                                     <div className="items-start">
                                         <div className="mt-3 text-center sm:mt-0 sm:text-left">
                                             <Dialog.Title
@@ -71,7 +83,7 @@ export default function Modal({
                                                     onClick={() =>
                                                         setOpen((pre) => !pre)
                                                     }
-                                                    className="hover:bg-gray-200 p-1 cursor-pointer transition-all rounded-full"
+                                                    className="hover:bg-gray-200 hover:text-gray-600 text-white p-1 cursor-pointer transition-all rounded-full"
                                                 >
                                                     <VscChromeClose />
                                                 </div>

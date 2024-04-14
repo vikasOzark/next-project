@@ -57,6 +57,7 @@ export const ErrorResponse = (
       message: message,
       success: false,
       data: [],
+      errorMessage: error?.message || "",
       error: error,
     },
 

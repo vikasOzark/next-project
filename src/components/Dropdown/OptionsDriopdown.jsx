@@ -1,9 +1,17 @@
 import React, { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-const Dropdown = ({ buttonTitle, icon, className, children }) => {
+import { useOnClickOutside } from "@/hooks/modalClose.hook";
+
+const OptionsDropdown = ({
+    buttonTitle,
+    icon,
+    className,
+    children,
+    bodyClass,
+}) => {
     const dropRef = useRef();
     const [open, setOpen] = useState(false);
-    useOut;
+    useOnClickOutside({ ref: dropRef, handler: () => setOpen(false) });
 
     return (
         <div ref={dropRef} className={cn("relative", className)}>
@@ -15,7 +23,12 @@ const Dropdown = ({ buttonTitle, icon, className, children }) => {
                 {buttonTitle}
             </div>
             {open && (
-                <div className="absolute mt-1 soft-bg soft-bg-border p-3 rounded-lg w-[12rem] right-0 cursor-pointer z-50">
+                <div
+                    className={cn(
+                        "absolute mt-1 soft-bg p-1 rounded-lg w-[10rem] right-0 cursor-pointer z-50",
+                        bodyClass
+                    )}
+                >
                     {children}
                 </div>
             )}
@@ -23,4 +36,4 @@ const Dropdown = ({ buttonTitle, icon, className, children }) => {
     );
 };
 
-export default Dropdown;
+export default OptionsDropdown;
