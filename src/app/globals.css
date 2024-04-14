@@ -122,6 +122,10 @@
     .globle-btn {
         @apply bg-[#004a77];
     }
+
+    .delete-btn {
+        @apply hover:bg-red-400 flex items-center gap-1 justify-center hover:text-white w-full text-red-400 px-2 py-1 rounded-full;
+    }
 }
 
 body ::-webkit-scrollbar {

@@ -28,8 +28,8 @@ export default function Tag({ tag, ticketId, queryKey }) {
         },
     });
     return (
-        <p
-            className={`${tag.color} rounded-full flex justify-betweeN items-center gap-2 px-2 font-bold text-white`}
+        <span
+            className={`${tag.color} rounded-full flex justify-between items-center text-center px-2 gap-4 text-sm text-white`}
             key={tag.id}
         >
             {tag.title}
@@ -37,6 +37,6 @@ export default function Tag({ tag, ticketId, queryKey }) {
                 onClick={() => mutationTagRemove.mutate(tag.id)}
                 className=" hover:bg-gray-100 hover:text-black rounded-full h-5 p-[3px] cursor-pointer w-5"
             />{" "}
-        </p>
+        </span>
     );
 }

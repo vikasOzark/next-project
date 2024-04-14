@@ -172,7 +172,7 @@ const TableRowComponent = ({ data }) => {
                 </td>
 
                 <td className="px-12 py-4  font-medium  whitespace-nowrap">
-                    <TaskStatus status={data.status} TaskStatus={Status} />
+                    <TicketStatus status={data.status} TaskStatus={Status} />
                 </td>
 
                 <td className="px-4 py-4   dark:text-gray-300 whitespace-nowrap">
@@ -284,8 +284,8 @@ const TableHeaderRow = () => {
     );
 };
 
-const TaskStatus = ({ TaskStatus, status }) => {
-    if (TaskStatus.PENDING === status) {
+export const TicketStatus = ({ status }) => {
+    if (Status.PENDING === status) {
         return (
             <>
                 <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-yellow-200  ">
@@ -298,7 +298,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
         );
     }
 
-    if (TaskStatus.CLOSE === status) {
+    if (Status.CLOSE === status) {
         return (
             <>
                 <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-green-200  ">
@@ -311,7 +311,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
         );
     }
 
-    if (TaskStatus.HOLD === status) {
+    if (Status.HOLD === status) {
         return (
             <>
                 <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-blue-200  ">
@@ -324,7 +324,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
         );
     }
 
-    if (TaskStatus.REJECT === status) {
+    if (Status.REJECT === status) {
         return (
             <>
                 <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-red-200  ">
@@ -337,7 +337,7 @@ const TaskStatus = ({ TaskStatus, status }) => {
         );
     }
 
-    if (TaskStatus.PROCESS === status) {
+    if (Status.PROCESS === status) {
         return (
             <>
                 <div className="inline-flex items-center px-3 py-[3px]  rounded-full gap-2 bg-violet-500  ">

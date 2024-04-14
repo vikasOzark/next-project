@@ -140,7 +140,6 @@ const TicketDataSection = () => {
                             ticketStatus={Status}
                             actionData={ticketData}
                             revalidateKey={ticketData.id}
-                            styleButton="hover:bg-gray-600 rounded-full hover:text-white"
                         />
                         <TicketDeleteButton
                             ticketId={ticketData.id}
