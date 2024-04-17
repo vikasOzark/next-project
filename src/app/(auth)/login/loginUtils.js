@@ -29,7 +29,6 @@ export const loginHandler = async (event, config) => {
         email,
         password,
       }).then((response) => {
-        console.log(response);
         if (!response.ok) {
           setErrorResponseData(response);
           setLoading(false);
@@ -37,7 +36,7 @@ export const loginHandler = async (event, config) => {
         }
         toast.success("Successfully signed in.");
         setTimeout(() => {
-          router.push(urlRoutes.DASHBOARD);
+          window.location.href = urlRoutes.DASHBOARD
         }, 500);
       });
     }

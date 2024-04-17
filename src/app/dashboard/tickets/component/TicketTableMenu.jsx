@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import { useState } from "react";
-import { VscAdd, VscCheck, VscEdit, VscPlug } from "react-icons/vsc";
+import {
+    VscAdd,
+    VscCheck,
+    VscEdit,
+    VscGroupByRefType,
+    VscPlug,
+} from "react-icons/vsc";
 import { useMutation, useQueryClient } from "react-query";
 import { twMerge } from "tailwind-merge";
 import toast from "react-hot-toast";
@@ -19,6 +25,8 @@ import UpdateTicketForm from "./forms/UpdateTicketForm";
 import { AppendChildToMergeForm } from "./forms/AppendMergeChild";
 import { Status } from "@prisma/client";
 import { VscSymbolKeyword } from "react-icons/vsc";
+import DropdownNew from "@/components/Dropdown/DropdownNew";
+import { QUERY_KEYS } from "@/queryKeys";
 
 export function DropdownActionMenuButton({
     styleButton,
@@ -84,13 +92,7 @@ export function DropdownActionMenuButton({
     );
 }
 
-export function TicketStatusUpdate({
-    styleButton,
-    icon,
-    title,
-    actionData,
-    revalidateKey,
-}) {
+export function TicketStatusUpdate({ actionData }) {
     const queryClient = useQueryClient();
     const mutationAction = useMutation({
         mutationFn: async (status) => {
@@ -101,7 +103,9 @@ export function TicketStatusUpdate({
         },
         onSuccess: (response) => {
             toast.dismiss();
-            queryClient.invalidateQueries(revalidateKey);
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TICKET_LIST],
+            });
             toast.success("Successfully status is updated.");
         },
         onError: async (error) => {
@@ -114,57 +118,32 @@ export function TicketStatusUpdate({
     });
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    // disabled={}
-                    title={
-                        actionData.isMerged &&
-                        "Ticket will automatically closed when sub child tickets will closed."
-                    }
-                    className={
-                        "hover:bg-gray-200 bg-transparent px-3 py-[3px] flex items-center gap-2 font-medium rounded-full text-gray-300 hover:text-gray-700"
-                    }
-                >
-                    {icon}
-                    <span className="hidden md:block lg:block">{title}</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-[#666974] border-gray-400">
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    {Object.keys(Status).map((status) => (
-                        <>
-                            {status === actionData.status ? (
-                                <DropdownMenuItem
-                                    key={status}
-                                    className={`flex items-center  hover:bg-[#909091] text-white justify-between ${statusCss(
-                                        status
-                                    )}`}
-                                >
-                                    <span className="flex justify-center gap-2">
-                                        <VscSymbolKeyword size={18} /> {status}
-                                    </span>{" "}
-                                    {<VscCheck />}
-                                </DropdownMenuItem>
-                            ) : (
-                                <DropdownMenuItem
-                                    onClick={() =>
-                                        mutationAction.mutate(status)
-                                    }
-                                    key={status}
-                                    className={`flex items-center  hover:bg-[#909091] text-white justify-between`}
-                                >
-                                    <span className="flex justify-center gap-2">
-                                        <VscSymbolKeyword size={18} /> {status}
-                                    </span>
-                                </DropdownMenuItem>
-                            )}
-                        </>
-                    ))}
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <DropdownNew
+            className={"w-[10rem]"}
+            icon={<VscGroupByRefType />}
+            title={"Update"}
+        >
+            {Object.keys(Status).map((status) => (
+                <div key={status}>
+                    {status === actionData.status ? (
+                        <DropdownMenuItem>
+                            <span className="flex justify-center gap-2">
+                                <VscSymbolKeyword size={18} /> {status}
+                            </span>
+                            <VscCheck className=" text-green-500" />
+                        </DropdownMenuItem>
+                    ) : (
+                        <DropdownMenuItem
+                            onClick={() => mutationAction.mutate(status)}
+                        >
+                            <span className="flex justify-center gap-2">
+                                <VscSymbolKeyword size={18} /> {status}
+                            </span>
+                        </DropdownMenuItem>
+                    )}
+                </div>
+            ))}
+        </DropdownNew>
     );
 }
 

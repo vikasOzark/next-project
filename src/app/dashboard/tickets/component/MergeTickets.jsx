@@ -15,10 +15,7 @@ const MergeTickets = () => {
 
     return (
         <>
-            <Button
-                onClick={() => setOpen((pre) => !pre)}
-                className="bg-transparent gap-2 rounded-full hover:bg-gray-600 text-white"
-            >
+            <Button onClick={() => setOpen((pre) => !pre)}>
                 <VscGitMerge size={18} />
                 <span className="hidden md:block lg:block">Merge Tickets</span>
             </Button>
@@ -78,18 +75,18 @@ export const MergeForm = () => {
     });
 
     return (
-        <div className=" transition-all">
+        <div className=" transition-all tex-white">
             <form onSubmit={mergeMutation.mutate}>
-                <p className="text-gray-600 text-sm font-bold line-clamp-2">
-                    <span className="text-gray-900">Note: </span>Merging tickets
-                    together will create new tickets as reference. Through you
-                    can track tickets all of them.
+                <p className=" text-sm font-bold line-clamp-2">
+                    <span className="">Note: </span>Merging tickets together
+                    will create new tickets as reference. Through you can track
+                    tickets all of them.
                 </p>
                 <div className="grid grid-cols-1 mt-2 md:grid-cols-1 lg:grid-cols-2 gap-3">
                     <div>
                         <label
                             htmlFor="taskTitle"
-                            className="block text-sm text-black dark:text-white font-medium leading-6 "
+                            className="block text-sm   font-medium leading-6 "
                         >
                             Ticket title
                         </label>
@@ -98,7 +95,7 @@ export const MergeForm = () => {
                                 id="taskTitle"
                                 name="taskTitle"
                                 type="text"
-                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 px-2  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -106,7 +103,7 @@ export const MergeForm = () => {
                     <div>
                         <label
                             htmlFor="department"
-                            className="block text-sm text-black   font-medium leading-6 "
+                            className="block text-sm  font-medium leading-6 "
                         >
                             Department
                         </label>
@@ -124,7 +121,7 @@ export const MergeForm = () => {
                                               selected={
                                                   item.id == defaultDepartmentId
                                               }
-                                              className="text-black"
+                                              className=""
                                               defaultValue={defaultDepartmentId}
                                               id={item.id}
                                               name={item.name}
@@ -143,7 +140,7 @@ export const MergeForm = () => {
                 <div>
                     <label
                         htmlFor="department"
-                        className="block text-sm mt-2 text-black   font-medium leading-6 "
+                        className="block text-sm mt-2    font-medium leading-6 "
                     >
                         Assign tags
                     </label>
@@ -159,7 +156,7 @@ export const MergeForm = () => {
                 <div>
                     <label
                         htmlFor="ticketDetil"
-                        className="block mt-2 text-sm w-full text-black   font-medium leading-6 "
+                        className="block mt-2 text-sm w-full    font-medium leading-6 "
                     >
                         Ticket Detail
                     </label>
@@ -175,7 +172,7 @@ export const MergeForm = () => {
                 <div className=" transition-all">
                     <label
                         htmlFor="ticketDetil"
-                        className="block mt-2 text-sm w-full text-black   font-medium leading-6 "
+                        className="block mt-2 text-sm w-full    font-medium leading-6 "
                     >
                         Merging tickets
                     </label>
@@ -194,7 +191,7 @@ export const MergeForm = () => {
                 <div className="flex justify-end">
                     <SubmitButton
                         cssClass={
-                            " border-0 mr-0 hover:bg-gray-300 text-black hover:text-gray-900 font-bold border hover:border-gray-300"
+                            " border-0 mr-0 hover:bg-gray-300  hover: font-bold border hover:border-gray-300"
                         }
                         icon={<VscGitMerge size={18} />}
                         title={"Merge ticket"}
@@ -227,9 +224,7 @@ export const MergingTicket = ({ ticket }) => {
             <h1 className="text-gray-800 font-bold text-sm md:text-neutral-700 leading-none mt-1">
                 {ticket.taskTitle}
             </h1>
-            <small className="text-gray-600 font-bold">
-                {ticket.department.name}
-            </small>
+            <small className=" font-bold">{ticket.department.name}</small>
         </div>
     );
 };

@@ -1,44 +1,51 @@
 "use client";
 
-import {
-    TableFlag,
-    TicketStatus,
-    TicketTableComponent,
-} from "./component/components";
+import { TableFlag, TicketStatus } from "./component/components";
 import {
     VscChromeClose,
-    VscClose,
     VscGroupByRefType,
-    VscSearch,
+    VscLoading,
     VscSymbolKeyword,
 } from "react-icons/vsc";
 import React, { useEffect, useState } from "react";
-import { DropdownMenuButton } from "./component/TicketTableGlobleAction";
+import { TicketActionDropdown } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
 import CreateTicketButton from "./component/forms/TicketCreateButton";
-import { FilterByCreation } from "./component/FilterComponent";
-import { useSearchParams, useRouter } from "next/navigation";
+import { TicketFilter } from "./component/FilterComponent";
+import { useSearchParams } from "next/navigation";
 import TicketSearch from "./component/TicketSearch";
-import { Paginator } from "@/components/Pagination";
 import { useQuery } from "react-query";
 import { QUERY_KEYS } from "@/queryKeys";
 import Tag from "@/components/Tag";
 import { TicketDeleteButton } from "./ticketActionUtils";
-import { TicketStatusUpdate } from "./component/TicketTableMenu";
+import {
+    DropdownActionMenuButton,
+    TicketStatusUpdate,
+} from "./component/TicketTableMenu";
 import UpdateTicketButtonModal from "./component/UpdateTicketButtonModal";
 import TableComponent from "@/components/TableComponent";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import { urlRoutes } from "@/utils/urlRoutes";
 import Link from "next/link";
+import CustomPagination from "@/components/Pagination";
+import { LoadingState } from "@/components/Buttons";
+import { TicketEmptyState } from "@/components/EmptyState";
+import useSetQueryParam, { useSearchQuery } from "@/hooks/setQueryParam";
 
 export const SelectContext = React.createContext();
 
 export default function Tickets({ searchParams }) {
     const [selectedTickets, setSelectedTickets] = useState([]);
-    const [queryTicketTitle, setSearchQuery] = useState("");
+    const searchParam = useSearchParams();
+    const query = searchParam.get("q");
+    const status = searchParam.get("status");
+    const setQuery = useSearchQuery();
+    useEffect(() => {
+        setQuery("page", 1);
+    }, []);
 
     const ticketResponse = useQuery({
-        queryKey: [QUERY_KEYS.TICKET_LIST, ""],
+        queryKey: [QUERY_KEYS.TICKET_LIST, searchParam.toString()],
 
         queryFn: async ({ queryKey }) => {
             const [_, query] = queryKey;
@@ -57,7 +64,18 @@ export default function Tickets({ searchParams }) {
         staleTime: 0,
     });
 
-    const tickets = ticketResponse?.data?.data || [];
+    const tickets = ticketResponse?.data?.data || []; //
+    const filteredTickets = tickets
+        .filter((ticket) =>
+            ticket.taskTitle
+                .toLowerCase()
+                .includes(query ? query.toLowerCase() : "")
+        )
+        .filter((ticket) => {
+            return ticket.status
+                .toLowerCase()
+                .includes(status ? status.toLowerCase() : "");
+        });
 
     const headers = [
         "Name",
@@ -74,7 +92,6 @@ export default function Tickets({ searchParams }) {
                 value={{
                     selectedTickets,
                     setSelectedTickets,
-                    queryTicketTitle,
                     searchParams,
                 }}
             >
@@ -85,31 +102,38 @@ export default function Tickets({ searchParams }) {
                                 selectedTickets={selectedTickets}
                                 setSelectedTickets={setSelectedTickets}
                             />
-                            <TicketSearch
-                                queryTicketTitle={queryTicketTitle}
-                                setSearchQuery={setSearchQuery}
-                            />
-                            <FilterByCreation />
+                            <TicketSearch searchName={"q"} />
+                            <TicketFilter />
                         </div>
                         <div className="flex items-center gap-2">
                             <MergeTickets />
                             <CreateTicketButton />
-                            <DropdownMenuButton
-                                title={"Actions"}
-                                icon={<VscSymbolKeyword />}
-                                styleButton="hover:bg-slate-600 bg-transparent text-white"
-                            />
+                            <TicketActionDropdown />
                         </div>
                     </div>
-                    <div className="mt-2 w-full">
+                    <div className="mt-2 relative min-h-[35em] max-h-full w-full">
                         <TableComponent
                             headers={headers}
-                            tableData={tableDataProvider(
-                                tickets,
+                            tableData={TableDataProvider(
+                                filteredTickets,
                                 setSelectedTickets,
                                 selectedTickets
                             )}
                         />
+                        {!ticketResponse.isLoading &&
+                            filteredTickets.length === 0 && (
+                                <TicketEmptyState />
+                            )}
+                        {ticketResponse.isLoading && (
+                            <>
+                                <div className="grid place-content-center">
+                                    <LoadingState message={"Loading tickets"} />
+                                </div>
+                            </>
+                        )}
+                        <div className=" absolute bottom-0 flex justify-center">
+                            <CustomPagination />
+                        </div>
                     </div>
                 </main>
             </SelectContext.Provider>
@@ -144,7 +168,7 @@ const SelectedDataInfo = ({ selectedTickets, setSelectedTickets }) => {
     return null;
 };
 
-const tableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
+const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
     const handleSelect = (event, ticketData) => {
         if (event.target.checked) {
             setSelectedTickets([...selectedTickets, ticketData]);
@@ -155,11 +179,12 @@ const tableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
         }
     };
 
-    const dateTime = (date) =>
-        handleTimeFormat(date, {
+    const dateTime = (date) => {
+        return handleTimeFormat(date, {
             isFormated: true,
             dateTime: true,
         });
+    };
 
     return tickets.map((ticket) => ({
         id: ticket.id,
@@ -201,9 +226,9 @@ const tableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                 ),
             },
             {
-                content: ticket.department?.name | "N/A",
+                content: ticket?.department?.name || "N/A",
             },
-            { content: dateTime(ticket.createdAt) },
+            { content: dateTime(ticket.createdAt), className: "text-sm" },
             {
                 content: (
                     <div className="flex flex-wrap gap-1">
@@ -232,13 +257,7 @@ const tableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                             className={"delete-btn"}
                         />
 
-                        <TicketStatusUpdate
-                            key={ticket.id}
-                            title={"Status"}
-                            icon={<VscGroupByRefType />}
-                            actionData={ticket}
-                            revalidateKey={QUERY_KEYS.TICKET_LIST}
-                        />
+                        <TicketStatusUpdate actionData={ticket} />
                         <UpdateTicketButtonModal
                             className={
                                 "hover:bg-gray-200 bg-transparent px-3 py-[3px] font-medium rounded-full text-gray-300"

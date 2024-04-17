@@ -96,7 +96,7 @@ export const SideNavbar = ({ children }) => {
         setSingout(true);
         try {
             setTimeout(() => {
-                signOut();
+                signOut(false);
             }, 1000);
         } finally {
             setSingout(false);
@@ -105,7 +105,7 @@ export const SideNavbar = ({ children }) => {
 
     return (
         <>
-            <Disclosure as="nav" className="relative">
+            <Disclosure as="div" className="relative">
                 <div
                     onClick={() => setMenuOpen(true)}
                     className="md:block lg:hidden"
@@ -115,7 +115,7 @@ export const SideNavbar = ({ children }) => {
                     </div>
                 </div>
 
-                <aside
+                <div
                     className={` lg:block [1412px]:hidden z-20 flex-col duration-500 transition-all globle-bg border-gray-700 w-64 h-screen px-5 fixed ${
                         menuOpen
                             ? "md:block left-0 "
@@ -130,7 +130,7 @@ export const SideNavbar = ({ children }) => {
                         <VscChromeClose />
                     </div>
                     <div className="flex flex-col justify-between flex-1 mt-6">
-                        <nav className="-mx-3 space-y-3 ">
+                        <div className="-mx-3 space-y-3 ">
                             <div className=" bg-[#2c85ea36] capitalize rounded-lg flex items-center gap-2 py-2 px-4 text-white font-bold md:text-lg lg:text-lg">
                                 <div className="bg-white  rounded">
                                     <FcBusinessman className="lg:text-4xl" />
@@ -176,9 +176,9 @@ export const SideNavbar = ({ children }) => {
                                     </div>
                                 )}
                             </div>
-                        </nav>
+                        </div>
                     </div>
-                </aside>
+                </div>
             </Disclosure>
         </>
     );

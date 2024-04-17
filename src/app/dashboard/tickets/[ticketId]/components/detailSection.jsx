@@ -19,7 +19,7 @@ export default function TicketDetailSection({ ticketData }) {
 
     return (
         <>
-            <div className="soft-bg border border-gray-600 mt-5 rounded-2xl p-3">
+            <div className=" mt-5 border border-gray-600 rounded-2xl p-3">
                 <div className="">
                     <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
                         Ticket details

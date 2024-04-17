@@ -25,8 +25,9 @@ import {
 import { twMerge } from "tailwind-merge";
 import { useRouter, useParams } from "next/navigation";
 import { urlRoutes } from "@/utils/urlRoutes";
+import { cn } from "@/lib/utils";
 
-export const NotesNavBarTab = () => {
+export const NotesNavBarTab = ({ className }) => {
     const [creating, setCreating] = useState(false);
     const [showList, setShowList] = useState(false);
 
@@ -35,9 +36,10 @@ export const NotesNavBarTab = () => {
             <div className="">
                 <div
                     onClick={() => setShowList((pre) => !pre)}
-                    className={`${
-                        creating && "bg-gray-500 text-white"
-                    } text-gray-400 mb-1 cursor-pointer font-bold justify-between flex items-center gap-2 px-3 py-1 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-500 hover:text-white dark:hover:bg-gray-800 dark:hover:text-gray-200 `}
+                    className={cn(
+                        "mx-[-0.65rem] cursor-pointer flex items-center gap-4 rounded-xl px-3 py-2 soft-bg-hover",
+                        className
+                    )}
                 >
                     <div className="flex transition-all items-center gap-2">
                         <span
@@ -171,3 +173,41 @@ export function SideNavNotesOptions({ styleButton, noteData }) {
         </>
     );
 }
+
+const LinkComponent = ({ linkObject, className }) => {
+    return (
+        <Link
+            href={linkObject.route}
+            className={cn(
+                "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+                className
+            )}
+        >
+            {linkObject?.icon ? (
+                linkObject.icon
+            ) : (
+                <LineChart className="h-5 w-5" />
+            )}
+            {linkObject.title}
+        </Link>
+    );
+};
+
+// const LinkComponentLg = ({ linkObject, className }) => {
+//     return (
+//         <Link
+//             href={linkObject.route}
+//             className={cn(
+//                 "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+//                 className
+//             )}
+//         >
+//             {linkObject?.icon ? (
+//                 linkObject.icon
+//             ) : (
+//                 <LineChart className="h-5 w-5" />
+//             )}
+//             {linkObject.title}
+//         </Link>
+//     );
+// };

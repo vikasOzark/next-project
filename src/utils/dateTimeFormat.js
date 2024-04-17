@@ -1,3 +1,6 @@
+import { VscCircleSmallFilled } from "react-icons/vsc";
+
+
 /**
  * This helper function is used format date time, `isFormated=true` date time will be return in formate way
  * `isFormated=false` date time will be return in object format, later you can pass required format such as { onlyTime | onlyDate | dateTime }.
@@ -7,17 +10,17 @@
  * @param {Config} config 
  * @returns 
  */
-const handleTimeFormat = (dateTime, config) => {
-  if (dateTime) {
+const handleTimeFormat = (dateTimeString, config) => {
+  if (dateTimeString) {
     const {
       isFormated = false,
-      datePrifix = "-",
+      datePrifix = "/",
       onlyTime = false,
       onlyDate = false,
       dateTime = false,
     } = config;
 
-    const dateObject = new Date(dateTime);
+    const dateObject = new Date(dateTimeString);
     const dateYear = dateObject.getFullYear();
     const month = dateObject.getMonth() + 1;
     const day = dateObject.getDate();
@@ -36,7 +39,7 @@ const handleTimeFormat = (dateTime, config) => {
         return COMBINED_DATE;
       }
       if (dateTime) {
-        return COMBINED_DATE + " | " + COMBINED_TIME;
+        return <><span className="flex items-center">{COMBINED_DATE}<VscCircleSmallFilled size={18} /> {COMBINED_TIME}</span></>;
       }
       return {
         date: COMBINED_DATE,

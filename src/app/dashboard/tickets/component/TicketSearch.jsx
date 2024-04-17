@@ -1,47 +1,31 @@
 "use client";
 
 import { VscClose, VscSearch } from "react-icons/vsc";
-import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useRef } from "react";
 
-export default function TicketSearch({ setSearchQuery, queryTicketTitle }) {
+export default function TicketSearch({ searchName }) {
     const search = useSearchParams();
+    const searchRef = useRef(null);
     const queryParams = new URLSearchParams(search);
     const router = useRouter();
-    const [typingTimeout, setTypingTimeout] = useState(null);
+    const searchValue = search.get(searchName);
 
     const handlerClear = () => {
-        queryParams.delete("q");
+        queryParams.delete(searchName);
         router.push("?" + queryParams.toString());
-        setSearchQuery("");
+        searchRef.current.value = "";
     };
 
-    useEffect(() => {
-        const q = queryParams.get("q");
-        if (q && q !== "") {
-            setSearchQuery(q);
-        }
-
-        if (q === "" || q === null) {
-            handlerClear();
-        }
-    }, []);
+    const queryCheck = queryParams.get(searchName);
+    if (queryCheck === "") {
+        handlerClear();
+    }
 
     const handleQuery = (event) => {
         const query = event.target.value;
-
-        // Clear previous timeout
-        if (typingTimeout) {
-            clearTimeout(typingTimeout);
-        }
-
-        setTypingTimeout(
-            setTimeout(() => {
-                setSearchQuery(query);
-                queryParams.set("q", query);
-                router.push("?" + queryParams.toString());
-            }, 500)
-        );
+        queryParams.set(searchName, query);
+        router.push("?" + queryParams.toString());
     };
 
     return (
@@ -50,13 +34,14 @@ export default function TicketSearch({ setSearchQuery, queryTicketTitle }) {
             <div className="">
                 <div className="bg-gray-700 flex items-center px-3 rounded-full ">
                     <input
+                        ref={searchRef}
                         type="text"
-                        defaultValue={queryTicketTitle}
+                        defaultValue={searchValue || ""}
                         onChange={handleQuery}
                         className="w-full p-2 px-3 text-white focus:outline-none bg-transparent rounded-full"
                         placeholder="Search"
                     />
-                    {queryTicketTitle ? (
+                    {queryCheck ? (
                         <VscClose
                             className="hover:cursor-pointer"
                             onClick={handlerClear}

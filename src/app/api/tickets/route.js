@@ -51,15 +51,19 @@ export async function POST(request) {
   }
 }
 
-export async function GET(request, context) {
-  const sortByTitle = request.nextUrl.searchParams.get("sort") || "asc";
-  const orderCreated = request.nextUrl.searchParams.get("order") || "desc";
-  const filterByStatus = request.nextUrl.searchParams.get("filter");
+export async function GET(request) {
+
+  const sortByTitle = request.nextUrl.searchParams.get("sort");
+  const orderCreated = request.nextUrl.searchParams.get("order");
+  const filterByStatus = request.nextUrl.searchParams.get("status");
   const queryTicketTitle = request.nextUrl.searchParams.get("q");
+  const page = request.nextUrl.searchParams.get("page");
+
+  const size = 10
+  const skip = (Number(page) - 1) * size
 
   try {
     const userObjectId = await getUserId(true);
-    await prisma.$connect();
 
     const filtering = {
       createdById: {
@@ -67,19 +71,29 @@ export async function GET(request, context) {
       },
     };
 
-    if (filterByStatus !== "all") {
-      filtering.status = Status[filterByStatus];
-    }
-
     if (queryTicketTitle) {
       filtering.taskTitle = {
         contains: queryTicketTitle,
       };
     }
 
+    if (filterByStatus) {
+      filtering.status = Status[filterByStatus];
+    }
+
+    const order_filters = []
+    if (sortByTitle) {
+      order_filters.push({ taskTitle: sortByTitle })
+    }
+
+    if (orderCreated) {
+      order_filters.push({ createdAt: orderCreated })
+    }
+
     const ticketsData = await prisma.tickets.findMany({
       where: filtering,
-
+      take: size,
+      skip: skip,
       include: {
         department: true,
         tags: true,
@@ -90,7 +104,7 @@ export async function GET(request, context) {
         },
       },
 
-      orderBy: [{ taskTitle: sortByTitle }, { createdAt: orderCreated }],
+      orderBy: order_filters,
     });
 
     return NextResponse.json(
@@ -107,8 +121,6 @@ export async function GET(request, context) {
       error: error,
       message: "Something went wrong, Please try again.",
     });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

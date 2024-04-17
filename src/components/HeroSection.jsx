@@ -6,6 +6,7 @@ import { AiOutlineLogin } from "react-icons/ai";
 import { ActionButton, LoadingState } from "./Buttons";
 import { useRouter } from "next/navigation";
 import { urlRoutes } from "@/utils/urlRoutes";
+import { VscLoading } from "react-icons/vsc";
 
 export default function HeroSection() {
     const session = useSession();
@@ -40,7 +41,7 @@ export default function HeroSection() {
                             <span className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
                                 Streamline
                             </span>{" "}
-                            Your Support Experience with Our Ticket Tracker
+                            Your Support Experience with Ticket Tracker
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-300">
                             – Effortlessly Manage, Monitor, and Resolve your
@@ -64,11 +65,25 @@ export default function HeroSection() {
                                         " border text-white hover:text-blue-600 bg-blue-600 border-transparent text-lg"
                                     }
                                     onClick={() =>
-                                        route.push(urlRoutes.DASHBOARD)
+                                        (window.location.href =
+                                            urlRoutes.DASHBOARD)
                                     }
                                 >
                                     Dashboard
                                     <AiOutlineLogin size={20} />
+                                </ActionButton>
+                            )}
+                            {session.status === "loading" && (
+                                <ActionButton
+                                    cssClass={
+                                        " border text-white hover:text-blue-600 bg-blue-600 border-transparent text-lg"
+                                    }
+                                >
+                                    <VscLoading
+                                        className=" animate-spin"
+                                        size={20}
+                                    />
+                                    Loading...
                                 </ActionButton>
                             )}
                         </div>

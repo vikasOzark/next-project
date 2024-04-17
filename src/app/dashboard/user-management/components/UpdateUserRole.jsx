@@ -18,6 +18,7 @@ import { LoadingButton, SubmitButton } from "@/components/Buttons";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import DropdownNew from "@/components/Dropdown/DropdownNew";
 
 export function UpdateUserRole({ styleButton, icon, title, userData }) {
     const queryClient = useQueryClient();
@@ -48,39 +49,20 @@ export function UpdateUserRole({ styleButton, icon, title, userData }) {
 
     return (
         <>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        className={twMerge(
-                            "px-4 flex gap-2 items-center font-bold hover:bg-gray-600 text-white",
-                            styleButton
-                        )}
-                    >
-                        {icon}
-                        {title}
-                    </Button>
-                </DropdownMenuTrigger>
+            <DropdownNew title={"Alter role"} btnClassName={""}>
+                <DropdownMenuItem
+                    className="dropdown-item"
+                    onClick={() => setUserUpdateModal(true)}
+                >
+                    <VscSparkle
+                        size={18}
+                        className="font-bold"
+                        fontWeight={800}
+                    />
+                    Alter role
+                </DropdownMenuItem>
+            </DropdownNew>
 
-                <DropdownMenuContent className="w-56  bg-[#434447] border-none">
-                    {/* <DropdownMenuLabel>{title} Actions</DropdownMenuLabel> */}
-                    {/* <DropdownMenuSeparator /> */}
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            onClick={() => setUserUpdateModal(true)}
-                            className={
-                                " hover:text-gray-100 text-white flex items-center gap-2 cursor-pointer font-bold"
-                            }
-                        >
-                            <VscSparkle
-                                size={18}
-                                className="font-bold"
-                                fontWeight={800}
-                            />
-                            Alter role
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                </DropdownMenuContent>
-            </DropdownMenu>
             <Modal
                 cssClass={"min-w-fit"}
                 className=" "

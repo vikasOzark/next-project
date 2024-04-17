@@ -165,23 +165,23 @@ const TicketDataSection = () => {
                     {ticketResponse.isSuccess && (
                         <>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Ticket title
                                 </h3>
-                                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                                <p className=" capitalize text-sm md:text-sm lg:text-md ">
                                     {ticketData.taskTitle}
                                 </p>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Department
                                 </h3>
-                                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                                <p className=" capitalize text-sm md:text-sm lg:text-md ">
                                     {ticketData?.department?.name}
                                 </p>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Ticket status
                                 </h3>
                                 <p
@@ -195,16 +195,16 @@ const TicketDataSection = () => {
                                 </p>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Created by
                                 </h3>
-                                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                                <p className=" capitalize text-sm md:text-sm lg:text-md ">
                                     {ticketData?.createdById?.first_name}{" "}
                                     {ticketData?.createdById?.last_name}
                                 </p>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Tags
                                 </h3>
                                 <div className=" flex gap-2 items-center">
@@ -222,10 +222,10 @@ const TicketDataSection = () => {
                                 </div>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Created at
                                 </h3>
-                                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                                <p className=" capitalize text-sm md:text-sm lg:text-md ">
                                     {handleTimeFormat(ticketData?.createdAt, {
                                         isFormated: true,
                                         datePrifix: "/",
@@ -234,16 +234,16 @@ const TicketDataSection = () => {
                                 </p>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Creatd by
                                 </h3>
-                                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                                <p className=" capitalize text-sm md:text-sm lg:text-md ">
                                     {ticketData?.createdById?.first_name}{" "}
                                     {ticketData?.createdById?.last_name}
                                 </p>
                             </div>
                             <div className="">
-                                <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
+                                <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
                                     Assigned
                                 </h3>
                                 <div className="flex gap-3 items-center mt-2">
