@@ -2,7 +2,12 @@ import { LoadingState } from "@/components/Buttons";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
-import { VscDebugStepBack, VscTrash } from "react-icons/vsc";
+import {
+    VscChevronRight,
+    VscDebugStepBack,
+    VscPersonAdd,
+    VscTrash,
+} from "react-icons/vsc";
 import { twMerge } from "tailwind-merge";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getUsersData } from "../user-management/components/Forms/userUtils";
+import { QUERY_KEYS } from "@/queryKeys";
 
 export const TicketDeleteButton = ({
     ticketId,
@@ -71,16 +77,9 @@ export const TicketDeleteButton = ({
     );
 };
 
-export function AssignUserAction({
-    className,
-    icon,
-    title,
-    actionData,
-    revalidateKey,
-    isAlreadyAssigned = false,
-}) {
+export function AssignUserAction({ className, actionData }) {
     const queryClient = useQueryClient();
-    const usersResponse = useQuery("users-list", getUsersData, {
+    const usersResponse = useQuery(QUERY_KEYS.USERS, getUsersData, {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
     });
@@ -101,55 +100,66 @@ export function AssignUserAction({
         },
         onSuccess: (data) => {
             toast.dismiss();
-            queryClient.invalidateQueries(revalidateKey);
+            queryClient.invalidateQueries({
+                queryKey: [[QUERY_KEYS.TICKET_LIST, actionData.id]],
+            });
             toast.success("Successfully person assigned.");
         },
     });
+    const hasUsersData = Object.keys(actionData).length > 0;
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                {isAlreadyAssigned ? (
-                    <Button
-                        className={twMerge(
-                            "px-4 flex gap-2 items-center font-bold",
-                            className
+        <>
+            {hasUsersData && (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        {actionData?.assingedUserId !== null ? (
+                            <Button
+                                className={twMerge(
+                                    "px-4 flex gap-2 items-center font-bold",
+                                    className
+                                )}
+                            >
+                                <span className="flex gap-2 items-center">
+                                    <VscDebugStepBack size={18} />
+                                    <span className="hidden md:block lg:block">
+                                        {actionData?.assingedUser?.first_name}{" "}
+                                        {actionData?.assingedUser?.last_name}
+                                    </span>
+                                </span>
+                                <VscChevronRight size={18} />
+                            </Button>
+                        ) : (
+                            <Button
+                                className={twMerge(
+                                    "px-4 flex gap-2 items-center font-bold",
+                                    className
+                                )}
+                            >
+                                <VscPersonAdd size={18} />
+                                <span className="hidden md:block lg:block">
+                                    Assign people
+                                </span>
+                            </Button>
                         )}
-                    >
-                        <VscDebugStepBack size={18} />
-                        <span className="hidden md:block lg:block">
-                            Change person
-                        </span>
-                    </Button>
-                ) : (
-                    <Button
-                        className={twMerge(
-                            "px-4 flex gap-2 items-center font-bold",
-                            className
-                        )}
-                    >
-                        {icon}
-                        <span className="hidden md:block lg:block">
-                            {title}
-                        </span>
-                    </Button>
-                )}
-            </DropdownMenuTrigger>
+                    </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>{title} Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    {usersData.map((user) => (
-                        <DropdownMenuItem
-                            key={user.id}
-                            onClick={() => mutationAction.mutate(user.id)}
-                        >
-                            {user.first_name}
-                        </DropdownMenuItem>
-                    ))}
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuGroup>
+                            {usersData.map((user) => (
+                                <DropdownMenuItem
+                                    key={user.id}
+                                    onClick={() =>
+                                        mutationAction.mutate(user.id)
+                                    }
+                                >
+                                    {user.first_name}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
+        </>
     );
 }

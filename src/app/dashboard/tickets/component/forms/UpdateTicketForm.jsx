@@ -137,7 +137,7 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
                 >
                     Ticket Detail
                 </label>
-                <div className="mt-2">
+                <div className="mt-2 p-2">
                     <CustomEditor
                         onChange={setDetail}
                         editorProps={{ initialContent: details }}

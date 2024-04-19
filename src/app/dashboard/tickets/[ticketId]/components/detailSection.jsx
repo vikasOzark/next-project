@@ -19,29 +19,29 @@ export default function TicketDetailSection({ ticketData }) {
 
     return (
         <>
-            <div className=" mt-5 border border-gray-600 rounded-2xl p-3">
-                <div className="">
-                    <h3 className="text-gray-400 text-sm lg:text-lg md:text-md">
-                        Ticket details
-                    </h3>
-                    {isJsonString ? (
-                        <div className="">
-                            <CustomEditor
-                                onChange={setEditorData}
-                                className={"border-none"}
-                                editable={false}
-                                editorProps={{
-                                    initialContent: details,
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <p className=" capitalize text-sm md:text-md lg:text-lg ">
-                            {details}
-                        </p>
-                    )}
+            {isJsonString ? (
+                <div className="mb-2">
+                    <label
+                        htmlFor="ticketDetil"
+                        className="block mt-2 text-sm w-full text-white font-medium leading-6 "
+                    >
+                        Ticket Detail
+                    </label>
+                    <div className="mt-2">
+                        <CustomEditor
+                            onChange={setEditorData}
+                            className={
+                                " p-2 border border-gray-700/60 h-[15rem] min-h-[10rem]  max-h-[20rem]"
+                            }
+                            editorProps={{ initialContent: details }}
+                        />
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <p className=" capitalize text-sm md:text-md lg:text-lg ">
+                    {details}
+                </p>
+            )}
         </>
     );
 }

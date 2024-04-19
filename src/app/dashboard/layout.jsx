@@ -3,7 +3,6 @@ import { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import { CircleUser, HomeIcon, LineChart, Menu, Package2 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -27,6 +26,7 @@ import { CursorArrowRaysIcon, LifebuoyIcon } from "@heroicons/react/20/solid";
 import { NotesNavBarTab } from "@/components/SideNavNotesTab";
 
 import { QueryClient, QueryClientProvider } from "react-query";
+import DropdownNew from "@/components/Dropdown/DropdownNew";
 
 export default function Layout({ children }) {
     const queryClient = new QueryClient();
@@ -81,7 +81,7 @@ export function MainLayout({ children }) {
 
     return (
         <div className="grid text-white  min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-            <div className="hidden bg-muted/40 md:block">
+            <div className="hidden bg-muted/40 h-screen md:sticky bottom-0 md:block">
                 <div className="flex h-full max-h-screen flex-col gap-2">
                     <div className="flex h-14 items-center px-4 lg:h-[60px] lg:px-6">
                         <Link
@@ -102,22 +102,6 @@ export function MainLayout({ children }) {
                             ))}
                             <NotesNavBarTab />
                         </nav>
-                    </div>
-                    <div className="mt-auto p-4">
-                        <Card x-chunk="dashboard-02-chunk-0">
-                            <CardHeader className="p-2 pt-0 md:p-4">
-                                <CardTitle>Upgrade to Pro</CardTitle>
-                                <CardDescription>
-                                    Unlock all features and get unlimited access
-                                    to our support team.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-                                <Button size="sm" className="w-full">
-                                    Upgrade
-                                </Button>
-                            </CardContent>
-                        </Card>
                     </div>
                 </div>
             </div>
@@ -153,55 +137,18 @@ export function MainLayout({ children }) {
                                 ))}
                                 <NotesNavBarTab />
                             </nav>
-                            <div className="mt-auto">
-                                <Card className="!soft-bg border-gray-600">
-                                    <CardHeader>
-                                        <CardTitle>Upgrade to Pro</CardTitle>
-                                        <CardDescription>
-                                            Unlock all features and get
-                                            unlimited access to our support
-                                            team.
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <Button size="sm" className="w-full">
-                                            Upgrade
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </div>
                         </SheetContent>
                     </Sheet>
                     <div className="w-full flex-1"></div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="secondary"
-                                size="icon"
-                                className="rounded-full"
-                            >
-                                <CircleUser className="h-5 w-5" />
-                                <span className="sr-only">
-                                    Toggle user menu
-                                </span>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Settings</DropdownMenuItem>
-                            <DropdownMenuItem>Support</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Logout</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+
+                    <DropdownNew
+                        icon={<CircleUser className="h-7 w-7" />}
+                        title={""}
+                    >
+                        <DropdownMenuItem>Logout</DropdownMenuItem>
+                    </DropdownNew>
                 </header>
-                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-                    {/* <div className="flex items-center">
-                        <h1 className="text-lg font-semibold md:text-2xl">
-                            Inventory
-                        </h1>
-                    </div> */}
+                <main className="flex flex-1 overflow-hidden md:h-[calc(100vh_-_300px)] flex-col gap-4 p-4 lg:gap-6 lg:p-6">
                     {children}
                 </main>
             </div>

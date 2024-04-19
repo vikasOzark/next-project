@@ -20,13 +20,16 @@ import {
 } from "@/components/Buttons";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import { SimpleErrorMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { QUERY_KEYS } from "@/queryKeys";
+import CustomEditor from "@/components/Editor";
+import { saveMessage } from "@/app/apiFunctions/addMessageNote";
 
-export const NotesSection = () => {
-    const { params } = useContext(TicketDataContext);
+export const NotesSection = ({ ticketData }) => {
+    // const { params } = useContext(TicketDataContext);
 
     const notesResponse = useQuery({
-        queryFn: () => axios.get(`/api/tickets/${params?.ticketId}/notes`),
-        queryKey: "notes",
+        queryFn: () => axios.get(`/api/tickets/${ticketData?.ticketId}/notes`),
+        queryKey: QUERY_KEYS.NOTES,
         refetchOnMount: false,
         refetchOnWindowFocus: false,
     });
@@ -68,18 +71,9 @@ export const NotesSection = () => {
                     />
                 </div>
             ) : (
-                <div className="mt-2 px-2 overflow-scroll p-2 max-h-[30rem] border rounded-2xl border-gray-600">
-                    {notes.length > 0 ? (
-                        displayNotes(notes)
-                    ) : (
-                        <>
-                            <div className="">
-                                <CreateFirstNote />
-                            </div>
-                        </>
-                    )}
-                </div>
+                <div className="mt-4">{displayNotes(notes)}</div>
             )}
+            <CreateThread />
         </>
     );
 };
@@ -272,7 +266,6 @@ export const CreateFirstNote = () => {
     useEffect(() => {
         const handleClose = (event) => {
             if (!createFormRef.current?.contains(event.target)) {
-                console.log(buttonRef?.current);
                 setModalOpen(false);
             }
         };
