@@ -1,12 +1,11 @@
 import CustomEditor from "@/components/Editor";
-import Modal from "@/components/Modal";
 import { isJSONString } from "@/utils/validateJsonString";
-import { useState } from "react";
-import { VscEdit } from "react-icons/vsc";
-import UpdateTicketForm from "../../component/forms/UpdateTicketForm";
-import UpdateTicketButtonModal from "../../component/UpdateTicketButtonModal";
+import { useContext, useState } from "react";
+import { TicketDataContext } from "../page";
 
-export default function TicketDetailSection({ ticketData }) {
+export default function TicketDetailSection() {
+    const { ticketData } = useContext(TicketDataContext);
+
     const isJsonString = isJSONString(ticketData?.ticketDetil);
     const [editorData, setEditorData] = useState("");
 
@@ -19,29 +18,29 @@ export default function TicketDetailSection({ ticketData }) {
 
     return (
         <>
-            {isJsonString ? (
-                <div className="mb-2">
-                    <label
-                        htmlFor="ticketDetil"
-                        className="block mt-2 text-sm w-full text-white font-medium leading-6 "
-                    >
-                        Ticket Detail
-                    </label>
-                    <div className="mt-2">
+            <div className="mb-2">
+                <label
+                    htmlFor="ticketDetil"
+                    className="block mt-2 text-sm w-full text-white font-medium leading-6 "
+                >
+                    Ticket Detail
+                </label>
+                <div className="mt-2">
+                    {isJsonString ? (
                         <CustomEditor
+                            editable={false}
+                            key={"editor-123"}
                             onChange={setEditorData}
                             className={
                                 " p-2 border border-gray-700/60 h-[15rem] min-h-[10rem]  max-h-[20rem]"
                             }
                             editorProps={{ initialContent: details }}
                         />
-                    </div>
+                    ) : (
+                        <div className="p-2 border rounded-md border-gray-700/60 h-[8em] min-h-[10rem]  max-h-[20rem]" />
+                    )}
                 </div>
-            ) : (
-                <p className=" capitalize text-sm md:text-md lg:text-lg ">
-                    {details}
-                </p>
-            )}
+            </div>
         </>
     );
 }

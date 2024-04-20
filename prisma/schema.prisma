@@ -100,18 +100,19 @@ model Tags {
 }
 
 model Tickets {
-    id           String     @id @default(auto()) @map("_id") @db.ObjectId
-    taskTitle    String     @unique
-    ticketDetil  String?
-    status       Status     @default(PENDING)
-    department   Department @relation(fields: [departmentId], references: [id])
-    createdById  User       @relation(fields: [userId], references: [id])
-    tags         Tags[]     @relation(references: [id], fields: [tagsId])
-    tagsId       String[]   @db.ObjectId
-    departmentId String     @db.ObjectId
-    userId       String     @db.ObjectId
-    createdAt    DateTime   @default(now())
-    updated_at   DateTime?  @updatedAt
+    id            String     @id @default(auto()) @map("_id") @db.ObjectId
+    taskTitle     String     @unique
+    ticketDetil   String?
+    mentioneUsers String[]
+    status        Status     @default(PENDING)
+    department    Department @relation(fields: [departmentId], references: [id])
+    createdById   User       @relation(fields: [userId], references: [id])
+    tags          Tags[]     @relation(references: [id], fields: [tagsId])
+    tagsId        String[]   @db.ObjectId
+    departmentId  String     @db.ObjectId
+    userId        String     @db.ObjectId
+    createdAt     DateTime   @default(now())
+    updated_at    DateTime?  @updatedAt
 
     assingedUser   User?   @relation(name: "assingedUser", fields: [assingedUserId], references: [id])
     assingedUserId String? @db.ObjectId
@@ -138,6 +139,8 @@ model Notes {
     id        String   @id @default(auto()) @map("_id") @db.ObjectId
     note      String
     createdAt DateTime @default(now())
+
+    mentioneUsers String[]
 
     tickets  Tickets[] @relation(fields: [ticketId], references: [id])
     ticketId String[]  @db.ObjectId

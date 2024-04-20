@@ -6,20 +6,21 @@ import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient } from "@prisma/client";
 import prismaInstance from "@/lib/dbController";
-/**
- * @type {PrismaClient}
- */
-const prisma = prismaInstance;
 
 export async function POST(request) {
   try {
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
+
+
     const requestBody = await request.json();
     const userId = await getUserId();
 
     if (!requestBody["id"]) {
       throw new Error("self : ticket id were not provided.");
     }
-    prisma.$connect();
     const ticket = await prisma.notes.create({
       data: {
         note: requestBody.note,
@@ -39,6 +40,12 @@ export async function POST(request) {
 }
 
 export async function GET(request, context) {
+  /**
+ * @type {PrismaClient}
+ */
+  const prisma = prismaInstance;
+
+
   try {
     const userId = await getUserId();
     const { params } = context;

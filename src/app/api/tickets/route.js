@@ -2,10 +2,9 @@ import ErrorResponseHandler, {
   ErrorResponse,
 } from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
-import getUserId, { getTokenNew } from "@/utils/userByToken";
+import getUserId from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { provideFilter } from "./ticketFilter.provider";
 
 /**
  * @type {PrismaClient}
@@ -20,6 +19,9 @@ export async function POST(request) {
     if (!userId) {
       throw new Error("self: Please re-login, and try again.");
     }
+
+    // const users = getMentionedUser(requestBody.ticketDetil)
+    // console.log(users);
 
     const createdTicket = await prisma.tickets.create({
       data: {

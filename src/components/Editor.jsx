@@ -7,7 +7,6 @@ import {
 import { twMerge } from "tailwind-merge";
 import {
     BlockNoteSchema,
-    blockToNode,
     defaultInlineContentSpecs,
     filterSuggestionItems,
 } from "@blocknote/core";
@@ -15,12 +14,11 @@ import "@blocknote/react/style.css";
 
 import "../../public/css/editor.css";
 
-import { Mention } from "./Mention";
 import React from "react";
 import { useQuery } from "react-query";
 import { QUERY_KEYS } from "@/queryKeys";
 import { getUsersData } from "@/app/dashboard/user-management/components/Forms/userUtils";
-import { TicketHoverCardTest } from "./MentionedHoverCard";
+import { Mention } from "./MentionedHoverCard";
 
 /**
  * Editor
@@ -50,6 +48,7 @@ const CustomEditor = React.forwardRef(
             refetchOnWindowFocus: false,
             enabled: editable,
             select: (data) => data.data,
+            mention: Mention,
         });
 
         return (
@@ -105,10 +104,9 @@ const getMentionMenuItems = (editor, users) => {
                 {
                     type: "mention",
                     props: {
-                        user: <TicketHoverCardTest user={user} />,
-                        ...user,
+                        user,
+                        data: user,
                     },
-                    style: {},
                 },
                 " ",
             ]);

@@ -1,16 +1,16 @@
 "use client";
 import axios from "axios";
-import { VscCircleSmallFilled, VscLibrary, VscVerified } from "react-icons/vsc";
+import { VscLibrary } from "react-icons/vsc";
 import { useQuery } from "react-query";
-import React, { useContext } from "react";
+import React from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
 import { isJSONString } from "@/utils/validateJsonString";
 import TicketDetailSection from "./components/detailSection";
 import { VscIssues } from "react-icons/vsc";
 import { QUERY_KEYS } from "@/queryKeys";
-import handleTimeFormat from "@/utils/dateTimeFormat";
 import DetailSidePanel from "./components/DetailSidePanel";
 import MessageThread from "./MessageThread";
+import ActivitySection from "./components/ActivitySection";
 
 export const TicketDataContext = React.createContext();
 
@@ -52,19 +52,23 @@ export default function Page({ params }) {
                                     <p className="block mt-2 text-sm w-full text-white font-medium leading-6 ">
                                         Title
                                     </p>
+                                    <p className="text-md font-bold">
+                                        {ticketData?.taskTitle}
+                                    </p>
 
                                     {ticketData?.isLoading && (
                                         <div className="h-[2rem] animate-pulse bg-gray-500 rounded-lg"></div>
                                     )}
                                 </div>
                                 <div className="rounded-md p-1  ">
-                                    {Object.keys(ticketData).length > 0 && (
+                                    {/* {Object.keys(ticketData).length > 0 && (
                                         <>
                                             <TicketDetailSection
                                                 ticketData={ticketData}
                                             />
                                         </>
-                                    )}
+                                    )} */}
+                                    <TicketDetailSection />
                                     {isLoading && (
                                         <div className="h-[15rem] animate-pulse bg-gray-500 rounded-lg" />
                                     )}
@@ -107,33 +111,52 @@ export default function Page({ params }) {
     );
 }
 
-const ActivitySection = () => {
-    const { isLoading, ticketData } = useContext(TicketDataContext);
-    return (
-        <>
-            {!isLoading && (
-                <div className="flex items-center font-bold gap-2">
-                    <VscVerified size={18} />
-                    {ticketData?.createdById?.first_name}
-                    {ticketData?.createdById?.last_name}
-                    <span className="text-sm text-gray-500 ">
-                        Created ticket
-                    </span>
-                    <span className="flex items-center gap-2 text-sm text-gray-400">
-                        <VscCircleSmallFilled size={16} />
-                        {handleTimeFormat(ticketData?.createdAt || "", {
-                            isFormated: true,
-                            dateTime: true,
-                        })}
-                    </span>
-                </div>
-            )}
-            {isLoading && (
-                <div className="h-[2rem] w-[12rem] bg-gray-500 rounded-md animate-pulse" />
-            )}
-        </>
-    );
-};
+// const ActivitySection = () => {
+//     const { isLoading, ticketData } = useContext(TicketDataContext);
+//     const MentionedUsers = getMentionedUser(ticketData.ticketDetil);
+//     return (
+//         <>
+//             {!isLoading && (
+//                 <>
+//                     <div className="flex items-center font-bold gap-2">
+//                         <VscVerified size={18} />
+//                         {ticketData?.createdById?.first_name}
+//                         {ticketData?.createdById?.last_name}
+//                         <span className="text-sm text-gray-500 ">
+//                             Created ticket
+//                         </span>
+//                         <span className="flex items-center gap-2 text-sm text-gray-400">
+//                             <VscCircleSmallFilled size={16} />
+//                             {handleTimeFormat(ticketData?.createdAt || "", {
+//                                 isFormated: true,
+//                                 dateTime: true,
+//                             })}
+//                         </span>
+//                     </div>
+
+//                     <div className="flex items-center font-bold gap-2">
+//                         <VscMention size={18} />
+//                         {ticketData?.createdById?.first_name}
+//                         {ticketData?.createdById?.last_name}
+//                         <span className="text-sm text-gray-500 ">
+//                             Created ticket
+//                         </span>
+//                         <span className="flex items-center gap-2 text-sm text-gray-400">
+//                             <VscCircleSmallFilled size={16} />
+//                             {handleTimeFormat(ticketData?.createdAt || "", {
+//                                 isFormated: true,
+//                                 dateTime: true,
+//                             })}
+//                         </span>
+//                     </div>
+//                 </>
+//             )}
+//             {isLoading && (
+//                 <div className="h-[2rem] w-[12rem] bg-gray-500 rounded-md animate-pulse" />
+//             )}
+//         </>
+//     );
+// };
 
 // TagsPopover
 // const TicketDataSection = () => {
