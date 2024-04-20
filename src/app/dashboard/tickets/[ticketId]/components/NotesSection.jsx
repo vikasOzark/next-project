@@ -73,7 +73,6 @@ export const NotesSection = ({ ticketData }) => {
             ) : (
                 <div className="mt-4">{displayNotes(notes)}</div>
             )}
-            <CreateThread />
         </>
     );
 };

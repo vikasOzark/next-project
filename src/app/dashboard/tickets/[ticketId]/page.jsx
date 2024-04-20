@@ -44,7 +44,7 @@ export default function Page({ params }) {
                 <section>
                     <div className="grid gap-2 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
                         <div
-                            className="xl:col-span-4 lg:grid-span-3"
+                            className="xl:col-span-4 h-[calc(100vh_-_7em)] overflow-hidden overflow-y-auto lg:grid-span-3"
                             x-chunk="dashboard-01-chunk-4"
                         >
                             <main className="px-2 md:px-10 space-y-4 lg:px-10">

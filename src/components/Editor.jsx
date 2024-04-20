@@ -17,6 +17,10 @@ import "../../public/css/editor.css";
 
 import { Mention } from "./Mention";
 import React from "react";
+import { useQuery } from "react-query";
+import { QUERY_KEYS } from "@/queryKeys";
+import { getUsersData } from "@/app/dashboard/user-management/components/Forms/userUtils";
+import { TicketHoverCardTest } from "./MentionedHoverCard";
 
 /**
  * Editor
@@ -27,10 +31,12 @@ import React from "react";
  * @param {useBlockNote} props.editorProps
  */
 const CustomEditor = React.forwardRef(
-    ({ className, theme = "dark", onChange, editable, editorProps }, ref) => {
+    (
+        { className, theme = "dark", onChange, editable = true, editorProps },
+        ref
+    ) => {
         const editor = useCreateBlockNote({
             schema,
-            editable: editable,
             ...editorProps,
         });
 
@@ -38,6 +44,13 @@ const CustomEditor = React.forwardRef(
             const content = JSON.stringify(jsonBlocks);
             onChange(content);
         }
+
+        const { data: users = [] } = useQuery(QUERY_KEYS.USERS, getUsersData, {
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
+            enabled: editable,
+            select: (data) => data.data,
+        });
 
         return (
             <BlockNoteView
@@ -49,6 +62,7 @@ const CustomEditor = React.forwardRef(
                     className
                 )}
                 id="editor"
+                editable={editable}
                 placeholder="Ticket details..."
                 theme={theme}
                 onChange={() => {
@@ -62,7 +76,7 @@ const CustomEditor = React.forwardRef(
                     getItems={async (query) =>
                         // Gets the mentions menu items
                         filterSuggestionItems(
-                            getMentionMenuItems(editor),
+                            getMentionMenuItems(editor, users),
                             query
                         )
                     }
@@ -83,18 +97,18 @@ const schema = BlockNoteSchema.create({
     },
 });
 
-const getMentionMenuItems = (editor) => {
-    const users = ["Steve", "Bob", "Joe", "Mike"];
-
+const getMentionMenuItems = (editor, users) => {
     return users.map((user) => ({
-        title: user,
+        title: `${user.first_name} ${user.last_name}`,
         onItemClick: () => {
             editor.insertInlineContent([
                 {
                     type: "mention",
                     props: {
-                        user,
+                        user: <TicketHoverCardTest user={user} />,
+                        ...user,
                     },
+                    style: {},
                 },
                 " ",
             ]);
