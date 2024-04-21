@@ -3,12 +3,13 @@ import { LoadingButton, SubmitButton } from "../../../../../components/Buttons";
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
-import formValidator from "@/utils/formValidator";
 import toast from "react-hot-toast";
 import { getDepartmentData } from "./utils";
-import { TagsOptions } from "./TagsDropDownOptions";
 import dynamic from "next/dynamic";
 import CustomEditor from "@/components/Editor";
+import { QUERY_KEYS } from "@/queryKeys";
+import TagsCardComponent from "@/components/TagsCardComponent";
+import Tag from "@/components/TagComponent";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
@@ -31,15 +32,16 @@ export default function CreateTicketForm({ modalClose }) {
                 taskTitle: event.target.taskTitle.value,
                 ticketDetil: detail,
                 department: event.target.department.value,
-                tags: selectedTag,
+                tags: selectedTag.map((tag) => tag.id),
             };
 
-            const isError = formValidator(ticketData, ["ticketDetil"]);
-            if (isError) {
-                setFormError(isError);
+            if (ticketData.taskTitle === "") {
+                setFormError({
+                    taskTitle:
+                        "Ticket tile should be at least 5 characters long.",
+                });
                 throw new Error();
             }
-
             return axios.post(`/api/tickets`, ticketData);
         },
 
@@ -61,9 +63,29 @@ export default function CreateTicketForm({ modalClose }) {
         },
 
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["tickets-list"] });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TICKET_LIST],
+            });
         },
     });
+
+    const getTag = (tag) => {
+        setSelectedTag((pre) => {
+            const isAvailable = pre.find(
+                (selectedTag) => selectedTag.id === tag.id
+            );
+            if (isAvailable) {
+                return pre.filter((selectedTag) => selectedTag.id !== tag.id);
+            }
+            return [...pre, tag];
+        });
+    };
+
+    const handleTagClicks = (tag) => {
+        setSelectedTag((pre) =>
+            pre.filter((selectedTag) => selectedTag.id !== tag.id)
+        );
+    };
 
     return (
         <form ref={formElement} onSubmit={mutation.mutate}>
@@ -75,12 +97,12 @@ export default function CreateTicketForm({ modalClose }) {
                     >
                         Ticket title
                     </label>
-                    <div className="mt-2">
+                    <div className="mt-2 ">
                         <input
                             id="taskTitle"
                             name="taskTitle"
                             type="text"
-                            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full border border-gray-700 bg-inherit rounded-md py-1.5 px-2 text-white font-bold text-md shadow-sm ring-inset ring-none placeholder:text-gray-400 focus:ring-0 focus:outline-none sm:text-sm sm:leading-6"
                         />
                         {mutation.isError && formError?.taskTitle && (
                             <small className="text-red-500 font-bold">
@@ -90,16 +112,16 @@ export default function CreateTicketForm({ modalClose }) {
                     </div>
                 </div>
 
-                <div>
+                <div className="">
                     <label
                         htmlFor="department"
-                        className="block text-sm text-black   font-medium leading-6 "
+                        className="block text-sm text-white  font-medium leading-6 "
                     >
                         Department
                     </label>
                     <div className="mt-2">
                         <select
-                            className="py-2 bg-white border rounded-lg px-2 w-full"
+                            className="py-2 temp-bg border rounded-lg px-2 w-full"
                             id="department"
                             name="department"
                         >
@@ -107,7 +129,13 @@ export default function CreateTicketForm({ modalClose }) {
                             {responseData.isSuccess &&
                             responseData.data?.success
                                 ? responseData.data.data?.map((item) => (
-                                      <option key={item.id} value={item.id}>
+                                      <option
+                                          key={item.id}
+                                          selected={
+                                              item.id === defaultDepartmentId
+                                          }
+                                          value={item.id}
+                                      >
                                           {item.name}
                                       </option>
                                   ))
@@ -130,11 +158,23 @@ export default function CreateTicketForm({ modalClose }) {
                     Assign tags
                 </label>
 
-                <div className="mt-2 relative flex items-center gap-2">
-                    <TagsOptions
-                        setSelectedTag={setSelectedTag}
-                        selectedTag={selectedTag}
-                    />
+                <div className="mt-2 relative flex-row items-center gap-2">
+                    <div className="min-w-[10em] max-w-[13em]">
+                        <TagsCardComponent
+                            className={"!border"}
+                            selectedIds={selectedTag.map((tag) => tag.id)}
+                            onClick={getTag}
+                        />
+                    </div>
+                    <div className=" flex gap-2 flex-wrap">
+                        {selectedTag.map((tag) => (
+                            <Tag
+                                onClick={handleTagClicks}
+                                key={tag.id}
+                                tag={tag}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
 

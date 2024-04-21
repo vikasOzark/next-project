@@ -1,12 +1,7 @@
 "use client";
 
 import { TableFlag, TicketStatus } from "./component/components";
-import {
-    VscChromeClose,
-    VscGroupByRefType,
-    VscLoading,
-    VscSymbolKeyword,
-} from "react-icons/vsc";
+import { VscChromeClose, VscPass, VscPassFilled } from "react-icons/vsc";
 import React, { useEffect, useState } from "react";
 import { TicketActionDropdown } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
@@ -18,10 +13,7 @@ import { useQuery } from "react-query";
 import { QUERY_KEYS } from "@/queryKeys";
 import Tag from "@/components/Tag";
 import { TicketDeleteButton } from "./ticketActionUtils";
-import {
-    DropdownActionMenuButton,
-    TicketStatusUpdate,
-} from "./component/TicketTableMenu";
+import { TicketStatusUpdate } from "./component/TicketTableMenu";
 import UpdateTicketButtonModal from "./component/UpdateTicketButtonModal";
 import TableComponent from "@/components/TableComponent";
 import handleTimeFormat from "@/utils/dateTimeFormat";
@@ -30,7 +22,7 @@ import Link from "next/link";
 import CustomPagination from "@/components/Pagination";
 import { LoadingState } from "@/components/Buttons";
 import { TicketEmptyState } from "@/components/EmptyState";
-import useSetQueryParam, { useSearchQuery } from "@/hooks/setQueryParam";
+import { useSearchQuery } from "@/hooks/setQueryParam";
 
 export const SelectContext = React.createContext();
 
@@ -142,25 +134,19 @@ export default function Tickets({ searchParams }) {
 }
 
 const SelectedDataInfo = ({ selectedTickets, setSelectedTickets }) => {
-    const handleUnSelectAll = () => {
-        selectedTickets.map((ticket) => {
-            document.getElementById(ticket.id).checked = false;
-        });
-        setSelectedTickets([]);
-    };
-
     if (selectedTickets.length) {
         return (
-            <span className="bg-white flex gap-2 items-center rounded-full px-4 py-1">
+            <span className="temp-bg flex gap-2 text-white items-center rounded-full px-4 py-1">
                 <div className="flex gap-2">
                     <span>Selected ticket</span>
-                    <span className="text-blue-900 font-bold">
+                    <span className="text-blue-500 font-bold">
                         {selectedTickets.length}
                     </span>
                 </div>
                 <VscChromeClose
-                    onClick={handleUnSelectAll}
-                    className="hover:bg-gray-300 rounded-full cursor-pointer"
+                    size={20}
+                    onClick={() => setSelectedTickets([])}
+                    className="hover:bg-gray-700 rounded-full cursor-pointer"
                 />
             </span>
         );
@@ -169,16 +155,6 @@ const SelectedDataInfo = ({ selectedTickets, setSelectedTickets }) => {
 };
 
 const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
-    const handleSelect = (event, ticketData) => {
-        if (event.target.checked) {
-            setSelectedTickets([...selectedTickets, ticketData]);
-        } else {
-            setSelectedTickets(
-                selectedTickets.filter((ticket) => ticket.id !== ticketData.id)
-            );
-        }
-    };
-
     const dateTime = (date) => {
         return handleTimeFormat(date, {
             isFormated: true,
@@ -186,6 +162,20 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
         });
     };
 
+    const handleSelect = (ticket) => {
+        setSelectedTickets((pre) => {
+            const isAvailable = pre.find(
+                (selectedTicket) => selectedTicket.id === ticket.id
+            );
+            if (isAvailable) {
+                return pre.filter(
+                    (selectedTicket) => selectedTicket.id !== ticket.id
+                );
+            }
+            return [...pre, ticket];
+        });
+    };
+    const selectedIds = selectedTickets.map((ticket) => ticket.id);
     return tickets.map((ticket) => ({
         id: ticket.id,
         columns: [
@@ -194,14 +184,20 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                     <div className="inline-flex items-center gap-x-3">
                         <div className="flex items-center gap-x-2">
                             <div className=" flex gap-3 items-center">
-                                <input
-                                    id={ticket.id}
-                                    type="checkbox"
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                    onClick={(event) =>
-                                        handleSelect(event, ticket)
-                                    }
-                                />
+                                <div className="">
+                                    {selectedIds.includes(ticket.id) ? (
+                                        <VscPassFilled
+                                            className="text-green-500"
+                                            onClick={() => handleSelect(ticket)}
+                                            size={20}
+                                        />
+                                    ) : (
+                                        <VscPass
+                                            onClick={() => handleSelect(ticket)}
+                                            size={20}
+                                        />
+                                    )}
+                                </div>
                                 <Link
                                     href={`${urlRoutes.TICKETS}/${ticket.id}`}
                                     className="font-medium  text-gray-300 dark:text-white hover:underline"
@@ -215,7 +211,7 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                         </div>
                     </div>
                 ),
-                className: "w-[10rem]",
+                className: "min-w-[8rem] max-w-[14rem]",
             },
             {
                 content: (
@@ -267,6 +263,7 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                         />
                     </div>
                 ),
+                className: "w-fit",
             },
         ],
     }));

@@ -83,7 +83,7 @@ export const TableFlag = ({ ticketData }) => {
                 )}
                 {ticketData.isMerged && (
                     <span>
-                        <small className=" bg-green-500 text-white px-3 py-1 flex gap-2 rounded-full">
+                        <small className=" bg-green-500 text-white px-3 flex gap-2 rounded-full">
                             <span>Merged</span>
                             {mergedCount.toString()}
                         </small>

@@ -13,6 +13,7 @@ const prisma = prismaInstance;
 
 export async function POST(request) {
   const requestBody = await request.json();
+  console.log(requestBody);
   try {
     const userId = await getUserId();
 
@@ -38,7 +39,7 @@ export async function POST(request) {
           },
         },
         tags: {
-          connect: requestBody.tags?.map((tag) => ({ id: tag.id })),
+          connect: requestBody.tags?.map((id) => ({ id })),
         },
       },
     });
@@ -49,7 +50,8 @@ export async function POST(request) {
       data: [createdTicket],
     });
   } catch (error) {
-    return ErrorResponseHandler(error);
+    console.log(error.message);
+    return ErrorResponse({ error: error })
   }
 }
 
