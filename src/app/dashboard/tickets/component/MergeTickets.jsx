@@ -1,4 +1,4 @@
-import { SubmitButton } from "@/components/Buttons";
+import { ButtonComponent, SubmitButton } from "@/components/Buttons";
 import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import React, { useContext, useState } from "react";
@@ -18,10 +18,11 @@ const MergeTickets = () => {
 
     return (
         <>
-            <Button onClick={() => setOpen((pre) => !pre)}>
-                <VscGitMerge size={18} />
-                <span className="hidden md:block lg:block">Merge Tickets</span>
-            </Button>
+            <ButtonComponent
+                onClick={() => setOpen((pre) => !pre)}
+                title={"Merge"}
+                icon={<VscGitMerge size={18} />}
+            />
             <Modal
                 open={open}
                 setOpen={setOpen}
@@ -256,7 +257,7 @@ export const MergingTicket = ({ ticket }) => {
     return (
         <div className="temp-card-bg rounded-lg p-2 col-span-4 shadow">
             <div className="flex items-center justify-between">
-                <small className="bg-green-600 text-xs font-bold text-white px-3 rounded-md py-1">
+                <small className="bg-green-600 text-xs font-bold text-white px-3 rounded-full py-1">
                     {ticket.status}
                 </small>
                 <VscClose

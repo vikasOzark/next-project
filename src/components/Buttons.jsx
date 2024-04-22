@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
 import { VscLoading } from "react-icons/vsc";
 import { twMerge } from "tailwind-merge";
+import { Button } from "./ui/button";
 
 export const LoadingButton = ({ title, cssClass }) => {
     return (
@@ -88,5 +89,21 @@ export const LoadingState = ({ title, cssClass }) => {
                 {title}
             </button>
         </>
+    );
+};
+
+export const ButtonComponent = ({ className, icon, title, onClick }) => {
+    return (
+        <Button
+            onClick={onClick ? onClick : () => {}}
+            title={title}
+            className={cn(
+                "px-4 flex gap-2 border-0 rounded-full items-center font-bold hover:bg-gray-600 text-white",
+                className
+            )}
+        >
+            {icon}
+            <span className="hidden md:block lg:block">{title}</span>
+        </Button>
     );
 };

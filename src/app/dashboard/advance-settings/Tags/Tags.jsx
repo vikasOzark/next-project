@@ -88,6 +88,7 @@ export const CreateTag = () => {
                 <VscAdd />
             </button>
             <Modal
+                dialogClass={"!w-[12em]"}
                 open={tagsModalOpen}
                 setOpen={setTagsModalOpen}
                 modalTitle={"Create Tags"}
