@@ -101,7 +101,7 @@ export function AssignUserAction({ className, actionData }) {
         onSuccess: (data) => {
             toast.dismiss();
             queryClient.invalidateQueries({
-                queryKey: [[QUERY_KEYS.TICKET_LIST, actionData.id]],
+                queryKey: [[QUERY_KEYS.TICKET_DETAIL, actionData.id]],
             });
             toast.success("Successfully person assigned.");
         },
@@ -144,7 +144,7 @@ export function AssignUserAction({ className, actionData }) {
                         )}
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="w-56">
+                    <DropdownMenuContent className="bg-[#1f1e24] border-0 p-2 w-[10rem]">
                         <DropdownMenuGroup>
                             {usersData.map((user) => (
                                 <DropdownMenuItem

@@ -19,6 +19,8 @@ export default function Dashboard() {
         }
     }, [data]);
 
+    console.log(session);
+
     const route = useRouter();
     route.push("/dashboard/-");
     // const searchParam = useSearchParams()

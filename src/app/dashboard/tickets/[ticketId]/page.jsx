@@ -11,14 +11,15 @@ import { QUERY_KEYS } from "@/queryKeys";
 import DetailSidePanel from "./components/DetailSidePanel";
 import MessageThread from "./MessageThread";
 import ActivitySection from "./components/ActivitySection";
+import TicketAction from "./components/TicketAction";
 
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
     const { ticketId } = params;
 
-    const { data, isLoading } = useQuery({
-        queryKey: [QUERY_KEYS.TICKET_LIST, ticketId],
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: [QUERY_KEYS.TICKET_DETAIL, ticketId],
         queryFn: () => {
             return axios.get(`/api/tickets/${ticketId}`);
         },
@@ -39,7 +40,7 @@ export default function Page({ params }) {
     return (
         <>
             <TicketDataContext.Provider
-                value={{ ticketData, params, isLoading }}
+                value={{ ticketData, params, isLoading, refetch }}
             >
                 <section>
                     <div className="grid gap-2 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
@@ -48,26 +49,24 @@ export default function Page({ params }) {
                             x-chunk="dashboard-01-chunk-4"
                         >
                             <main className="px-2 md:px-10 space-y-4 lg:px-10">
-                                <div className="">
-                                    <p className="block mt-2 text-sm w-full text-white font-medium leading-6 ">
-                                        Title
-                                    </p>
-                                    <p className="text-md font-bold">
-                                        {ticketData?.taskTitle}
-                                    </p>
+                                <div className="flex justify-between items-center">
+                                    <div className="">
+                                        <p className="block mt-2 text-sm w-full text-white font-medium leading-6 ">
+                                            Title
+                                        </p>
+                                        <p className="text-md font-bold">
+                                            {ticketData?.taskTitle}
+                                        </p>
 
-                                    {ticketData?.isLoading && (
-                                        <div className="h-[2rem] animate-pulse bg-gray-500 rounded-lg"></div>
-                                    )}
+                                        {ticketData?.isLoading && (
+                                            <div className="h-[2rem] animate-pulse bg-gray-500 rounded-lg"></div>
+                                        )}
+                                    </div>
+                                    <div className="">
+                                        <TicketAction />
+                                    </div>
                                 </div>
                                 <div className="rounded-md p-1  ">
-                                    {/* {Object.keys(ticketData).length > 0 && (
-                                        <>
-                                            <TicketDetailSection
-                                                ticketData={ticketData}
-                                            />
-                                        </>
-                                    )} */}
                                     <TicketDetailSection />
                                     {isLoading && (
                                         <div className="h-[15rem] animate-pulse bg-gray-500 rounded-lg" />

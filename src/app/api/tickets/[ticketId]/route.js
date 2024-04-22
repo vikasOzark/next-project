@@ -109,7 +109,7 @@ export async function DELETE(request, context) {
       httpStatus.HTTP_202_ACCEPTED
     );
   } catch (error) {
-    return ErrorResponseHandler(error);
+    return ErrorResponse({ error });
   }
 }
 

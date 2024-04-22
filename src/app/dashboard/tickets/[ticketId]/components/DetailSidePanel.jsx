@@ -1,16 +1,14 @@
-import {
-    VscChromeClose,
-    VscDebugDisconnect,
-    VscPerson,
-    VscTag,
-} from "react-icons/vsc";
+import { VscDebugDisconnect, VscPerson, VscTag } from "react-icons/vsc";
 import SidePanelSection from "./SidePanelSectionLayout";
 import { AssignUserAction } from "../../ticketActionUtils";
 import { SetTimeFrame } from "./SetTimeFrame";
 import TagsCardComponent from "@/components/TagsCardComponent";
 import { TicketDataContext } from "../page";
 import { useContext } from "react";
-import { cn } from "@/lib/utils";
+import Tag from "@/components/TagComponent";
+import { useMutation, useQueryClient } from "react-query";
+import { patchRequest } from "@/app/apiFunctions/api";
+import { QUERY_KEYS } from "@/queryKeys";
 
 export default function DetailSidePanel() {
     const { isLoading, ticketData } = useContext(TicketDataContext);
@@ -35,25 +33,43 @@ export default function DetailSidePanel() {
                 <SetTimeFrame ticketData={ticketData} />
             </SidePanelSection>
             <SidePanelSection icon={<VscTag size={20} />} title={"Tags"}>
-                <TagsCardComponent />
-                <div className=" mb-2 flex-wrap">
-                    {ticketData?.tags?.map((tag) => (
-                        <div
-                            key={tag.id}
-                            onClick={() => onClick(tag)}
-                            className={cn(
-                                "p-1 px-2 mb-1 flex items-center justify-between max-w-[8em] min-w-[6em] rounded-full ",
-                                tag.color
-                            )}
-                        >
-                            {tag.title}
-                            <span className="hover:bg-gray-500 rounded-full px-1 cursor-pointer">
-                                <VscChromeClose size={20} />
-                            </span>
-                        </div>
-                    ))}
-                </div>
+                <TagAction />
             </SidePanelSection>
         </div>
     );
 }
+
+const TagAction = () => {
+    const { ticketData } = useContext(TicketDataContext);
+    const queryClient = useQueryClient();
+
+    const { mutate } = useMutation({
+        mutationFn: (data) => {
+            return patchRequest({
+                url: `tickets/${ticketData.id}/tag`,
+                formData: {
+                    tagId: data.id,
+                },
+            });
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TICKET_DETAIL, ticketData.id],
+            });
+        },
+    });
+
+    return (
+        <>
+            <TagsCardComponent
+                onClick={mutate}
+                selectedIds={ticketData?.tags?.map((tag) => tag.id)}
+            />
+            <div className=" mb-2 flex-wrap">
+                {ticketData?.tags?.map((tag) => (
+                    <Tag onClick={mutate} key={tag.id} tag={tag} />
+                ))}
+            </div>
+        </>
+    );
+};

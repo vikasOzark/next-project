@@ -179,17 +179,17 @@ const Message = ({ note }) => {
 const ThreadLoading = () => {
     return (
         <>
-            <div class="rounded-lg mb-2  bg-gray-700/25 p-2 ">
-                <div class="h-[2em] w-[9em] bg-gray-500 animate-pulse rounded-md mb-1"></div>
-                <div class=" text-gray-300 text-sm h-[3em] bg-gray-500 rounded-md animate-pulse"></div>
+            <div className="rounded-lg mb-2  bg-gray-700/25 p-2 ">
+                <div className="h-[2em] w-[9em] bg-gray-500 animate-pulse rounded-md mb-1"></div>
+                <div className=" text-gray-300 text-sm h-[3em] bg-gray-500 rounded-md animate-pulse"></div>
             </div>
-            <div class="rounded-lg mb-2  bg-gray-700/25 p-2 ">
-                <div class="h-[2em] w-[7em] bg-gray-500 animate-pulse rounded-md mb-1"></div>
-                <div class=" text-gray-300 text-sm h-[3em] bg-gray-500 rounded-md animate-pulse"></div>
+            <div className="rounded-lg mb-2  bg-gray-700/25 p-2 ">
+                <div className="h-[2em] w-[7em] bg-gray-500 animate-pulse rounded-md mb-1"></div>
+                <div className=" text-gray-300 text-sm h-[3em] bg-gray-500 rounded-md animate-pulse"></div>
             </div>
-            <div class="rounded-lg mb-2 bg-gray-700/25 p-2 ">
-                <div class="h-[2em] w-[9em] bg-gray-500 animate-pulse rounded-md mb-1"></div>
-                <div class=" text-gray-300 text-sm h-[3em] bg-gray-500 rounded-md animate-pulse"></div>
+            <div className="rounded-lg mb-2 bg-gray-700/25 p-2 ">
+                <div className="h-[2em] w-[9em] bg-gray-500 animate-pulse rounded-md mb-1"></div>
+                <div className=" text-gray-300 text-sm h-[3em] bg-gray-500 rounded-md animate-pulse"></div>
             </div>
         </>
     );

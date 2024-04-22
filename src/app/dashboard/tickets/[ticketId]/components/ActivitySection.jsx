@@ -1,5 +1,10 @@
 "use client";
-import { VscCircleSmallFilled, VscMention, VscVerified } from "react-icons/vsc";
+import {
+    VscCircleSmallFilled,
+    VscMention,
+    VscPerson,
+    VscVerified,
+} from "react-icons/vsc";
 import React, { useContext } from "react";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import getMentionedUser from "@/utils/getMentionedUsersData";
@@ -14,9 +19,9 @@ export default function ActivitySection() {
             {!isLoading && (
                 <>
                     <ActivityFragment
-                        icon={<VscVerified size={18} />}
+                        className={"mb-1"}
+                        icon={<VscVerified size={20} />}
                         type={"Created ticket"}
-                        key={ticketData?.createdById.id}
                         dateTimeString={ticketData?.createdAt}
                     >
                         <>
@@ -24,8 +29,21 @@ export default function ActivitySection() {
                             {ticketData?.createdById?.last_name}
                         </>
                     </ActivityFragment>
+                    <ActivityFragment
+                        className={"mb - 1"}
+                        icon={<VscPerson size={20} />}
+                        type={"Assigned"}
+                        key={ticketData?.createdById.id}
+                        // dateTimeString={ticketData?.createdAt}
+                    >
+                        <>
+                            {ticketData?.assingedUser?.first_name}{" "}
+                            {ticketData?.assingedUser?.last_name}
+                        </>
+                    </ActivityFragment>
                     {MentionedUsers.map((user) => (
                         <ActivityFragment
+                            className={"mb - 1"}
                             icon={<VscMention size={20} />}
                             type={"Mentioned"}
                             key={user.id}

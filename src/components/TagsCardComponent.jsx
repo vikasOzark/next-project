@@ -9,7 +9,11 @@ import { EmptyState } from "./EmptyState";
 import { useOnClickOutside } from "@/hooks/modalClose.hook";
 import { VscCheckAll } from "react-icons/vsc";
 
-export default function TagsCardComponent({ onClick, className, selectedIds }) {
+export default function TagsCardComponent({
+    onClick,
+    className,
+    selectedIds = [],
+}) {
     const [query, setQuery] = useState("");
     const [isOpenState, setState] = useState(false);
     /**
@@ -66,7 +70,7 @@ export default function TagsCardComponent({ onClick, className, selectedIds }) {
                                     )}
                                 >
                                     {tag.title}
-                                    {selectedIds.includes(tag.id) && (
+                                    {selectedIds?.includes(tag.id) && (
                                         <VscCheckAll size={15} />
                                     )}
                                 </div>
