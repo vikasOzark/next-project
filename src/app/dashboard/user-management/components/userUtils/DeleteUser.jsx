@@ -38,7 +38,7 @@ export const ToggleDisableUser = ({ user }) => {
                         <ActionButton
                             onClick={() => mutationUser.mutate("enable_user")}
                             cssClass={
-                                " rounded-full hover:bg-gray-500 border border-gray-600 hover:border-transparent transition-all gap-2"
+                                " rounded-md hover:bg-gray-500 border border-gray-600 hover:border-transparent transition-all gap-2"
                             }
                         >
                             <VscCircleLarge
@@ -52,7 +52,7 @@ export const ToggleDisableUser = ({ user }) => {
                         <ActionButton
                             onClick={() => mutationUser.mutate("disable_user")}
                             cssClass={
-                                " rounded-full hover:bg-gray-500 border border-gray-600 hover:border-transparent transition-all gap-1"
+                                " rounded-md hover:bg-gray-500 border border-gray-600 hover:border-transparent transition-all gap-1"
                             }
                         >
                             <VscCircleSlash

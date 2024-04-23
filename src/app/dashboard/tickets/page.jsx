@@ -265,9 +265,9 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                         />
                         <UpdateTicketButtonModal
                             className={
-                                "hover:bg-gray-200 bg-transparent px-3 py-[3px] font-medium rounded-full text-gray-300"
+                                "hover:bg-gray-200 bg-transparent px-3 py-[3px] font-medium rounded-md text-gray-300"
                             }
-                            title={"Update"}
+                            title={"Edit"}
                             ticketData={ticket}
                         />
                     </div>

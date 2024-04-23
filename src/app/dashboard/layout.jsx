@@ -4,21 +4,6 @@ import Link from "next/link";
 import { CircleUser, HomeIcon, LineChart, Menu, Package2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { urlRoutes } from "@/utils/urlRoutes";
 import { cn } from "@/lib/utils";
@@ -27,6 +12,10 @@ import { NotesNavBarTab } from "@/components/SideNavNotesTab";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import DropdownNew from "@/components/Dropdown/DropdownNew";
+import { signOut, useSession } from "next-auth/react";
+import { ButtonComponent } from "@/components/Buttons";
+import { VscSignOut } from "react-icons/vsc";
+import { PageLoader } from "@/components/Loading";
 
 export default function Layout({ children }) {
     const queryClient = new QueryClient();
@@ -46,6 +35,12 @@ export default function Layout({ children }) {
 }
 
 export function MainLayout({ children }) {
+    const { data, status } = useSession();
+    if (status === "unauthenticated") {
+        location.href = urlRoutes.LOGIN_IN;
+        return;
+    }
+
     const ADMIN_VIEW_LINKS = [
         {
             title: "Dashboard",
@@ -79,6 +74,9 @@ export function MainLayout({ children }) {
         },
     ];
 
+    if (status === "loading") {
+        return <PageLoader />;
+    }
     return (
         <div className="grid text-white  min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
             <div className="hidden bg-muted/40 h-screen md:sticky bottom-0 md:block">
@@ -142,14 +140,19 @@ export function MainLayout({ children }) {
                     <div className="w-full flex-1"></div>
 
                     <DropdownNew
+                        className="w-[8rem]"
                         icon={<CircleUser className="h-7 w-7" />}
-                        title={""}
+                        title={data?.user?.name}
                     >
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
+                        <ButtonComponent
+                            onClick={signOut}
+                            icon={<VscSignOut size={18} />}
+                            title={"Logout"}
+                        />
                     </DropdownNew>
                 </header>
                 <main className="flex flex-1 overflow-hidden md:h-[calc(100vh_-_300px)] flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-                    {children}
+                    {status === "authenticated" && children}
                 </main>
             </div>
         </div>

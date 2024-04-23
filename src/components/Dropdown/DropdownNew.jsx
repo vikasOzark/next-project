@@ -19,7 +19,7 @@ export default function DropdownNew({
             <DropdownMenuTrigger asChild>
                 <Button
                     className={cn(
-                        "px-4 flex gap-2 border-0 rounded-full items-center font-bold hover:bg-gray-600 text-white",
+                        "px-4 flex gap-2 border-0 rounded-md items-center font-bold hover:bg-gray-600 text-white",
                         btnClassName
                     )}
                 >

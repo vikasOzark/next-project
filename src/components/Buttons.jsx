@@ -11,7 +11,7 @@ export const LoadingButton = ({ title, cssClass }) => {
                 disabled
                 type="button"
                 className={twMerge(
-                    "py-2.5 px-5 mr-2 text-sm font-bold text-white  rounded-full  focus:z-10 focus:ring-2 inline-flex items-center cursor-progress caret-fuchsia-400",
+                    "py-2.5 px-5 mr-2 text-sm font-bold text-white  rounded-md  focus:z-10 focus:ring-2 inline-flex items-center cursor-progress caret-fuchsia-400",
                     cssClass
                 )}
             >
@@ -44,7 +44,7 @@ export const SubmitButton = ({ title, icon, cssClass }) => {
             <button
                 type="submit"
                 className={twMerge(
-                    "py-2 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-full  hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700   dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex gap-2 items-center",
+                    "py-2 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-md  hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700   dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex gap-2 items-center",
                     cssClass
                 )}
             >
@@ -62,7 +62,7 @@ const ActionButton = forwardRef(({ children, cssClass, onClick }, ref) => {
                 ref={ref}
                 onClick={() => onClick()}
                 className={twMerge(
-                    "py-2 px-5 mr-2 text-sm font-bold transition-all text-white rounded-full hover:text-gray-700 hover:bg-gray-100 focus:z-10   dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 inline-flex gap-3 items-center",
+                    "py-2 px-5 mr-2 text-sm font-bold transition-all text-white rounded-md hover:text-gray-700 hover:bg-gray-100 focus:z-10   dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 inline-flex gap-3 items-center",
                     cssClass
                 )}
             >
@@ -106,7 +106,7 @@ export const ButtonComponent = ({
             title={title}
             disabled={isLoading}
             className={cn(
-                "px-4 flex gap-2 border-0 rounded-full items-center font-bold hover:bg-gray-600 text-white",
+                "px-4 flex gap-2 border-0 rounded-md items-center font-bold hover:bg-gray-600 text-white",
                 className
             )}
         >
