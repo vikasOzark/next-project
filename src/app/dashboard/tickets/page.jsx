@@ -59,6 +59,7 @@ export default function Tickets({ searchParams }) {
         retry: false,
         cacheTime: 0,
         staleTime: 0,
+        enabled: !!searchParam,
     });
 
     const tickets = ticketResponse?.data?.data || []; //
