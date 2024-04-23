@@ -5,6 +5,8 @@ import getUserId from "@/utils/userByToken";
 import { PrismaClient, Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { v4 } from "uuid";
+import prismaInstance from "@/lib/dbController";
+
 /**
  * @type {PrismaClient}
  */

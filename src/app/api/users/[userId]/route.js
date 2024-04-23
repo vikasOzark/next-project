@@ -7,6 +7,7 @@ import getUserId from "@/utils/userByToken";
 import { PrismaClient, Role } from "@prisma/client";
 import { handleUpdateUser, handleUserAlter } from "./apiHelper";
 import exclude from "@/lib/exclude";
+import prismaInstance from "@/lib/dbController";
 
 /**
  * @type {PrismaClient}

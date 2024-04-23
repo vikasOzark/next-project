@@ -5,6 +5,7 @@ import httpStatus from "@/utils/httpStatus";
 import getUserId, { getTokenNew } from "@/utils/userByToken";
 import { PrismaClient, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
+import prismaInstance from "@/lib/dbController";
 
 /**
  * @type {PrismaClient}

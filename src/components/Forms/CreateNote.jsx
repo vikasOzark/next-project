@@ -30,7 +30,7 @@ const CreateNote = forwardRef(({ setCreating }, ref) => {
         if (isError) {
             toast.error("Something bad happened, Please try again");
         }
-    }, [isSuccess, isError]);
+    }, [isSuccess, isError, setCreating, data?.data, router]);
 
     return (
         <>

@@ -26,7 +26,7 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
         if (mutation.data?.data?.success) {
             setTicketUpdateModal(false);
         }
-    }, [mutation.isSuccess]);
+    }, [mutation.data?.data?.success, setTicketUpdateModal]);
 
     useEffect(() => {
         if (ticketDataUpdate.tags) {
@@ -38,7 +38,7 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
             }));
             setSelectedTag(tagsSelected);
         }
-    }, []);
+    }, [ticketDataUpdate.tags]);
 
     const isJsonString = isJSONString(ticketData?.ticketDetil);
     let details;

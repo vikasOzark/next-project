@@ -2,6 +2,8 @@ import { PrismaClient, Role } from "@prisma/client";
 import httpStatus from "./httpStatus";
 import getUserId from "./userByToken";
 import bcrypt from "bcrypt";
+import prismaInstance from "@/lib/dbController";
+
 
 export async function verifyIsAdmin() {
   /**

@@ -1,3 +1,4 @@
+import prismaInstance from "@/lib/dbController";
 import ErrorResponseHandler, {
   ErrorResponse,
 } from "@/utils/ErrorResponseHandler";

@@ -1,3 +1,4 @@
+import prismaInstance from "@/lib/dbController";
 import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
@@ -10,7 +11,7 @@ export async function DELETE(request, context) {
     /**
  * @type {PrismaClient}
  */
-    const prisma = prismaInstance;
+    const prisma = prismaInstance
     const userId = getUserId();
 
     if (!userId) {

@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import { setTimeFrame } from "@/app/apiFunctions/tickets";
 import { Card } from "@/components/ui/card";
@@ -20,7 +20,9 @@ export const SetTimeFrame = ({ ticketData }) => {
     const end_month = endDateObject.getMonth() + 1;
     const end_day = endDateObject.getDate();
 
-    const dateTime = {};
+    // const dateTime = {};
+    const dateTime = useMemo(() => ({}), []);
+
     if (ticketData.startDate) {
         dateTime.from = new Date(start_dateYear, start_month, start_day);
     }
@@ -36,7 +38,7 @@ export const SetTimeFrame = ({ ticketData }) => {
         if (Object.keys(dateTime).length > 0) {
             setDate({ ...dateTime });
         }
-    }, [ticketData]);
+    }, [ticketData, dateTime]);
 
     const { mutate, isLoading } = useMutation({
         mutationFn: setTimeFrame,

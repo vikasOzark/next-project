@@ -18,7 +18,7 @@ export default function HeroSection() {
                 route.push(urlRoutes.DASHBOARD);
             }, 500);
         }
-    }, [route]);
+    }, [route, session.status]);
 
     return (
         <div className="">

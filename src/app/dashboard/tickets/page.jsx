@@ -39,7 +39,7 @@ export default function Tickets({ searchParams }) {
     const setQuery = useSearchQuery();
     useEffect(() => {
         setQuery("page", 1);
-    }, []);
+    }, [setQuery]);
 
     const ticketResponse = useQuery({
         queryKey: [QUERY_KEYS.TICKET_LIST, searchParam.toString()],

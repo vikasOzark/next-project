@@ -174,24 +174,24 @@ export function SideNavNotesOptions({ styleButton, noteData }) {
     );
 }
 
-const LinkComponent = ({ linkObject, className }) => {
-    return (
-        <Link
-            href={linkObject.route}
-            className={cn(
-                "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
-                className
-            )}
-        >
-            {linkObject?.icon ? (
-                linkObject.icon
-            ) : (
-                <LineChart className="h-5 w-5" />
-            )}
-            {linkObject.title}
-        </Link>
-    );
-};
+// const LinkComponent = ({ linkObject, className }) => {
+//     return (
+//         <Link
+//             href={linkObject.route}
+//             className={cn(
+//                 "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+//                 className
+//             )}
+//         >
+//             {linkObject?.icon ? (
+//                 linkObject.icon
+//             ) : (
+//                 <LineChart className="h-5 w-5" />
+//             )}
+//             {linkObject.title}
+//         </Link>
+//     );
+// };
 
 // const LinkComponentLg = ({ linkObject, className }) => {
 //     return (

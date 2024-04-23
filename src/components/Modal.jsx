@@ -129,7 +129,7 @@ export const ButtonDropdownComponent = ({ title, selectedUserTags = [] }) => {
         if (responseData.data && responseData.data?.success) {
             setTags(responseData.data?.data);
         }
-    }, [responseData.isSuccess]);
+    }, [responseData.data]);
 
     const handleSelect = (tag) => {
         const isMatched = selectedTag.find((item) => item.id === tag.id);
