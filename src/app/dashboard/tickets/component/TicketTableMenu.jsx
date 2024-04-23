@@ -27,6 +27,7 @@ import { Status } from "@prisma/client";
 import { VscSymbolKeyword } from "react-icons/vsc";
 import DropdownNew from "@/components/Dropdown/DropdownNew";
 import { QUERY_KEYS } from "@/queryKeys";
+import { cn } from "@/lib/utils";
 
 export function DropdownActionMenuButton({
     styleButton,
@@ -91,8 +92,15 @@ export function DropdownActionMenuButton({
         </>
     );
 }
-
-export function TicketStatusUpdate({ actionData }) {
+//
+export function TicketStatusUpdate({
+    actionData,
+    title,
+    icon,
+    className,
+    btnClassName,
+    queryKey,
+}) {
     const queryClient = useQueryClient();
     const mutationAction = useMutation({
         mutationFn: async (status) => {
@@ -105,6 +113,9 @@ export function TicketStatusUpdate({ actionData }) {
             toast.dismiss();
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.TICKET_LIST],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TICKET_DETAIL, actionData.id],
             });
             toast.success("Successfully status is updated.");
         },
@@ -119,9 +130,10 @@ export function TicketStatusUpdate({ actionData }) {
 
     return (
         <DropdownNew
-            className={"w-[10rem]"}
-            icon={<VscGroupByRefType />}
-            title={"Update"}
+            btnClassName={btnClassName}
+            className={cn("w-[10rem]", className)}
+            icon={icon}
+            title={title}
         >
             {Object.keys(Status).map((status) => (
                 <div key={status}>

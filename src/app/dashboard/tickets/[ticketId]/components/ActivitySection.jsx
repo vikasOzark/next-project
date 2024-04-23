@@ -1,6 +1,7 @@
 "use client";
 import {
     VscCircleSmallFilled,
+    VscGitCompare,
     VscMention,
     VscPerson,
     VscVerified,
@@ -14,6 +15,9 @@ import { TicketDataContext } from "../page";
 export default function ActivitySection() {
     const { isLoading, ticketData } = useContext(TicketDataContext);
     const MentionedUsers = getMentionedUser(ticketData.ticketDetil);
+
+    const hasTimeFrame = ticketData?.endDate || ticketData?.startDate;
+
     return (
         <>
             {!isLoading && (
@@ -30,11 +34,10 @@ export default function ActivitySection() {
                         </>
                     </ActivityFragment>
                     <ActivityFragment
-                        className={"mb - 1"}
+                        className={"mb-1"}
                         icon={<VscPerson size={20} />}
                         type={"Assigned"}
                         key={ticketData?.createdById.id}
-                        // dateTimeString={ticketData?.createdAt}
                     >
                         <>
                             {ticketData?.assingedUser?.first_name}{" "}
@@ -43,7 +46,7 @@ export default function ActivitySection() {
                     </ActivityFragment>
                     {MentionedUsers.map((user) => (
                         <ActivityFragment
-                            className={"mb - 1"}
+                            className={"mb-1"}
                             icon={<VscMention size={20} />}
                             type={"Mentioned"}
                             key={user.id}
@@ -53,6 +56,15 @@ export default function ActivitySection() {
                             </>
                         </ActivityFragment>
                     ))}
+                    {hasTimeFrame && (
+                        <ActivityFragment
+                            className={"mb-1"}
+                            icon={<VscGitCompare size={20} />}
+                            type={"Added"}
+                        >
+                            Time frame
+                        </ActivityFragment>
+                    )}
                 </>
             )}
             {isLoading && (

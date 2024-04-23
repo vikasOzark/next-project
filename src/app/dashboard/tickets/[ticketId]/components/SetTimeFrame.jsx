@@ -1,10 +1,13 @@
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import { setTimeFrame } from "@/app/apiFunctions/tickets";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { QUERY_KEYS } from "@/queryKeys";
+import { ButtonComponent } from "@/components/Buttons";
+import { VscSymbolConstant } from "react-icons/vsc";
 
 export const SetTimeFrame = ({ ticketData }) => {
     const startDateObject = new Date(ticketData.startDate);
@@ -27,16 +30,20 @@ export const SetTimeFrame = ({ ticketData }) => {
     }
 
     const queryClient = useQueryClient();
-    const [date, setDate] = React.useState(() =>
-        Object.keys(dateTime).length > 0 ? dateTime : undefined
-    );
+    const [date, setDate] = React.useState(undefined);
 
-    const { mutate } = useMutation({
+    useEffect(() => {
+        if (Object.keys(dateTime).length > 0) {
+            setDate({ ...dateTime });
+        }
+    }, [ticketData]);
+
+    const { mutate, isLoading } = useMutation({
         mutationFn: setTimeFrame,
         onSuccess: (response) => {
             if (response.success) {
                 queryClient.invalidateQueries({
-                    queryKey: [QUERY_KEYS.TICKET_LIST, ticketData.id],
+                    queryKey: [QUERY_KEYS.TICKET_DETAIL, ticketData.id],
                 });
                 toast.success(response.message);
             } else {
@@ -48,21 +55,19 @@ export const SetTimeFrame = ({ ticketData }) => {
         },
     });
 
-    const handleSave = () => {
+    const handleSave = (event) => {
         let payload = {};
 
-        if (date.from) {
-            payload.startDate = new Date(
-                event.target.startDate.value
-            ).toISOString();
+        if (date?.from) {
+            payload.startDate = new Date(date.from).toISOString();
         }
 
-        if (date.to) {
-            payload.endDate = new Date(
-                event.target.endDate.value
-            ).toISOString();
+        if (date?.to) {
+            payload.endDate = new Date(date.to).toISOString();
         }
-
+        if (Object.keys(payload).length === 0) {
+            return;
+        }
         mutate({ formData: payload, ticketId: ticketData.id });
     };
 
@@ -74,9 +79,12 @@ export const SetTimeFrame = ({ ticketData }) => {
                 setDate={setDate}
             />
             <div className="mt-2 flex items-center justify-end">
-                <Button className={"hover:bg-gray-700 rounded-full"}>
-                    Save
-                </Button>
+                <ButtonComponent
+                    isLoading={isLoading}
+                    onClick={handleSave}
+                    icon={<VscSymbolConstant size={20} />}
+                    title={"Set time"}
+                />
             </div>
         </div>
     );

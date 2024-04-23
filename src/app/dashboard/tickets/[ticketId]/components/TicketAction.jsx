@@ -1,22 +1,25 @@
 import DropdownNew from "@/components/Dropdown/DropdownNew";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { VscExtensions, VscKebabVertical } from "react-icons/vsc";
+import { VscEdit, VscExtensions, VscKebabVertical } from "react-icons/vsc";
 import { TicketDeleteButton } from "../../ticketActionUtils";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TicketDataContext } from "../page";
 import { QUERY_KEYS } from "@/queryKeys";
 import { urlRoutes } from "@/utils/urlRoutes";
+import Modal from "@/components/Modal";
+import UpdateTicketForm from "../../component/forms/UpdateTicketForm";
+import { ButtonComponent } from "@/components/Buttons";
 
 export default function TicketAction() {
     return (
         <DropdownNew title={"Action"} icon={<VscExtensions size={18} />}>
-            <UpdateTicket />
+            <DeleteTicket />
+            <UpdateTicketButtonModal />
         </DropdownNew>
     );
 }
-//<VscKebabVertical />
 
-const UpdateTicket = () => {
+const DeleteTicket = () => {
     const { ticketData } = useContext(TicketDataContext);
     return (
         <DropdownMenuItem className="w-[7em]">
@@ -31,3 +34,34 @@ const UpdateTicket = () => {
         </DropdownMenuItem>
     );
 };
+
+function UpdateTicketButtonModal() {
+    const { ticketData } = useContext(TicketDataContext);
+    const [updateTicketModal, setTicketUpdateModal] = useState(false);
+    return (
+        <>
+            <DropdownMenuItem className="w-[7em]">
+                <button
+                    onClick={() => setTicketUpdateModal((pre) => !pre)}
+                    className={`hover:bg-red-400 text-red-400 flex gap-2 px-3 items-center  rounded-full transition-colors duration-200  hover:text-white focus:outline-none`}
+                >
+                    <VscEdit size={16} />
+                    <span className="md:block lg:block">Update</span>
+                </button>
+            </DropdownMenuItem>
+
+            <Modal
+                cssClass={"min-w-fit"}
+                className=" "
+                open={updateTicketModal}
+                setOpen={setTicketUpdateModal}
+                modalTitle={"Update ticket"}
+            >
+                <UpdateTicketForm
+                    setTicketUpdateModal={setTicketUpdateModal}
+                    ticketData={ticketData}
+                />
+            </Modal>
+        </>
+    );
+}

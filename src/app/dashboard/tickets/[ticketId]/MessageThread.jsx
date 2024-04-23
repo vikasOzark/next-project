@@ -1,5 +1,5 @@
-import CustomEditor from "@/components/Editor";
-import { useContext, useEffect, useRef, useState } from "react";
+// import CustomEditor from "@/components/Editor";
+import { useContext, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { TicketDataContext } from "./page";
 import { saveMessage } from "@/app/apiFunctions/addMessageNote";
@@ -15,6 +15,10 @@ import { QUERY_KEYS } from "@/queryKeys";
 import axios from "axios";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import OptionsDropdown from "@/components/Dropdown/OptionsDriopdown";
+import dynamic from "next/dynamic";
+const CustomEditor = dynamic(() => import("@/components/Editor"), {
+    ssr: false,
+});
 
 export default function MessageThread() {
     const { ticketData } = useContext(TicketDataContext);

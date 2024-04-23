@@ -92,18 +92,42 @@ export const LoadingState = ({ title, cssClass }) => {
     );
 };
 
-export const ButtonComponent = ({ className, icon, title, onClick }) => {
+export const ButtonComponent = ({
+    className,
+    icon,
+    title,
+    onClick,
+    isLoading,
+    children,
+}) => {
     return (
         <Button
             onClick={onClick ? onClick : () => {}}
             title={title}
+            disabled={isLoading}
             className={cn(
                 "px-4 flex gap-2 border-0 rounded-full items-center font-bold hover:bg-gray-600 text-white",
                 className
             )}
         >
-            {icon}
-            <span className="hidden md:block lg:block">{title}</span>
+            {isLoading ? (
+                <>
+                    <div className=" flex justify-center items-center gap-2">
+                        <VscLoading size={20} className=" animate-spin" />{" "}
+                        Processing...
+                    </div>
+                </>
+            ) : (
+                <>
+                    {icon}
+                    {title && (
+                        <span className="hidden md:block lg:block">
+                            {title}
+                        </span>
+                    )}
+                    {children}
+                </>
+            )}
         </Button>
     );
 };

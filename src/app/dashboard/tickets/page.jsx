@@ -1,7 +1,12 @@
 "use client";
 
 import { TableFlag, TicketStatus } from "./component/components";
-import { VscChromeClose, VscPass, VscPassFilled } from "react-icons/vsc";
+import {
+    VscChromeClose,
+    VscGroupByRefType,
+    VscPass,
+    VscPassFilled,
+} from "react-icons/vsc";
 import React, { useEffect, useState } from "react";
 import { TicketActionDropdown } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
@@ -253,7 +258,11 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
                             className={"delete-btn"}
                         />
 
-                        <TicketStatusUpdate actionData={ticket} />
+                        <TicketStatusUpdate
+                            actionData={ticket}
+                            title={"Update"}
+                            icon={<VscGroupByRefType />}
+                        />
                         <UpdateTicketButtonModal
                             className={
                                 "hover:bg-gray-200 bg-transparent px-3 py-[3px] font-medium rounded-full text-gray-300"

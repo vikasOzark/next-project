@@ -64,8 +64,10 @@ const CustomEditor = React.forwardRef(
                 editable={editable}
                 placeholder="Ticket details..."
                 theme={theme}
-                onChange={() => {
-                    saveContent(editor?.document);
+                onChange={(data) => {
+                    if ("document" in data) {
+                        saveContent(data?.document);
+                    }
                 }}
                 sideMenu={false}
             >

@@ -101,7 +101,7 @@ export function AssignUserAction({ className, actionData }) {
         onSuccess: (data) => {
             toast.dismiss();
             queryClient.invalidateQueries({
-                queryKey: [[QUERY_KEYS.TICKET_DETAIL, actionData.id]],
+                queryKey: [QUERY_KEYS.TICKET_DETAIL, actionData.id],
             });
             toast.success("Successfully person assigned.");
         },

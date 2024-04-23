@@ -1,8 +1,13 @@
 "use client";
 import axios from "axios";
-import { VscLibrary } from "react-icons/vsc";
-import { useQuery } from "react-query";
-import React from "react";
+import {
+    VscArrowDown,
+    VscChevronDown,
+    VscLibrary,
+    VscSymbolEvent,
+} from "react-icons/vsc";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import React, { useContext } from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
 import { isJSONString } from "@/utils/validateJsonString";
 import TicketDetailSection from "./components/detailSection";
@@ -12,6 +17,10 @@ import DetailSidePanel from "./components/DetailSidePanel";
 import MessageThread from "./MessageThread";
 import ActivitySection from "./components/ActivitySection";
 import TicketAction from "./components/TicketAction";
+import { TicketStatusUpdate } from "../component/TicketTableMenu";
+import { ButtonComponent } from "@/components/Buttons";
+import toast from "react-hot-toast";
+import { Status } from "@prisma/client";
 
 export const TicketDataContext = React.createContext();
 
@@ -62,7 +71,8 @@ export default function Page({ params }) {
                                             <div className="h-[2rem] animate-pulse bg-gray-500 rounded-lg"></div>
                                         )}
                                     </div>
-                                    <div className="">
+                                    <div className="flex items-center gap-2">
+                                        <UpdateStatus />
                                         <TicketAction />
                                     </div>
                                 </div>
@@ -110,235 +120,64 @@ export default function Page({ params }) {
     );
 }
 
-// const ActivitySection = () => {
-//     const { isLoading, ticketData } = useContext(TicketDataContext);
-//     const MentionedUsers = getMentionedUser(ticketData.ticketDetil);
-//     return (
-//         <>
-//             {!isLoading && (
-//                 <>
-//                     <div className="flex items-center font-bold gap-2">
-//                         <VscVerified size={18} />
-//                         {ticketData?.createdById?.first_name}
-//                         {ticketData?.createdById?.last_name}
-//                         <span className="text-sm text-gray-500 ">
-//                             Created ticket
-//                         </span>
-//                         <span className="flex items-center gap-2 text-sm text-gray-400">
-//                             <VscCircleSmallFilled size={16} />
-//                             {handleTimeFormat(ticketData?.createdAt || "", {
-//                                 isFormated: true,
-//                                 dateTime: true,
-//                             })}
-//                         </span>
-//                     </div>
+const UpdateStatus = () => {
+    const { ticketData } = useContext(TicketDataContext);
+    const queryClient = useQueryClient();
+    const { mutate, isLoading } = useMutation({
+        mutationFn: async (status) => {
+            toast.loading(`Ticket status is updating...`);
+            return axios.post(`/api/tickets/${ticketData.id}`, {
+                status: status,
+            });
+        },
+        onSuccess: (response) => {
+            toast.dismiss();
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TICKET_LIST],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TICKET_DETAIL, ticketData.id],
+            });
+            toast.success("Successfully status is updated.");
+        },
+        onError: async (error) => {
+            const err = await error.response.data;
+            toast.dismiss();
+            toast.error(
+                err?.message || "Something went wrong, Please try again."
+            );
+        },
+    });
 
-//                     <div className="flex items-center font-bold gap-2">
-//                         <VscMention size={18} />
-//                         {ticketData?.createdById?.first_name}
-//                         {ticketData?.createdById?.last_name}
-//                         <span className="text-sm text-gray-500 ">
-//                             Created ticket
-//                         </span>
-//                         <span className="flex items-center gap-2 text-sm text-gray-400">
-//                             <VscCircleSmallFilled size={16} />
-//                             {handleTimeFormat(ticketData?.createdAt || "", {
-//                                 isFormated: true,
-//                                 dateTime: true,
-//                             })}
-//                         </span>
-//                     </div>
-//                 </>
-//             )}
-//             {isLoading && (
-//                 <div className="h-[2rem] w-[12rem] bg-gray-500 rounded-md animate-pulse" />
-//             )}
-//         </>
-//     );
-// };
-
-// TagsPopover
-// const TicketDataSection = () => {
-//     const { ticketData, ticketResponse } = useContext(TicketDataContext);
-//     const router = useRouter();
-
-//     const errorMessageProvider = () => {
-//         const error = ticketResponse.error?.request.response || "{}";
-//         const errorMessage = JSON.parse(error);
-//         return errorMessage.message;
-//     };
-
-//     const isJsonString = isJSONString(ticketData?.ticketDetil);
-
-//     let details;
-//     if (isJsonString) {
-//         details = JSON.parse(ticketData?.ticketDetil);
-//     } else {
-//         details = ticketData?.ticketDetil;
-//     }
-
-//     return (
-//         <>
-//             <div className="text-white font-bold">
-//                 <div className="flex justify-between mb-2 gap-2">
-//                     <div className="mb-2">
-//                         <button
-//                             title="Take me back"
-//                             onClick={() => router.back()}
-//                             className="text-white cursor-pointer "
-//                         >
-//                             <VscChevronLeft
-//                                 size={32}
-//                                 className="bg-slate-600 rounded-full hover:bg-slate-400 transition-all"
-//                             />
-//                         </button>
-//                     </div>
-
-//                     <div className="flex w-auto gap-2">
-//                         <AssignUserAction
-//                             icon={<VscPersonAdd size={18} />}
-//                             title={"Assign people"}
-//                             actionData={ticketData}
-//                             revalidateKey={ticketData.id}
-//                             isAlreadyAssigned={
-//                                 ticketData["assingedUser"] === null
-//                                     ? false
-//                                     : true
-//                             }
-//                             className={
-//                                 "gap-2   hover:bg-slate-700 bg-gray-900 transition-all  px-3 py-1 items-center rounded-full"
-//                             }
-//                         />
-//                         <TicketStatusUpdate
-//                             title={"Status update"}
-//                             icon={<VscGroupByRefType />}
-//                             ticketStatus={Status}
-//                             actionData={ticketData}
-//                             revalidateKey={ticketData.id}
-//                         />
-//                         <TicketDeleteButton
-//                             ticketId={ticketData.id}
-//                             title={"Delete"}
-//                             className={"bg-red-200 p-1 px-3"}
-//                             navigateTo={urlRoutes.TICKETS}
-//                         />
-//                     </div>
-//                 </div>
-//                 <div className="rounded-2xl grid grid-cols-3 gap-3 p-3 border soft-bg shadow-md border-gray-800 ">
-//                     {isLoading && (
-//                         <div className="col-span-3">
-//                             <LoadingButton title={"Loading your ticket..."} />
-//                         </div>
-//                     )}
-//                     {ticketResponse.isError && (
-//                         <div className="col-span-3">
-//                             <SimpleErrorMessage
-//                                 message={errorMessageProvider()}
-//                             />
-//                         </div>
-//                     )}
-//                     {ticketResponse.isSuccess && (
-//                         <>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Ticket title
-//                                 </h3>
-//                                 <p className=" capitalize text-sm md:text-sm lg:text-md ">
-//                                     {ticketData.taskTitle}
-//                                 </p>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Department
-//                                 </h3>
-//                                 <p className=" capitalize text-sm md:text-sm lg:text-md ">
-//                                     {ticketData?.department?.name}
-//                                 </p>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Ticket status
-//                                 </h3>
-//                                 <p
-//                                     className={`${statusCss(
-//                                         ticketData?.status,
-//                                         Status,
-//                                         "text"
-//                                     )}`}
-//                                 >
-//                                     {ticketData?.status}
-//                                 </p>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Created by
-//                                 </h3>
-//                                 <p className=" capitalize text-sm md:text-sm lg:text-md ">
-//                                     {ticketData?.createdById?.first_name}{" "}
-//                                     {ticketData?.createdById?.last_name}
-//                                 </p>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Tags
-//                                 </h3>
-//                                 <div className=" flex gap-2 items-center">
-//                                     {ticketData?.tags?.map((tag) => (
-//                                         <Tag
-//                                             key={tag?.id}
-//                                             tag={tag}
-//                                             ticketId={ticketData.id}
-//                                             queryKey={[
-//                                                 "ticket-detail",
-//                                                 ticketData.id,
-//                                             ]}
-//                                         />
-//                                     ))}
-//                                 </div>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Created at
-//                                 </h3>
-//                                 <p className=" capitalize text-sm md:text-sm lg:text-md ">
-//                                     {handleTimeFormat(ticketData?.createdAt, {
-//                                         isFormated: true,
-//                                         datePrifix: "/",
-//                                         dateTime: true,
-//                                     })}
-//                                 </p>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Creatd by
-//                                 </h3>
-//                                 <p className=" capitalize text-sm md:text-sm lg:text-md ">
-//                                     {ticketData?.createdById?.first_name}{" "}
-//                                     {ticketData?.createdById?.last_name}
-//                                 </p>
-//                             </div>
-//                             <div className="">
-//                                 <h3 className="text-gray-300 text-sm lg:text-lg md:text-md">
-//                                     Assigned
-//                                 </h3>
-//                                 <div className="flex gap-3 items-center mt-2">
-//                                     <TicketHoverCard ticketData={ticketData} />
-//                                 </div>
-//                             </div>
-//                         </>
-//                     )}
-//                 </div>
-//                 {Object.keys(ticketData).length > 0 && (
-//                     <>
-//                         <TicketDetailSection ticketData={ticketData} />
-//                         <UpdateTicketButtonModal
-//                             title={"Update ticket"}
-//                             className={"mt-2"}
-//                             ticketData={ticketData}
-//                         />
-//                     </>
-//                 )}
-//             </div>
-//         </>
-//     );
-// };
+    return (
+        <div className="rounded-md flex items-center gap-2">
+            <span className="px-3 font-bold">{ticketData.status}</span>
+            <div className="flex rounded-full ">
+                <ButtonComponent
+                    icon={<VscSymbolEvent size={20} />}
+                    title={
+                        ticketData.status === Status.CLOSE ? "Pending" : "Close"
+                    }
+                    isLoading={isLoading}
+                    onClick={() =>
+                        mutate(
+                            ticketData.status === Status.CLOSE
+                                ? Status.PENDING
+                                : Status.CLOSE
+                        )
+                    }
+                    className={
+                        " bg-green-600 border-e hover:bg-green-700 border-0 rounded-e-none rounded-s-md"
+                    }
+                />
+                <TicketStatusUpdate
+                    actionData={ticketData}
+                    btnClassName={
+                        "border-0 hover:bg-green-600 bg-green-700 px-1 rounded-s-none rounded-e-md"
+                    }
+                    icon={<VscChevronDown size={20} />}
+                />
+            </div>
+        </div>
+    );
+};
