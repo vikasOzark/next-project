@@ -5,7 +5,10 @@ import { PrismaClient } from "@prisma/client";
 import prismaInstance from "@/lib/dbController";
 
 export async function POST(request) {
-    const prismaClient = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prismaClient = prismaInstance
     const response = await request.json()
     const userObject = await getUserId();
     try {
@@ -19,13 +22,14 @@ export async function POST(request) {
         return SuccessResponseHandler(taskBoard, "Created successfully.")
     } catch (error) {
         return ErrorResponse({ error: error })
-    } finally {
-        prismaClient.$disconnect()
     }
 }
 
 export async function GET(request) {
-    const prismaClient = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prismaClient = prismaInstance
     const userObject = await getUserId();
     try {
         const taskBoard = await prismaClient.board.findMany({
@@ -39,13 +43,14 @@ export async function GET(request) {
         return SuccessResponseHandler(taskBoard, "Boards data fetched successfully.")
     } catch (error) {
         return ErrorResponse({ error: error })
-    } finally {
-        prismaClient.$disconnect()
     }
 }
 
 export async function PATCH(request) {
-    const prismaClient = new PrismaClient()
+    /**
+ * @type {PrismaClient}
+ */
+    const prismaClient = prismaInstance
     const response = await request.json()
     const userObject = await getUserId();
     try {
@@ -62,7 +67,5 @@ export async function PATCH(request) {
         return SuccessResponseHandler(taskBoard, "Created successfully.")
     } catch (error) {
         return ErrorResponse({ error: error })
-    } finally {
-        prismaClient.$disconnect()
     }
 }

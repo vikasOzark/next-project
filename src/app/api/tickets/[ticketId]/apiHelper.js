@@ -1,3 +1,4 @@
+import prismaInstance from "@/lib/dbController";
 import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
 import httpStatus from "@/utils/httpStatus";
@@ -23,8 +24,10 @@ export const handleTagRemove = async (request, query, params) => {
       return ErrorResponse();
     }
 
-    const prisma = await new PrismaClient();
-    prisma.$connect();
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
 
     await prisma.tickets.update({
       where: {
@@ -67,8 +70,10 @@ export const handleUserAssignment = async (request, query, params) => {
       return ErrorResponse();
     }
 
-    const prisma = await new PrismaClient();
-    prisma.$connect();
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
 
     await prisma.tickets.update({
       where: {
@@ -83,7 +88,10 @@ export const handleUserAssignment = async (request, query, params) => {
       },
     });
 
-    return SuccessResponseHandler([], "User has been assigned successfully.");
+    return SuccessResponseHandler(
+      [],
+      "User has been assigned successfully."
+    );
   } catch (error) {
     return ErrorResponse({ error: error });
   }
@@ -108,8 +116,10 @@ export const handleUserUnassign = async (request, query, params) => {
       return ErrorResponse();
     }
 
-    const prisma = await new PrismaClient();
-    prisma.$connect();
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
 
     await prisma.tickets.update({
       where: {
@@ -123,7 +133,10 @@ export const handleUserUnassign = async (request, query, params) => {
         },
       },
     });
-    return SuccessResponseHandler([], "User has been unassinged successfully.");
+    return SuccessResponseHandler(
+      [],
+      "User has been unassinged successfully."
+    );
   } catch (error) {
     return ErrorResponse({ error: error });
   }
@@ -147,8 +160,10 @@ export const removeTicketNote = async (request, query, params) => {
       return ErrorResponse();
     }
 
-    const prisma = await new PrismaClient();
-    prisma.$connect();
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
 
     await prisma.tickets.update({
       where: {
@@ -177,7 +192,10 @@ export const removeTicketNote = async (request, query, params) => {
  */
 export const updateMergeTicketStatus = async (request, params) => {
   try {
-    const prisma = await new PrismaClient();
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
     const userObject = await getUserId(true);
     const ticketData = await prisma.tickets.findFirst({
       where: {
@@ -227,7 +245,10 @@ function isAllTrue(iterable) {
  */
 export const updateParentTicketStatus = async (parentTicketId, status) => {
   try {
-    const prisma = await new PrismaClient();
+    /**
+     * @type {PrismaClient}
+     */
+    const prisma = prismaInstance;
     const userObject = await getUserId(true);
 
     if (status === Status.CLOSE) {
@@ -270,7 +291,7 @@ export class ParentTicketStatusHandler {
     this.requestedStatus = requestedStatus;
     this.currentTicketData = currentTicketData;
     this.parentTicketId = null;
-    this.prisma = new PrismaClient();
+    this.prisma = new prismaInstance();
     this.userObject = getUserId(true);
   }
 
@@ -332,7 +353,9 @@ export class ParentTicketStatusHandler {
       const ticketStatus = ticketData.mergedTicket.map(
         (sibling) => sibling.status === status
       );
-      const canCloseParentTicket = ticketStatus.every((item) => item === true);
+      const canCloseParentTicket = ticketStatus.every(
+        (item) => item === true
+      );
       return canCloseParentTicket;
     } catch (error) {
       return false;

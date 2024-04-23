@@ -1,7 +1,9 @@
+import prismaInstance from "@/lib/dbController";
+
 export async function removeTag(data) {
   "use server";
 
-   
+
 
   //    
 
@@ -14,8 +16,10 @@ export async function removeTag(data) {
   //         break;
   //     }
 
-  const prisma = await new PrismaClient();
-  prisma.$connect();
+  /**
+       * @type {PrismaClient}
+       */
+  const prisma = prismaInstance
 
   try {
     // await prisma.tickets.update({

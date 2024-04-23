@@ -57,18 +57,3 @@ export const handleUserAlter = async (body, userData, targetUser, userId) => {
     httpStatus.HTTP_202_ACCEPTED
   );
 };
-
-// class UserOperation {
-//   constructor (body, userData, targetUser, userId) {
-//     this.body = body;
-//     this.userData = userData;
-//     this.targetUser = targetUser;
-//     this.userId = userId;
-//     this.prisma = new PrismaClient();
-//   }
-
-//   isAuthorized () {
-
-//     return true
-//   }
-// }

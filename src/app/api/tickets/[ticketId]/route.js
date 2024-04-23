@@ -12,7 +12,11 @@ import {
   handleUserUnassign,
   updateMergeTicketStatus,
 } from "./apiHelper";
-const prisma = await new PrismaClient();
+import prismaInstance from "@/lib/dbController";
+/**
+ * @type {PrismaClient}
+ */
+const prisma = prismaInstance;
 
 export async function GET(request, context) {
   try {
@@ -53,10 +57,14 @@ export async function POST(request, context) {
      * @returns This method returns true is all the child tickets status `CLOSED` else false
      */
     if (Status[status] === Status.CLOSE) {
-      const isMergedAllow = await updateMergeTicketStatus(request, params);
+      const isMergedAllow = await updateMergeTicketStatus(
+        request,
+        params
+      );
       if (!isMergedAllow?.allowStatusUpdate) {
         return ErrorResponse({
-          message: "Child ticket are not closed yet, Please close them first.",
+          message:
+            "Child ticket are not closed yet, Please close them first.",
         });
       }
     }
@@ -119,8 +127,10 @@ export async function PATCH(request, context) {
   const url = new URL(request.url);
   const query = Object.fromEntries(url.searchParams);
 
-  const prisma = await new PrismaClient();
-  prisma.$connect();
+  /**
+   * @type {PrismaClient}
+   */
+  const prisma = prismaInstance;
 
   try {
     switch (query.operationTo.toUpperCase()) {
