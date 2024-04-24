@@ -52,7 +52,6 @@ export async function PATCH(request, context) {
             httpStatus.HTTP_202_ACCEPTED
         );
     } catch (error) {
-        console.log(error.message);
         return ErrorResponse({ error: error });
     }
 }

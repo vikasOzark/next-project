@@ -1,4 +1,4 @@
-import { LoadingState } from "@/components/Buttons";
+import { ButtonComponent, LoadingState } from "@/components/Buttons";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
@@ -54,26 +54,13 @@ export const TicketDeleteButton = ({
     });
 
     return (
-        <>
-            {mutationAction.isLoading ? (
-                <LoadingState title={"Deleting..."} />
-            ) : (
-                <div className="">
-                    <button
-                        onClick={() => mutationAction.mutate()}
-                        className={twMerge(
-                            `hover:bg-red-400 text-red-400 flex gap-2 px-3 items-center  rounded-md transition-colors duration-200  hover:text-white focus:outline-none`,
-                            className
-                        )}
-                    >
-                        <VscTrash size={18} />
-                        <span className="hidden md:block lg:block">
-                            {title}
-                        </span>
-                    </button>
-                </div>
-            )}
-        </>
+        <ButtonComponent
+            onClick={() => mutationAction.mutate()}
+            title="Delete"
+            className={"hover:bg-red-400 text-red-400 hover:text-white w-full"}
+            isLoading={mutationAction.isLoading}
+            icon={<VscTrash size={18} />}
+        />
     );
 };
 

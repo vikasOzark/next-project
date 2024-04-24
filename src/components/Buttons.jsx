@@ -95,6 +95,7 @@ export const LoadingState = ({ title, cssClass }) => {
 export const ButtonComponent = ({
     className,
     icon,
+    type,
     title,
     onClick,
     isLoading,
@@ -104,6 +105,7 @@ export const ButtonComponent = ({
         <Button
             onClick={onClick ? onClick : () => {}}
             title={title}
+            type={type}
             disabled={isLoading}
             className={cn(
                 "px-4 flex gap-2 border-0 rounded-md items-center font-bold hover:bg-gray-600 text-white",

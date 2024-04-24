@@ -23,9 +23,9 @@ export const PageLoader = () => (
         <div className="flex gap-2 flex-row items-center justify-center">
             <div class="loader-new"></div>
             <p className="text-2xl text-white font-bold">
-                Loadings <span className=" animate-pulse delay-500">.</span>
+                Loading <span className=" animate-pulse delay-600">.</span>
                 <span className=" animate-pulse delay-700">.</span>
-                <span className=" animate-pulse duration-500">.</span>
+                <span className=" animate-pulse delay-800">.</span>
             </p>
         </div>
     </div>

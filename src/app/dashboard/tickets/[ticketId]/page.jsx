@@ -3,7 +3,9 @@ import axios from "axios";
 import {
     VscArrowDown,
     VscChevronDown,
+    VscChromeClose,
     VscLibrary,
+    VscSave,
     VscSymbolEvent,
 } from "react-icons/vsc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -18,14 +20,21 @@ import MessageThread from "./MessageThread";
 import ActivitySection from "./components/ActivitySection";
 import TicketAction from "./components/TicketAction";
 import { TicketStatusUpdate } from "../component/TicketTableMenu";
-import { ButtonComponent } from "@/components/Buttons";
+import { ButtonComponent, LoadingState } from "@/components/Buttons";
 import toast from "react-hot-toast";
 import { Status } from "@prisma/client";
+import { useSearchParams } from "next/navigation";
+import { useRemoveSearchQuery, useSearchQuery } from "@/hooks/setQueryParam";
+import { Suspense } from "react";
 
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
     const { ticketId } = params;
+    const searchParam = useSearchParams();
+
+    const mode = searchParam.get("mode");
+    const editable = mode === "edit";
 
     const { data, isLoading, refetch } = useQuery({
         queryKey: [QUERY_KEYS.TICKET_DETAIL, ticketId],
@@ -37,14 +46,12 @@ export default function Page({ params }) {
         refetchOnWindowFocus: false,
     });
     const ticketData = data?.data.data || {};
-    const isJsonString = isJSONString(ticketData?.ticketDetil);
 
-    let details;
-    if (isJsonString) {
-        details = JSON.parse(ticketData?.ticketDetil);
-    } else {
-        details = ticketData?.ticketDetil;
-    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        console.log(form.get("taskTitle"));
+    };
 
     return (
         <>
@@ -58,40 +65,71 @@ export default function Page({ params }) {
                             x-chunk="dashboard-01-chunk-4"
                         >
                             <main className="px-2 md:px-10 space-y-4 lg:px-10">
-                                <div className="flex justify-between items-center">
-                                    <div className="">
-                                        <p className="block mt-2 text-sm w-full text-white font-medium leading-6 ">
-                                            Title
-                                        </p>
-                                        <p className="text-md font-bold">
-                                            {ticketData?.taskTitle}
-                                        </p>
-
-                                        {ticketData?.isLoading && (
-                                            <div className="h-[2rem] animate-pulse bg-gray-500 rounded-lg"></div>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="flex items-center">
+                                        <div className="flex-1">
+                                            <p className="block mt-2 text-sm w-full text-white font-medium leading-6 ">
+                                                Title
+                                            </p>
+                                            <input
+                                                className="w-full bg-transparent active:outline-none ring-0 focus:outline-none p-1"
+                                                defaultValue={
+                                                    ticketData?.taskTitle
+                                                }
+                                                readOnly={!editable}
+                                                type="text"
+                                                name="taskTitle"
+                                            />
+                                            {ticketData?.isLoading && (
+                                                <div className="h-[2rem] animate-pulse bg-gray-500 rounded-lg"></div>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            {editable ? (
+                                                <CancelEditMode />
+                                            ) : (
+                                                <UpdateStatus />
+                                            )}
+                                            <Suspense
+                                                fallback={<LoadingState />}
+                                            >
+                                                <TicketAction />
+                                            </Suspense>
+                                        </div>
+                                    </div>
+                                    <div className="rounded-md p-1  ">
+                                        <Suspense fallback={<LoadingState />}>
+                                            <TicketDetailSection />
+                                        </Suspense>
+                                        {isLoading && (
+                                            <div className="h-[15rem] animate-pulse bg-gray-500 rounded-lg" />
+                                        )}
+                                        {editable && (
+                                            <div className="flex justify-end">
+                                                <ButtonComponent
+                                                    type={"button"}
+                                                    className="text-blue-500 border border-blue-500 hover:bg-blue-400 hover:text-white"
+                                                    title={"Save"}
+                                                    icon={<VscSave size={18} />}
+                                                />
+                                            </div>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <UpdateStatus />
-                                        <TicketAction />
-                                    </div>
-                                </div>
-                                <div className="rounded-md p-1  ">
-                                    <TicketDetailSection />
-                                    {isLoading && (
-                                        <div className="h-[15rem] animate-pulse bg-gray-500 rounded-lg" />
-                                    )}
-                                </div>
+                                </form>
                                 <div className="">
                                     <p className="font-bold mb-2 text-md text-white flex items-center gap-2">
                                         <VscIssues size={18} /> Sub tickets
                                     </p>
-                                    {ticketData.mergedTicket?.map((ticket) => (
-                                        <MergedTicketCard
-                                            key={ticket.id}
-                                            ticketData={ticket}
-                                        />
-                                    ))}
+                                    <Suspense fallback={<LoadingState />}>
+                                        {ticketData.mergedTicket?.map(
+                                            (ticket) => (
+                                                <MergedTicketCard
+                                                    key={ticket.id}
+                                                    ticketData={ticket}
+                                                />
+                                            )
+                                        )}
+                                    </Suspense>
                                     {isLoading && (
                                         <div className=" space-y-2">
                                             <div className="h-[3rem] rounded-md animate-pulse bg-gray-500"></div>
@@ -103,15 +141,21 @@ export default function Page({ params }) {
                                     <p className="font-bold mb-2 text-md text-white flex items-center gap-2">
                                         <VscLibrary size={18} /> Activity
                                     </p>
-                                    <ActivitySection />
+                                    <Suspense fallback={<LoadingState />}>
+                                        <ActivitySection />
+                                    </Suspense>
                                 </div>
                                 <div className="">
-                                    <MessageThread />
+                                    <Suspense fallback={<LoadingState />}>
+                                        <MessageThread />
+                                    </Suspense>
                                 </div>
                             </main>
                         </div>
                         <div className="">
-                            <DetailSidePanel />
+                            <Suspense fallback={<LoadingState />}>
+                                <DetailSidePanel />
+                            </Suspense>
                         </div>
                     </div>
                 </section>
@@ -156,7 +200,7 @@ const UpdateStatus = () => {
                 <ButtonComponent
                     icon={<VscSymbolEvent size={20} />}
                     title={
-                        ticketData.status === Status.CLOSE ? "Pending" : "Close"
+                        ticketData.status === Status.CLOSE ? "Re-open" : "Close"
                     }
                     isLoading={isLoading}
                     onClick={() =>
@@ -179,5 +223,17 @@ const UpdateStatus = () => {
                 />
             </div>
         </div>
+    );
+};
+
+const CancelEditMode = () => {
+    const removeParam = useRemoveSearchQuery();
+    return (
+        <ButtonComponent
+            className={"border border-blue-500 text-blue-500"}
+            onClick={() => removeParam("mode", "edit")}
+            icon={<VscChromeClose size={18} />}
+            title={"Cancel"}
+        />
     );
 };
