@@ -11,7 +11,7 @@ const prisma = prismaInstance;
 
 export async function GET(request) {
   try {
-    await prisma.$connect();
+    ;
     const userObject = await getUserId(true);
 
     const ticketsList = await prisma.tickets.findMany({

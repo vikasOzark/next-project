@@ -17,7 +17,7 @@ export async function PATCH(request, context) {
  */
     const prisma = prismaInstance;
 
-    prisma.$connect();
+    ;
     const ticket = await prisma.tickets.update({
       where: {
         id: params.ticketId,

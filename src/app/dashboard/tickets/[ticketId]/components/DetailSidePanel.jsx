@@ -67,7 +67,7 @@ const TagAction = () => {
             />
             <div className=" mb-2 flex-wrap">
                 {ticketData?.tags?.map((tag) => (
-                    <Tag onClick={mutate} key={tag.id} tag={tag} />
+                    <Tag key={tag.id} ticketData={ticketData} tag={tag} />
                 ))}
             </div>
         </>

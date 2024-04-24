@@ -15,7 +15,7 @@ const prisma = prismaInstance;
 export async function POST(request) {
   try {
     const requestBody = await request.json();
-    prisma.$connect();
+    ;
 
     const bcrypt = require("bcrypt");
     const saltRounds = 10;

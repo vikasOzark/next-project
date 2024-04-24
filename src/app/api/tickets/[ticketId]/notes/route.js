@@ -50,7 +50,7 @@ export async function GET(request, context) {
     const userId = await getUserId();
     const { params } = context;
 
-    prisma.$connect();
+    ;
     const notes = await prisma.notes.findMany({
       where: {
         ticketId: { has: params.ticketId },

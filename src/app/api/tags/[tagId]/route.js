@@ -12,7 +12,7 @@ export async function DELETE(request, context) {
   const prisma = prismaInstance;
 
   try {
-    await prisma.$connect();
+    ;
     await prisma.tags.delete({
       where: {
         id: params.tagId,

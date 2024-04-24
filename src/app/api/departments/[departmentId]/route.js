@@ -38,7 +38,7 @@ export async function DELETE(request, context) {
       );
     }
 
-    await prisma.$connect();
+    ;
     await prisma.department.delete({
       where: {
         id: params.departmentId,
@@ -62,7 +62,7 @@ export async function GET(request, context) {
  * @type {PrismaClient}
  */
     const prisma = prismaInstance;
-    await prisma.$connect();
+    ;
     const departmentData = await prisma.department.findFirst({
       where: {
         id: departmentId,

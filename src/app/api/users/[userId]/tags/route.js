@@ -16,7 +16,7 @@ export async function GET(request, context) {
 
   try {
     const userObjectId = await getUserId(true);
-    await prisma.$connect();
+    ;
 
     const tagsData = await prisma.tags.findMany({
       where: {

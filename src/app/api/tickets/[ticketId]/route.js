@@ -1,4 +1,4 @@
-import ErrorResponseHandler, {
+import {
   ErrorResponse,
 } from "@/utils/ErrorResponseHandler";
 import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
@@ -20,7 +20,7 @@ const prisma = prismaInstance;
 
 export async function GET(request, context) {
   try {
-    await prisma.$connect();
+    ;
     const { params } = context;
 
     const userObjectId = await getUserId();
@@ -69,7 +69,7 @@ export async function POST(request, context) {
       }
     }
 
-    await prisma.$connect();
+    ;
     const data = await prisma.tickets.update({
       where: {
         userId: getUserId(),
@@ -98,7 +98,7 @@ export async function POST(request, context) {
 
 export async function DELETE(request, context) {
   const { params } = context;
-  await prisma.$connect();
+  ;
 
   try {
     const userObjectId = await getUserId(true);

@@ -27,7 +27,7 @@ export async function GET() {
 
 export const getTicketData = async function (statusType) {
   try {
-    await prisma.$connect();
+    ;
     const userObject = await getUserId(true);
     const data = await prisma.tickets.count({
       where: {

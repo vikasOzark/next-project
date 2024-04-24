@@ -12,7 +12,7 @@ const prisma = prismaInstance;
 export async function GET(request) {
   try {
     const userObject = await getUserId(true);
-    await prisma.$connect();
+    ;
     const departmentList = await prisma.department.findMany({
       where: {
         createdById: {
@@ -47,7 +47,7 @@ export async function POST(request) {
     if (!requestBody.department) {
       throw new Error("Name should not be empty.");
     }
-    prisma.$connect();
+    ;
     const userObject = await getUserId();
 
     await prisma.department.create({

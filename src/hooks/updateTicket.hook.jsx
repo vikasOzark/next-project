@@ -1,6 +1,7 @@
 import { useQueryClient, useMutation } from "react-query";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { QUERY_KEYS } from "@/queryKeys";
 
 export const useUpdateTicket = (
     setSelectedTag,
@@ -30,7 +31,7 @@ export const useUpdateTicket = (
         onSuccess: (data, data2, data3) => {
             toast.success("Ticket is created.");
             queryClient.invalidateQueries({
-                queryKey: ["ticket-detail", ticketId],
+                queryKey: [QUERY_KEYS.TICKET_DETAIL, ticketId],
             });
 
             setSelectedTag([]);

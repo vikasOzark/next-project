@@ -12,7 +12,7 @@ export async function verifyIsAdmin() {
   const prisma = prismaInstance;
 
   try {
-    await prisma.$connect();
+    ;
     const userId = await getUserId();
 
     const isAdmin = await prisma.user.findFirst({
@@ -51,7 +51,7 @@ export async function verifyAdminPassword(password) {
   const prisma = prismaInstance;
 
   try {
-    await prisma.$connect();
+    ;
     const userId = await getUserId();
 
     const isAdmin = await prisma.user.findFirst({

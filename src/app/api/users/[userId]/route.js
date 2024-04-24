@@ -19,7 +19,7 @@ export async function PATCH(request, context) {
   const { params } = context;
   const targetUser = params.userId;
   const body = await request.json();
-  await prisma.$connect();
+  ;
 
   try {
     if (!userId) {
@@ -84,7 +84,7 @@ export async function PATCH(request, context) {
 export async function GET(request, context) {
   try {
     const { userId } = context.params;
-    await prisma.$connect();
+    ;
     const userData = await prisma.user.findFirst({
       where: {
         id: userId,

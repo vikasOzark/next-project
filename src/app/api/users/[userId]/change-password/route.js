@@ -17,7 +17,7 @@ export async function POST(request, context) {
  * @type {PrismaClient}
  */
     const prisma = prismaInstance;
-    await prisma.$connect();
+    ;
 
     const { userId } = context.params;
     const isAdminVerified = await verifyAdminPassword(adminPassword);

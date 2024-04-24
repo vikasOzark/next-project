@@ -14,5 +14,4 @@ export const urlRoutes = {
   REGISTER: "/singup",
   NOTES: dashboard_prifix + "/notes",
   TASKS: dashboard_prifix + "/tasks"
-
 };

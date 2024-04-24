@@ -13,7 +13,7 @@ export async function DELETE(request, context) {
   const prisma = prismaInstance;
   try {
 
-    prisma.$connect();
+    ;
     await prisma.notes.delete({
       where: {
         id: params.noteId,

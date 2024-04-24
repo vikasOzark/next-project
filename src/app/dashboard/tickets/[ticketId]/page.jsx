@@ -26,6 +26,7 @@ import { Status } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useRemoveSearchQuery, useSearchQuery } from "@/hooks/setQueryParam";
 import { Suspense } from "react";
+import { urlRoutes } from "@/utils/urlRoutes";
 
 export const TicketDataContext = React.createContext();
 
@@ -47,10 +48,13 @@ export default function Page({ params }) {
     });
     const ticketData = data?.data.data || {};
 
+    const { mutate } = useMutation({
+        mutationFn: () => axios.patch(urlRoutes.CREATE_TICKET),
+    });
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
-        console.log(form.get("taskTitle"));
     };
 
     return (

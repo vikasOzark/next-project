@@ -13,7 +13,7 @@ export async function POST(request) {
     try {
         const userId = await getUserId();
 
-        prisma.$connect()
+
         if (!userId) {
             throw new Error("self: Please re-login, and try again.");
         }
@@ -41,7 +41,7 @@ export async function GET(request) {
     const prisma = prismaInstance
     try {
         const userObject = await getUserId(true);
-        await prisma.$connect();
+        ;
 
         const userNotes = await prisma.userNotes.findMany({
             where: {

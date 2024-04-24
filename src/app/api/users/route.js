@@ -17,7 +17,7 @@ const prisma = prismaInstance;
 export async function POST(request) {
   try {
     const requestBody = await request.json();
-    await prisma.$connect();
+    ;
 
     if (!requestBody.role) {
       return ErrorResponse(
@@ -117,7 +117,7 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    await prisma.$connect();
+    ;
     const userId = await getUserId(true);
     const userList = await prisma.user.findMany({
       where: {

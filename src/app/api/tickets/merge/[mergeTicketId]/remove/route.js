@@ -15,7 +15,7 @@ export async function PATCH(request, context) {
     const userObject = await getUserId(true);
     const requestBody = await request.json();
 
-    await prisma.$connect();
+    ;
     await prisma.tickets.update({
       where: {
         id: mergeTicketId,

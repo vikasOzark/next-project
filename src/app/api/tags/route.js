@@ -13,7 +13,7 @@ export async function POST(request) {
   const requestBody = await request.json();
   try {
     const userObjectId = await getUserId();
-    prisma.$connect();
+    ;
 
     if (!requestBody.color) {
       return ErrorResponse({
@@ -56,7 +56,7 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     const userObject = await getUserId(true);
-    prisma.$connect();
+    ;
 
     const tagsData = await prisma.tags.findMany({
       where: {

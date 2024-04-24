@@ -11,7 +11,7 @@ import bcrypt from "bcrypt";
 const prisma = prismaInstance;
 
 export const handleUpdateUser = async (targetUser, parentUserId, data = {}) => {
-  await prisma.$connect();
+  ;
   const userDataEnabled = await prisma.user.update({
     where: {
       id: targetUser,

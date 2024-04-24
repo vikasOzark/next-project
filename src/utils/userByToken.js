@@ -9,12 +9,16 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
  * @returns This method is responsible to provide user id and company id.
  */
 export default async function getUserId(isBothData = false) {
-  const { user } = await getServerSession(authOptions);
-  if (isBothData) {
-    return {
-      userId: user.userData?.id,
-      uniqueCompanyId: user.userData?.uniqueCompanyId,
-    };
+  try {
+    const { user } = await getServerSession(authOptions);
+    if (isBothData) {
+      return {
+        userId: user.userData?.id,
+        uniqueCompanyId: user.userData?.uniqueCompanyId,
+      };
+    }
+    return user.id;
+  } catch (error) {
+    return false
   }
-  return user.id;
 }

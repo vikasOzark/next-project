@@ -11,7 +11,7 @@ export async function GET() {
  * @type {PrismaClient}
  */
     const prisma = prismaInstance;
-    await prisma.$connect();
+    ;
     const userObject = await getUserId(true);
 
     const currentDate = new Date();

@@ -13,7 +13,7 @@ export async function PATCH(request, context) {
   const requestBody = await request.json();
 
   try {
-    await prisma.$connect();
+    ;
     const userObject = getUserId(true);
 
     const appendedTickets = await prisma.tickets.update({

@@ -12,7 +12,7 @@ export async function DELETE(request, context) {
     const { params } = context;
     try {
         const userObjectId = await getUserId();
-        await prisma.$connect();
+        ;
 
         await prisma.userNotes.delete({
             where: {
@@ -36,7 +36,7 @@ export async function GET(request, context) {
     const { params } = context;
     try {
         const userObjectId = await getUserId();
-        await prisma.$connect();
+        ;
 
         const note = await prisma.userNotes.findFirst({
             where: {
@@ -61,7 +61,7 @@ export async function PATCH(request, context) {
     const { params } = context;
     try {
         const userObjectId = await getUserId();
-        await prisma.$connect();
+        ;
         const updatedNote = await prisma.userNotes.update({
             where: {
                 id: params.noteId,

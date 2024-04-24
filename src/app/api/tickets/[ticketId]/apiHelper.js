@@ -291,7 +291,7 @@ export class ParentTicketStatusHandler {
     this.requestedStatus = requestedStatus;
     this.currentTicketData = currentTicketData;
     this.parentTicketId = null;
-    this.prisma = new prismaInstance();
+    this.prisma = prismaInstance;
     this.userObject = getUserId(true);
   }
 
