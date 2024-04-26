@@ -16,14 +16,14 @@ import TableComponent from "@/components/TableComponent";
 
 export default function UserTable() {
     const HEADERS = [
-        "First Name",
-        "Last Name",
-        "Role",
-        "Email address",
-        "Contact number",
-        "Created by",
-        "User state",
-        "Action",
+        { name: "First Name" },
+        { name: "Last Name" },
+        { name: "Role" },
+        { name: "Email address" },
+        { name: "Contact number" },
+        { name: "Created by" },
+        { name: "User state" },
+        { name: "Action" },
     ];
     const usersResponse = useContext(UsersDataContext);
     const users = usersResponse?.data?.data || [];

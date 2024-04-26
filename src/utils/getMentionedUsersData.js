@@ -2,7 +2,7 @@ import { isJSONString } from "./validateJsonString";
 
 export default function getMentionedUser(dataString) {
     const isJsonString = isJSONString(dataString);
-    if (!isJsonString) {
+    if (!isJsonString || !dataString) {
         return []
     }
 

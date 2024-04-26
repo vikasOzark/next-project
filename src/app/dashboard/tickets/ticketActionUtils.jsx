@@ -57,7 +57,7 @@ export const TicketDeleteButton = ({
         <ButtonComponent
             onClick={() => mutationAction.mutate()}
             title="Delete"
-            className={"hover:bg-red-400 text-red-400 hover:text-white w-full"}
+            className={"hover:bg-red-400 text-red-400 hover:text-white w-auto"}
             isLoading={mutationAction.isLoading}
             icon={<VscTrash size={18} />}
         />

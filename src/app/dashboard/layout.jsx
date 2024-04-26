@@ -50,7 +50,7 @@ export function MainLayout({ children }) {
         {
             title: "Tickets",
             icon: <LifebuoyIcon className="h-5 w-" title="create ticket" />,
-            route: urlRoutes.CREATE_TICKET,
+            route: urlRoutes.TICKETS,
         },
         {
             title: "User Management",

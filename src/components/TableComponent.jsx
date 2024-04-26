@@ -18,8 +18,16 @@ export default function TableComponent({ tableCaption, headers, tableData }) {
             <TableHeader>
                 <TableRow className="border-gray-700">
                     {headers.map((header) => (
-                        <TableHead key={header} className=" text-white">
-                            {header}
+                        <TableHead
+                            width={header?.width}
+                            height={header?.height}
+                            key={header.name}
+                            className={cn(
+                                " text-white",
+                                header?.className || ""
+                            )}
+                        >
+                            {header.name}
                         </TableHead>
                     ))}
                 </TableRow>

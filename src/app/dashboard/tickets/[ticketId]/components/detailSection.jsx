@@ -5,7 +5,7 @@ import { TicketDataContext } from "../page";
 import { useSearchParams } from "next/navigation";
 
 export default function TicketDetailSection() {
-    const { ticketData } = useContext(TicketDataContext);
+    const { ticketData, isLoading } = useContext(TicketDataContext);
     const searchParam = useSearchParams();
     const mode = searchParam.get("mode");
     const editable = mode === "edit";
@@ -30,34 +30,25 @@ export default function TicketDetailSection() {
                     Ticket Detail
                 </label>
                 <div className="mt-2">
-                    {/* {isJsonString ? (
-                        <CustomEditor
-                            editable={editable}
-                            key={"editor-123"}
-                            onChange={setEditorData}
-                            className={
-                                " p-2 border border-gray-700/60 h-[15rem] min-h-[10rem]  max-h-[20rem]"
-                            }
-                            editorProps={{ initialContent: details }}
-                        />
-                    ) : (
-                        <div className="p-2 border rounded-md border-gray-700/60 h-[8em] min-h-[10rem]  max-h-[20rem]" />
-                    )} */}
-                    <input
-                        type="text"
-                        name="ticketDetail"
-                        hidden
-                        value={editorData}
-                    />
-                    <CustomEditor
-                        editable={editable}
-                        key={"editor-123"}
-                        onChange={setEditorData}
-                        className={
-                            " p-2 border border-gray-700/60 h-[15rem] min-h-[10rem]  max-h-[20rem]"
-                        }
-                        editorProps={{ initialContent: details }}
-                    />
+                    {!isLoading && (
+                        <>
+                            <input
+                                type="text"
+                                name="ticketDetil"
+                                hidden
+                                value={editorData}
+                            />
+                            <CustomEditor
+                                editable={editable}
+                                key={"editor-123"}
+                                onChange={setEditorData}
+                                className={
+                                    " p-2 border border-gray-700/60 h-[15rem] min-h-[10rem]  max-h-[20rem]"
+                                }
+                                editorProps={{ initialContent: details }}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
         </>

@@ -1,7 +1,6 @@
 "use client";
 import axios from "axios";
 import {
-    VscArrowDown,
     VscChevronDown,
     VscChromeClose,
     VscLibrary,
@@ -11,7 +10,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import React, { useContext } from "react";
 import MergedTicketCard from "./components/MergedTicketCard";
-import { isJSONString } from "@/utils/validateJsonString";
 import TicketDetailSection from "./components/detailSection";
 import { VscIssues } from "react-icons/vsc";
 import { QUERY_KEYS } from "@/queryKeys";
@@ -26,13 +24,13 @@ import { Status } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useRemoveSearchQuery, useSearchQuery } from "@/hooks/setQueryParam";
 import { Suspense } from "react";
-import { urlRoutes } from "@/utils/urlRoutes";
 
 export const TicketDataContext = React.createContext();
 
 export default function Page({ params }) {
     const { ticketId } = params;
     const searchParam = useSearchParams();
+    const removeQuery = useRemoveSearchQuery();
 
     const mode = searchParam.get("mode");
     const editable = mode === "edit";
@@ -48,13 +46,23 @@ export default function Page({ params }) {
     });
     const ticketData = data?.data.data || {};
 
-    const { mutate } = useMutation({
-        mutationFn: () => axios.patch(urlRoutes.CREATE_TICKET),
+    const { mutate, isLoading: updateLoading } = useMutation({
+        mutationFn: (formData) =>
+            axios.patch(`/api/tickets/${ticketId}/update/`, formData),
+        onSuccess: ({ data }) => {
+            data?.success
+                ? toast.success(data?.message || "Ticket updated successfully.")
+                : toast.error(data?.message || "Ticket updated successfully.");
+            removeQuery("mode", "edit");
+        },
     });
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
+        const taskTitle = form.get("taskTitle");
+        const ticketDetil = form.get("ticketDetil");
+        mutate({ taskTitle, ticketDetil });
     };
 
     return (
@@ -111,7 +119,8 @@ export default function Page({ params }) {
                                         {editable && (
                                             <div className="flex justify-end">
                                                 <ButtonComponent
-                                                    type={"button"}
+                                                    type={"submit"}
+                                                    isLoading={updateLoading}
                                                     className="text-blue-500 border border-blue-500 hover:bg-blue-400 hover:text-white"
                                                     title={"Save"}
                                                     icon={<VscSave size={18} />}
@@ -234,6 +243,7 @@ const CancelEditMode = () => {
     const removeParam = useRemoveSearchQuery();
     return (
         <ButtonComponent
+            type={"button"}
             className={"border border-blue-500 text-blue-500"}
             onClick={() => removeParam("mode", "edit")}
             icon={<VscChromeClose size={18} />}

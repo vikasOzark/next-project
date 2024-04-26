@@ -76,12 +76,18 @@ export default function Tickets({ searchParams }) {
         });
 
     const headers = [
-        "Name",
-        "Ticket status",
-        "Department",
-        "Created",
-        "Tags",
-        "Action",
+        {
+            name: "Name",
+            className: "min-w-[20rem] w-[25rem] w-max max-w-[28rem]",
+        },
+        { name: "Ticket status" },
+        { name: "Department" },
+        { name: "Created" },
+        {
+            name: "Tags",
+            className: "min-w-[10rem] w-[12rem] w-max max-w-[15rem]",
+        },
+        { name: "Action" },
     ];
 
     return (
@@ -187,7 +193,7 @@ const TableDataProvider = (tickets, setSelectedTickets, selectedTickets) => {
         columns: [
             {
                 content: (
-                    <div className="inline-flex items-center gap-x-3">
+                    <div className="inline-flex items-center gap-x-3 w-max">
                         <div className="flex items-center gap-x-2">
                             <div className=" flex gap-3 items-center">
                                 <div className="">

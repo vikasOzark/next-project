@@ -45,7 +45,7 @@ export const SideNavbar = ({ children }) => {
         {
             title: "Tickets",
             icon: <LifebuoyIcon className="h-5 w-5" title="create ticket" />,
-            route: urlRoutes.CREATE_TICKET,
+            route: urlRoutes.TICKETS,
         },
         {
             title: "User Management",
@@ -68,7 +68,7 @@ export const SideNavbar = ({ children }) => {
         {
             title: "Tickets",
             icon: <LifebuoyIcon className="h-5 w-" title="create ticket" />,
-            route: urlRoutes.CREATE_TICKET,
+            route: urlRoutes.TICKETS,
         },
         {
             title: "User Management",
