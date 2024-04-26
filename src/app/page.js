@@ -1,7 +1,7 @@
 "use client";
 
-import HeroSection from "@/components/HeroSection";
-import PricingSection from "@/components/Pricing/Pricing";
+// import HeroSection from "@/components/HeroSection";
+// import PricingSection from "@/components/Pricing/Pricing";
 
 export default function Home() {
 
@@ -10,10 +10,10 @@ export default function Home() {
     <>
       <section>
         {/* <TracingBeam> */}
-        <HeroSection />
+        {/* <HeroSection /> */}
         {/* </TracingBeam> */}
       </section>
-      <PricingSection />
+      {/* <PricingSection /> */}
     </>
   );
 }

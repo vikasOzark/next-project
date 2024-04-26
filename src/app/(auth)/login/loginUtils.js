@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
-import formValidator from "@/utils/formValidator";
-import { urlRoutes } from "@/utils/urlRoutes";
+import formValidator from "../../../utils/formValidator";
+import { urlRoutes } from "../../..//utils/urlRoutes";
 
 export const loginHandler = async (event, config) => {
   const { setLoading, setErrorResponseData, router, params } = config;
