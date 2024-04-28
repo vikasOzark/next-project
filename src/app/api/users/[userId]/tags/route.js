@@ -43,7 +43,5 @@ export async function GET(request, context) {
     return ErrorResponse({
       error: error,
     });
-  } finally {
-    await prisma.$disconnect();
   }
 }

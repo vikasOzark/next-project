@@ -21,7 +21,5 @@ export async function POST(request, context) {
     return SuccessResponseHandler(users, "Users data fetched successfully");
   } catch (error) {
     return ErrorResponse({ error: error });
-  } finally {
-    await prisma.$disconnect();
   }
 }

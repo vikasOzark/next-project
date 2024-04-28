@@ -1,12 +1,11 @@
-import { SelectComponent } from "@/components/DropdownButton";
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { createUserMutation } from "./userUtils";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getDepartmentData } from "@/app/dashboard/tickets/component/forms/utils";
 import { useRef, useState } from "react";
 import { Role } from "@prisma/client";
-import { LoadingState, SubmitButton } from "@/components/Buttons";
-import { VscAccount, VscPlug, VscPulse } from "react-icons/vsc";
+import { ButtonComponent } from "@/components/Buttons";
+import { VscAccount } from "react-icons/vsc";
 
 export default function UserCreateUser() {
     const [formError, setFormError] = useState({});
@@ -15,7 +14,14 @@ export default function UserCreateUser() {
     const formElement = useRef();
     const queryClient = useQueryClient();
 
-    const departmentRes = useQuery("department-data", getDepartmentData);
+    const { data: departments = [] } = useQuery(
+        "department-data",
+        getDepartmentData,
+        {
+            select: (data) => data?.data || [],
+        }
+    );
+
     const mutation = useMutation({
         mutationFn: async (event) =>
             createUserMutation(
@@ -113,19 +119,27 @@ export default function UserCreateUser() {
 
                     <div className=" grid grid-cols md:grid-cols-2 lg:grid-cols-2 gap-2">
                         <div className="">
-                            <label className="block text-sm text-gray-100  font-medium leading-6 ">
+                            <label className="block text-sm  font-medium leading-6 ">
                                 Select department
                             </label>
-                            <div className="mt-2 text-white">
-                                <SelectComponent
-                                    setterFunction={setSelectedDepartment}
-                                    subTitle={"Department"}
-                                    data={
-                                        departmentRes.data?.success
-                                            ? departmentRes.data.data
-                                            : []
+                            <div className="mt-2 text-gray-900">
+                                <select
+                                    onChange={(event) =>
+                                        setSelectedDepartment(
+                                            event.target.value
+                                        )
                                     }
-                                />
+                                    className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                >
+                                    <option value="">select department</option>
+                                    {departments.map((department) => (
+                                        <>
+                                            <option value={department.id}>
+                                                {department.name}
+                                            </option>
+                                        </>
+                                    ))}
+                                </select>
                             </div>
                             {formError?.departmentMemberId && (
                                 <small className="text-red-500 capitalize font-bold">
@@ -161,16 +175,19 @@ export default function UserCreateUser() {
                     <div className="w-full text-white">
                         <label className=" text-sm flex items-center gap-2 text-gray-100  font-medium leading-6 ">
                             Select role
-                            {/* <ToolTip icon={<VscQuestion size={23} className="text-gray-100 " /> } text={"data display"} /> */}
                         </label>
-                        <SelectComponent
-                            setterFunction={setSelectedRole}
-                            subTitle={"User Role"}
-                            data={[
-                                // { name: Role.Admin, id: Role.Admin },
-                                { name: Role.User, id: Role.User },
-                            ]}
-                        />
+                        <div className="mt-2 text-gray-900">
+                            <select
+                                onChange={(event) =>
+                                    setSelectedRole(event.target.value)
+                                }
+                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            >
+                                <option value="">select department</option>
+                                <option value={Role.Admin}>{Role.Admin}</option>
+                                <option value={Role.User}>{Role.User}</option>
+                            </select>
+                        </div>
                         {formError?.role && (
                             <small className="text-red-500 capitalize font-bold">
                                 {formError.role}
@@ -209,7 +226,6 @@ export default function UserCreateUser() {
                                     className=" text-sm flex items-center gap-2 text-gray-100  font-medium leading-6 "
                                 >
                                     Password
-                                    {/* <ToolTip icon={<VscQuestion size={23} className="text-gray-100 " /> } text={"data display"} /> */}
                                 </label>
                             </div>
                             <div className="mt-2">
@@ -265,23 +281,13 @@ export default function UserCreateUser() {
                     </div>
 
                     <div className="flex justify-end">
-                        {mutation.isLoading ? (
-                            <LoadingState
-                                title={"Creating user..."}
-                                cssClass={"border rounded-full"}
-                            />
-                        ) : (
-                            <SubmitButton
-                                title={"Create user"}
-                                icon={<VscAccount size={18} />}
-                            />
-                            // <button
-                            //   type="submit"
-                            //   className=" justify-center rounded-md bg-indigo-600 px-5 text-white py-1 text-sm font-semibold leading-6   shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            // >
-                            //   Create user
-                            // </button>
-                        )}
+                        <ButtonComponent
+                            className={"border"}
+                            isLoading={mutation.isLoading}
+                            title={"Create"}
+                            icon={<VscAccount size={18} />}
+                            type={"submit"}
+                        />
                     </div>
                 </form>
             </div>

@@ -42,8 +42,6 @@ export async function GET(request, context) {
     return SuccessResponseHandler(ticket, "Ticket data fetched.");
   } catch (error) {
     return ErrorResponse({ error: error });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

@@ -142,7 +142,12 @@ export function MainLayout({ children }) {
                     <DropdownNew
                         className="w-[8rem]"
                         icon={<CircleUser className="h-7 w-7" />}
-                        title={data?.user?.name}
+                        title={
+                            <>
+                                {data?.user?.userData?.first_name}{" "}
+                                {data?.user?.userData?.last_name}
+                            </>
+                        }
                     >
                         <ButtonComponent
                             onClick={signOut}

@@ -74,6 +74,9 @@ export async function GET(request) {
       createdById: {
         uniqueCompanyId: userObjectId.uniqueCompanyId,
       },
+      department: {
+        id: userObjectId?.departmentMemberId
+      }
     };
 
     if (queryTicketTitle) {
@@ -93,6 +96,10 @@ export async function GET(request) {
 
     if (orderCreated) {
       order_filters.push({ createdAt: orderCreated })
+    }
+
+    if (userObjectId?.isSuperuser) {
+      delete filtering.department
     }
 
     const ticketsData = await prisma.tickets.findMany({
@@ -158,7 +165,5 @@ export async function PATCH(request) {
     });
   } catch (error) {
     return ErrorResponse({ error: error });
-  } finally {
-    await prisma.$disconnect();
   }
 }

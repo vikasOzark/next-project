@@ -104,7 +104,7 @@ export async function POST(request) {
       data: user,
     });
   } catch (error) {
-
+    console.log(error.message);
     return ErrorResponse(
       {
         message: "Something went wrong, Please try again.",
@@ -130,8 +130,7 @@ export async function GET(request) {
 
     return SuccessResponseHandler(userList);
   } catch (error) {
+    console.log(error.message);
     return ErrorResponse({ error: error });
-  } finally {
-    await prisma.$disconnect();
   }
 }

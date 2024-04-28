@@ -44,7 +44,5 @@ export const getTicketData = async function (statusType) {
     return { count: data, type: statusType };
   } catch (error) {
     return { count: "N/A", type: statusType };
-  } finally {
-    await prisma.$disconnect();
   }
 };

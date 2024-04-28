@@ -108,7 +108,7 @@ export const ButtonComponent = ({
             type={type}
             disabled={isLoading}
             className={cn(
-                "px-4 flex gap-2 border-0 rounded-md items-center font-bold hover:bg-gray-600 text-white",
+                "px-4 flex gap-2 border-gray-700 hover:border-transparent rounded-md items-center font-bold hover:bg-gray-600 text-white",
                 className
             )}
         >

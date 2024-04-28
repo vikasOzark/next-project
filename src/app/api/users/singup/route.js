@@ -81,7 +81,5 @@ export async function GET(request) {
     });
   } catch (error) {
     return ErrorResponse({ error: error });
-  } finally {
-    await prisma.$disconnect();
   }
 }
