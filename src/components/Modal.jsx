@@ -16,6 +16,7 @@ export default function Modal({
     modalTitle,
     className,
     dialogClass,
+    icon,
 }) {
     const cancelButtonRef = useRef(null);
 
@@ -69,12 +70,16 @@ export default function Modal({
                                                 className="text-base font-semibold leading-6 flex items-center justify-between text-gray-900"
                                             >
                                                 <div className="flex items-center gap-2">
-                                                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                                                        <Square2StackIcon
-                                                            className="h-6 w-6 text-green-600"
-                                                            aria-hidden="true"
-                                                        />
-                                                    </div>
+                                                    {icon ? (
+                                                        icon
+                                                    ) : (
+                                                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                            <Square2StackIcon
+                                                                className="h-6 w-6 text-green-600"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </div>
+                                                    )}
                                                     <span className="text-white">
                                                         {modalTitle}
                                                     </span>

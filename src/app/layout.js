@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import Provider from "@/app/providers/CredentialsProvider";
+import Provider from "@/providers/CredentialsProvider";
 export const metadata = {
   title: "Tickets | Dashboard",
   description: "Create and manage tickets here.",

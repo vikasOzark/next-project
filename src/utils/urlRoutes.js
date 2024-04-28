@@ -13,5 +13,6 @@ export const urlRoutes = {
   LOGIN_IN: "/login",
   REGISTER: "/singup",
   NOTES: dashboard_prifix + "/notes",
-  TASKS: dashboard_prifix + "/tasks"
+  TASKS: dashboard_prifix + "/tasks",
+  INTEGRATIONS: dashboard_prifix + "/advance-settings/integrations"
 };

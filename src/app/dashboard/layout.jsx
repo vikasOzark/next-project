@@ -16,6 +16,11 @@ import { signOut, useSession } from "next-auth/react";
 import { ButtonComponent } from "@/components/Buttons";
 import { VscSignOut } from "react-icons/vsc";
 import { PageLoader } from "@/components/Loading";
+import {
+    LinkComponent,
+    LinkComponentLg,
+} from "@/components/Navbars/Sidenavbar";
+import AdvanceOptionsNav from "@/components/Navbars/AdvancedSettingNav";
 
 export default function Layout({ children }) {
     const queryClient = new QueryClient();
@@ -41,6 +46,8 @@ export function MainLayout({ children }) {
         return;
     }
 
+    console.log(data);
+
     const ADMIN_VIEW_LINKS = [
         {
             title: "Dashboard",
@@ -57,11 +64,11 @@ export function MainLayout({ children }) {
             icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
             route: urlRoutes.PERMISSIONS,
         },
-        {
-            title: "Advance Settings",
-            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
-            route: urlRoutes.ADVANCE_SETTINGS,
-        },
+        // {
+        //     title: "Advance Settings",
+        //     icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+        //     route: urlRoutes.ADVANCE_SETTINGS,
+        // },
         {
             title: "Billing",
             icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
@@ -98,6 +105,7 @@ export function MainLayout({ children }) {
                                     linkObject={linkObject}
                                 />
                             ))}
+                            <AdvanceOptionsNav />
                             <NotesNavBarTab />
                         </nav>
                     </div>
@@ -133,6 +141,7 @@ export function MainLayout({ children }) {
                                         linkObject={linkObject}
                                     />
                                 ))}
+                                <AdvanceOptionsNav />
                                 <NotesNavBarTab />
                             </nav>
                         </SheetContent>
@@ -142,12 +151,7 @@ export function MainLayout({ children }) {
                     <DropdownNew
                         className="w-[8rem]"
                         icon={<CircleUser className="h-7 w-7" />}
-                        title={
-                            <>
-                                {data?.user?.userData?.first_name}{" "}
-                                {data?.user?.userData?.last_name}
-                            </>
-                        }
+                        title={<>{data?.user?.name}</>}
                     >
                         <ButtonComponent
                             onClick={signOut}
@@ -163,41 +167,3 @@ export function MainLayout({ children }) {
         </div>
     );
 }
-
-const LinkComponent = ({ linkObject, className }) => {
-    return (
-        <Link
-            href={linkObject.route}
-            className={cn(
-                "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 soft-bg-hover ",
-                className
-            )}
-        >
-            {linkObject?.icon ? (
-                linkObject.icon
-            ) : (
-                <LineChart className="h-5 w-5" />
-            )}
-            {linkObject.title}
-        </Link>
-    );
-};
-
-const LinkComponentLg = ({ linkObject, className }) => {
-    return (
-        <Link
-            href={linkObject.route}
-            className={cn(
-                "mx-[-0.65rem] flex items-center gap-4 rounded-md px-3 py-2 soft-bg-hover ",
-                className
-            )}
-        >
-            {linkObject?.icon ? (
-                linkObject.icon
-            ) : (
-                <LineChart className="h-5 w-5" />
-            )}
-            {linkObject.title}
-        </Link>
-    );
-};

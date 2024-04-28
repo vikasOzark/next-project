@@ -35,6 +35,15 @@ enum ON_BORDING_STATUS {
     ALREADY_MEMBER
 }
 
+enum INTERGRATION_PROVIDER {
+    PENDING
+    COMPLETED
+    ATTEMPTS_BUT_NO_COMPLITED
+    NEVER_ATTEMPTS
+    PAYMENT_FAILD
+    ALREADY_MEMBER
+}
+
 model User {
     id                 String  @id @default(auto()) @map("_id") @db.ObjectId
     first_name         String
@@ -60,13 +69,14 @@ model User {
     ticketAssingedUsers Tickets[] @relation(name: "assingedUser")
     Notes               Notes[]
 
-    createdAt DateTime    @default(now())
-    updatedAt DateTime?   @updatedAt
-    Activity  Activity[]
-    UserNotes UserNotes[] @relation(name: "noteCreatedBy")
-    Payment   Payment[]
-    Tasks     Tasks[]
-    Board     Board[]
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime?      @updatedAt
+    Activity     Activity[]
+    UserNotes    UserNotes[]    @relation(name: "noteCreatedBy")
+    Payment      Payment[]
+    Tasks        Tasks[]
+    Board        Board[]
+    Integrations Integrations[]
 }
 
 // model CompanyDetail {
@@ -75,6 +85,17 @@ model User {
 //     teamSize        String?
 //     UserNotes UserNotes[] @relation(name: "noteCreatedBy")
 // }
+
+model Integrations {
+    id           String                @id @default(auto()) @map("_id") @db.ObjectId
+    providerName INTERGRATION_PROVIDER
+    config_json  Json
+    isActive     Boolean               @default(false)
+    createdAt    DateTime              @default(now())
+    createdBy    User                  @relation(fields: [userId], references: [id])
+    userId       String                @db.ObjectId
+    webhookurl   String
+}
 
 model Department {
     id          String @id @default(auto()) @map("_id") @db.ObjectId
