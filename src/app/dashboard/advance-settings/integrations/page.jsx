@@ -5,6 +5,7 @@ import Image from "next/image";
 import GitlabIntegration from "./integration/gitlab";
 import Modal from "@/components/Modal";
 import { useState } from "react";
+import GitlabIntegrationForm from "./integration/GitlabForm";
 
 export default function IntegrationPage() {
     return (
@@ -15,7 +16,9 @@ export default function IntegrationPage() {
                 </div>
                 <section>
                     <div className="grid grid-cols-4 gap-3">
-                        <GitlabIntegration />
+                        <GitlabIntegration>
+                            <GitlabIntegrationForm />
+                        </GitlabIntegration>
                     </div>
                 </section>
             </main>

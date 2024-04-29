@@ -1,33 +1,11 @@
-"use client";
 import IntegrationCard from "@/components/IntegrationsComponent/IntegrationOptionCard";
 import Modal from "@/components/Modal";
 import Image from "next/image";
-import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React, { Suspense, useState } from "react";
+import { VscCircleSmallFilled } from "react-icons/vsc";
+import GitlabIntegrationForm from "./GitlabForm";
 
-import { Button } from "@/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { VscAdd, VscCircleSmallFilled, VscCopy } from "react-icons/vsc";
-import { ButtonComponent } from "@/components/Buttons";
-
-const formSchema = z.object({
-    access_token: z.string().min(16, {
-        message: "Not a valid access token.",
-    }),
-});
-
-export default function GitlabIntegration() {
+export default function GitlabIntegration({ children }) {
     const [gitlabModal, setGitlabModal] = useState(false);
     return (
         <>
@@ -112,80 +90,9 @@ export default function GitlabIntegration() {
                     </ul>
                 </span>
                 <div className="mt-2">
-                    <GitlabIntegrationForm />
-                </div>
-
-                <div className="my-2 softer-bg rounded-lg p-2">
-                    <p>Webhook URL</p>
-                    <div
-                        onmousedown="return false;"
-                        onselectstart="return false;"
-                        className="border rounded-md  px-2 py-1 flex justify-between items-center  bg-gray-800 border-gray-600"
-                    >
-                        http://test.com
-                        <span
-                            className="cursor-pointer hover:bg-gray-500 p-2 rounded-md"
-                            onClick={() => {
-                                navigator.clipboard.writeText(
-                                    "http://test.com"
-                                );
-                            }}
-                        >
-                            <VscCopy size={18} />
-                        </span>
-                    </div>
-
-                    <div className="flex justify-end mt-1">
-                        <ButtonComponent
-                            icon={<VscAdd size={18} />}
-                            type="submit"
-                        >
-                            Activate
-                        </ButtonComponent>
-                    </div>
+                    <Suspense>{children}</Suspense>
                 </div>
             </Modal>
         </>
-    );
-}
-
-export function GitlabIntegrationForm() {
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            access_token: "",
-        },
-        disabled: true,
-    });
-
-    /**
-     * @param {z.infer<typeof formSchema>} values
-     */
-    function onSubmit(values) {}
-
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="access_token"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Access Token</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="***************"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormDescription>
-                                This service is not available yet.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </form>
-        </Form>
     );
 }

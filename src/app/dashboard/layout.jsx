@@ -46,8 +46,6 @@ export function MainLayout({ children }) {
         return;
     }
 
-    console.log(data);
-
     const ADMIN_VIEW_LINKS = [
         {
             title: "Dashboard",
@@ -64,11 +62,6 @@ export function MainLayout({ children }) {
             icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
             route: urlRoutes.PERMISSIONS,
         },
-        // {
-        //     title: "Advance Settings",
-        //     icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
-        //     route: urlRoutes.ADVANCE_SETTINGS,
-        // },
         {
             title: "Billing",
             icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,

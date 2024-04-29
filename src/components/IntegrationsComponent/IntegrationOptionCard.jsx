@@ -11,7 +11,7 @@ export default function IntegrationCard({
     identifier,
 }) {
     return (
-        <Card onClick={() => onClick(identifier)}>
+        <Card className={" cursor-pointer"} onClick={() => onClick(identifier)}>
             <CardHeader>{cardHeader}</CardHeader>
             <CardContent>
                 Streamline your engineering workflow with Gitlab integration and
