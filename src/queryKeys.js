@@ -6,5 +6,6 @@ export const QUERY_KEYS = {
     TICKET_DETAIL: "ticket-detail",
     USERS: "user-list",
     TAGS: "tags-list",
-    NOTES: "notes"
+    NOTES: "notes",
+    INTEGRATIONS: "integrations-list"
 }

@@ -20,6 +20,7 @@ export default function TicketDetailSection() {
         details = ticketData?.ticketDetil;
     }
 
+    const isWebhookCreate = ticketData?.webhook_event_id;
     return (
         <>
             <div className="mb-2">
@@ -30,14 +31,13 @@ export default function TicketDetailSection() {
                     Ticket Detail
                 </label>
                 <div className="mt-2">
-                    {!isLoading && (
+                    <input
+                        type="hidden"
+                        name="ticketDetil"
+                        value={editorData}
+                    />
+                    {!isLoading && !isWebhookCreate && (
                         <>
-                            <input
-                                type="text"
-                                name="ticketDetil"
-                                hidden
-                                value={editorData}
-                            />
                             <CustomEditor
                                 editable={editable}
                                 key={"editor-123"}
@@ -49,6 +49,9 @@ export default function TicketDetailSection() {
                             />
                         </>
                     )}
+                    <div className="">
+                        <p>{details}</p>
+                    </div>
                 </div>
             </div>
         </>

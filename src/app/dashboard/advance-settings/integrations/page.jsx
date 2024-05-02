@@ -5,6 +5,7 @@ import GitlabIntegration from "./integration/gitlab";
 import { useQuery } from "react-query";
 import { useSession } from "next-auth/react";
 import { getRequest } from "@/app/apiFunctions/api";
+import { QUERY_KEYS } from "@/queryKeys";
 
 export const IntegrationContext = createContext({});
 
@@ -13,6 +14,7 @@ export default function IntegrationPage() {
     const { uniqueCompanyId } = data?.user?.userData || {};
 
     const { data: integrations = [], isLoading } = useQuery({
+        queryKey: [QUERY_KEYS.INTEGRATIONS],
         queryFn: () =>
             getRequest({ url: `integration/webhook/${uniqueCompanyId}` }),
         retry: 0,

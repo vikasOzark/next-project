@@ -2,17 +2,16 @@
 import IntegrationCard from "@/components/IntegrationsComponent/IntegrationOptionCard";
 import Modal from "@/components/Modal";
 import Image from "next/image";
-import React, { Suspense, useContext, useEffect, useState } from "react";
-import { VscCircleSmallFilled, VscSaveAll, VscSaveAs } from "react-icons/vsc";
+import { Suspense, useContext, useState } from "react";
+import { VscCircleSmallFilled, VscSaveAll } from "react-icons/vsc";
 import GitlabIntegrationForm from "./GitlabForm";
 import { INTEGRATION_PROVIDER } from "@prisma/client";
 import { getIntegrationData, IntegrationContext } from "../page";
 import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -23,9 +22,15 @@ import {
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { ButtonComponent } from "@/components/Buttons";
+import { useMutation, useQueryClient } from "react-query";
+import { patchRequest } from "@/app/apiFunctions/api";
+import toast from "react-hot-toast";
+import { QUERY_KEYS } from "@/queryKeys";
+import DateTime from "@/components/DateTime";
+import handleTimeFormat from "@/utils/dateTimeFormat";
 
 export default function GitlabIntegration() {
-    const { integrations } = useContext(IntegrationContext);
+    const { integrations, isLoading } = useContext(IntegrationContext);
     const [gitlabModal, setGitlabModal] = useState(false);
     const integrationData = getIntegrationData(
         integrations,
@@ -50,7 +55,7 @@ export default function GitlabIntegration() {
                 content={
                     <>
                         {/* {integrationData && (
-                            <ConnectionInfo integrationData={integrationData} />
+                            <ConnectionInfoAndUpdate integrationData={integrationData} />
                         )} */}
                         Streamline your engineering workflow with Gitlab
                         integration and keep in sync with issues and merge
@@ -59,6 +64,7 @@ export default function GitlabIntegration() {
                 }
             />
             <Modal
+                isLoading={isLoading}
                 dialogClass={"w-[13rem]"}
                 icon={
                     <Image
@@ -75,7 +81,9 @@ export default function GitlabIntegration() {
             >
                 <div className="mt-2">
                     {integrationData ? (
-                        <ConnectionInfo integrationData={integrationData} />
+                        <ConnectionInfoAndUpdate
+                            integrationData={integrationData}
+                        />
                     ) : (
                         <Suspense>
                             <ConnectionGuide />
@@ -143,7 +151,14 @@ const ConnectionGuide = () => {
     );
 };
 
-const ConnectionInfo = ({ integrationData }) => {
+const ConnectionInfoAndUpdate = ({ integrationData }) => {
+    const dateTime = (date) => {
+        return handleTimeFormat(date, {
+            isFormated: true,
+            dateTime: true,
+        });
+    };
+
     return (
         <>
             <div className="softer-bg mb-1 flex justify-between rounded-md p-2">
@@ -153,17 +168,19 @@ const ConnectionInfo = ({ integrationData }) => {
                 </div>
                 <div className="">
                     <Label>Created on</Label>
-                    <div>{integrationData?.createdAt}</div>
+                    <div>{dateTime(integrationData.createdAt)}</div>
                 </div>
             </div>
             <div className="">
-                <SwitchForm />
+                <SwitchForm integrationData={integrationData} />
             </div>
         </>
     );
 };
 
-export function SwitchForm() {
+export function SwitchForm({ integrationData }) {
+    const queryClient = useQueryClient();
+
     const FormSchema = z.object({
         active: z.boolean().default(true),
         issue_event: z.boolean().default(true),
@@ -173,15 +190,30 @@ export function SwitchForm() {
     const form = useForm({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            active: true,
-            issue_event: true,
-            merge_event: true,
+            active: integrationData?.isActive,
+            issue_event: integrationData?.config_json?.issue_event,
+            merge_event: integrationData?.config_json?.merge_event,
+        },
+    });
+
+    const { mutate, isLoading } = useMutation({
+        mutationFn: (formData) =>
+            patchRequest({
+                url: `integration/${integrationData.id}`,
+                formData: formData,
+            }),
+        onSuccess: (data) => {
+            data?.success
+                ? toast.success(data.message)
+                : toast.error(data?.message);
+            data.success &&
+                queryClient.invalidateQueries([QUERY_KEYS.INTEGRATIONS]);
         },
     });
 
     return (
         <Form {...form}>
-            <form className="w-full mt-2">
+            <form onSubmit={form.handleSubmit(mutate)} className="w-full mt-2">
                 <div className="space-y-4 ">
                     <h3 className="text-lg font-medium">
                         Gitlab connection configurations
@@ -195,7 +227,8 @@ export function SwitchForm() {
                                     <div className="space-y-0.5">
                                         <FormLabel>Service Active</FormLabel>
                                         <FormDescription>
-                                            Manage your gitlab integration.
+                                            If this setting is de-active events
+                                            will shut down the webhook events.
                                         </FormDescription>
                                     </div>
                                     <FormControl>
@@ -215,7 +248,8 @@ export function SwitchForm() {
                                     <div className="space-y-0.5">
                                         <FormLabel>Issue Events</FormLabel>
                                         <FormDescription>
-                                            Manage your gitlab integration.
+                                            If this setting is de-active events,
+                                            will not create any tickets.
                                         </FormDescription>
                                     </div>
                                     <FormControl>
@@ -235,7 +269,8 @@ export function SwitchForm() {
                                     <div className="space-y-0.5">
                                         <FormLabel>Merge Events</FormLabel>
                                         <FormDescription>
-                                            Manage your gitlab integration.
+                                            If this setting is de-active events,
+                                            will not close automatically.
                                         </FormDescription>
                                     </div>
                                     <FormControl>
@@ -250,7 +285,10 @@ export function SwitchForm() {
                     </div>
                 </div>
                 <div className="flex justify-end my-2">
-                    <ButtonComponent icon={<VscSaveAll size={18} />}>
+                    <ButtonComponent
+                        isLoading={isLoading}
+                        icon={<VscSaveAll size={18} />}
+                    >
                         Save changes
                     </ButtonComponent>
                 </div>

@@ -7,6 +7,7 @@ import { VscAdd, VscChevronUp, VscChromeClose, VscTag } from "react-icons/vsc";
 import { useQuery } from "react-query";
 import { Square2StackIcon, UserPlusIcon } from "@heroicons/react/20/solid";
 import { cn } from "@/lib/utils";
+import { LoadingState } from "./Loading";
 
 export default function Modal({
     open,
@@ -17,6 +18,7 @@ export default function Modal({
     className,
     dialogClass,
     icon,
+    isLoading,
 }) {
     const cancelButtonRef = useRef(null);
 
@@ -94,7 +96,11 @@ export default function Modal({
                                                 </div>
                                             </Dialog.Title>
                                             <div className="mt-2">
-                                                {children}
+                                                {isLoading ? (
+                                                    <LoadingState />
+                                                ) : (
+                                                    children
+                                                )}
                                             </div>
                                         </div>
                                     </div>
