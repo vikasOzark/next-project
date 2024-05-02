@@ -9,14 +9,24 @@ export default function IntegrationCard({
     cardHeader,
     onClick,
     identifier,
+    connected,
+    content,
 }) {
     return (
         <Card className={" cursor-pointer"} onClick={() => onClick(identifier)}>
-            <CardHeader>{cardHeader}</CardHeader>
-            <CardContent>
-                Streamline your engineering workflow with Gitlab integration and
-                keep in sync with issues and merge requests.
-            </CardContent>
+            <CardHeader>
+                <div className="flex justify-between">
+                    <div className="">{cardHeader}</div>
+                    {connected && (
+                        <span>
+                            <span className="bg-green-600 p-2  font-bold text-white rounded-md ">
+                                Connected
+                            </span>
+                        </span>
+                    )}
+                </div>
+            </CardHeader>
+            <CardContent>{content}</CardContent>
         </Card>
     );
 }

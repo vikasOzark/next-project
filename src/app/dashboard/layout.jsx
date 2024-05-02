@@ -143,7 +143,7 @@ export function MainLayout({ children }) {
 
                     <DropdownNew
                         className="w-[8rem]"
-                        icon={<CircleUser className="h-7 w-7" />}
+                        icon={<CircleUser className="h-5 w-5" />}
                         title={<>{data?.user?.name}</>}
                     >
                         <ButtonComponent

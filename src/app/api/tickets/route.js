@@ -115,7 +115,6 @@ export async function GET(request) {
           },
         },
       },
-
       orderBy: order_filters,
     });
 

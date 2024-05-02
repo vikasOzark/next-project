@@ -1,28 +1,84 @@
 "use server"
 import prismaInstance from "@/lib/dbController";
-import { ErrorResponse } from "@/utils/ErrorResponseHandler";
-import SuccessResponseHandler from "@/utils/SuccessResponseHandler";
-import { INTERGRATION_PROVIDER, PrismaClient } from "@prisma/client";
+import getUserId from "@/utils/userByToken";
+import { INTEGRATION_PROVIDER, Prisma, PrismaClient, } from "@prisma/client";
 export default async function gitlabIntegrate(formData) {
     try {
+        const userObject = await getUserId(true)
+        if (!userObject) {
+            return false
+        }
 
-        const data = fetch("http://gitlab.com/glpat-e-yQzxtHooqz-2b3p7Hw")
-        const res = await data.json()
-        console.log(res);
-        // /**
-        //  * @type {PrismaClient}
-        //  */
-        // const prisma = prismaInstance
-        // const body = await request.json()
+        const access_token = await formData.get("access_token")
+        const webhookUrl = await formData.get("webhookUrl")
+        const webhook_secret = await formData.get("webhook_secret")
+        const provider = await formData.get("provider")
 
-        // prisma.integrations.create({
-        //     data: {
-        //         providerName: INTERGRATION_PROVIDER.GITLAB,
-
-        //     }
-        // })
-        return { message: "success" }
+        /**
+         * @type {PrismaClient}
+         */
+        const prisma = prismaInstance
+        const data = await prisma.integrations.create({
+            data: {
+                providerName: await INTEGRATION_PROVIDER[provider],
+                isActive: true,
+                webhookurl: webhookUrl,
+                webhookSecret: webhook_secret,
+                uniqueCompanyId: userObject.userData.uniqueCompanyId,
+                config_json: { access_token },
+                createdBy: {
+                    connect: {
+                        id: userObject.userData.id
+                    }
+                }
+            }
+        })
+        if (data) {
+            return true
+        }
+        return false
     } catch (error) {
-        return ErrorResponse({ error })
+        console.log(error.message);
+        return false
+    }
+}
+
+/**
+ * @returns {import("@/types/integration").IntegrationReturnType}
+ */
+export const getIntegrations = async (provider) => {
+    try {
+        const userObject = await getUserId(true)
+        if (!userObject) {
+            if (provider) {
+                return {}
+            }
+            return []
+        }
+
+        /**
+         * @type {PrismaClient}
+         */
+        const prisma = prismaInstance
+
+        if (provider) {
+            return await prisma.integrations.findFirst({
+                where: {
+                    uniqueCompanyId: userObject.userData.uniqueCompanyId,
+                    AND: {
+                        providerName: INTEGRATION_PROVIDER[provider]
+                    }
+                }
+            })
+        }
+
+        return prisma.integrations.findMany({
+            where: {
+                uniqueCompanyId: userObject.uniquCompanyId,
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        return false
     }
 }

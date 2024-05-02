@@ -35,7 +35,13 @@ enum ON_BORDING_STATUS {
     ALREADY_MEMBER
 }
 
-enum INTERGRATION_PROVIDER {
+enum INTEGRATION_PROVIDER {
+    GITLAB
+    GITHUB
+}
+
+enum TICKET_CREATOR_TYPE {
+    USER
     GITLAB
     GITHUB
 }
@@ -83,14 +89,14 @@ model User {
 // }
 
 model Integrations {
-    id              String                @id @default(auto()) @map("_id") @db.ObjectId
-    providerName    INTERGRATION_PROVIDER
-    config_json     Json
-    isActive        Boolean               @default(false)
-    createdAt       DateTime              @default(now())
-    createdBy       User                  @relation(fields: [userId], references: [id])
+    id              String               @id @default(auto()) @map("_id") @db.ObjectId
+    providerName    INTEGRATION_PROVIDER
+    config_json     Json?
+    isActive        Boolean              @default(false)
+    createdAt       DateTime             @default(now())
+    createdBy       User                 @relation(fields: [userId], references: [id])
     uniqueCompanyId String
-    userId          String                @db.ObjectId
+    userId          String               @db.ObjectId
     webhookurl      String?
     webhookSecret   String?
 }
@@ -118,39 +124,37 @@ model Tags {
 }
 
 model Tickets {
-    id            String     @id @default(auto()) @map("_id") @db.ObjectId
-    taskTitle     String     @unique
-    ticketDetil   String?
-    mentioneUsers String[]
-    status        Status     @default(PENDING)
-    department    Department @relation(fields: [departmentId], references: [id])
-    createdById   User       @relation(fields: [userId], references: [id])
-    tags          Tags[]     @relation(references: [id], fields: [tagsId])
-    tagsId        String[]   @db.ObjectId
-    departmentId  String     @db.ObjectId
-    userId        String     @db.ObjectId
-    createdAt     DateTime   @default(now())
-    updated_at    DateTime?  @updatedAt
-
-    assingedUser   User?   @relation(name: "assingedUser", fields: [assingedUserId], references: [id])
-    assingedUserId String? @db.ObjectId
-
-    note   Notes[]  @relation(references: [id], fields: [noteId])
-    noteId String[] @db.ObjectId
-
-    isMerged Boolean @default(false)
-    isReaded Boolean @default(false)
-
-    mergedTickets Tickets[] @relation("mergeTickets", fields: [mergeTicketId], references: [id])
-    mergeTicketId String[]  @db.ObjectId
-
-    mergedTicket Tickets[] @relation("mergeTickets", fields: [mergeId], references: [id])
-    mergeId      String[]  @db.ObjectId
-
-    startDate   DateTime?
-    endDate     DateTime?
-    UserNotes   UserNotes? @relation(fields: [userNotesId], references: [id])
-    userNotesId String?    @db.ObjectId
+    id              String              @id @default(auto()) @map("_id") @db.ObjectId
+    taskTitle       String              @unique
+    ticketDetil     String?
+    mentioneUsers   String[]
+    status          Status              @default(PENDING)
+    department      Department          @relation(fields: [departmentId], references: [id])
+    createdById     User                @relation(fields: [userId], references: [id])
+    tags            Tags[]              @relation(references: [id], fields: [tagsId])
+    tagsId          String[]            @db.ObjectId
+    departmentId    String              @db.ObjectId
+    userId          String              @db.ObjectId
+    createdAt       DateTime            @default(now())
+    updated_at      DateTime?           @updatedAt
+    assingedUser    User?               @relation(name: "assingedUser", fields: [assingedUserId], references: [id])
+    assingedUserId  String?             @db.ObjectId
+    note            Notes[]             @relation(references: [id], fields: [noteId])
+    noteId          String[]            @db.ObjectId
+    isMerged        Boolean             @default(false)
+    isReaded        Boolean             @default(false)
+    mergedTickets   Tickets[]           @relation("mergeTickets", fields: [mergeTicketId], references: [id])
+    mergeTicketId   String[]            @db.ObjectId
+    mergedTicket    Tickets[]           @relation("mergeTickets", fields: [mergeId], references: [id])
+    mergeId         String[]            @db.ObjectId
+    startDate       DateTime?
+    endDate         DateTime?
+    UserNotes       UserNotes?          @relation(fields: [userNotesId], references: [id])
+    userNotesId     String?             @db.ObjectId
+    creator_type    TICKET_CREATOR_TYPE @default(USER)
+    uniqueCompanyId String?
+    ticket_metadata Json?
+    webhook_body    Json?
 }
 
 model Notes {

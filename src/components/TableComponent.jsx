@@ -22,10 +22,7 @@ export default function TableComponent({ tableCaption, headers, tableData }) {
                             width={header?.width}
                             height={header?.height}
                             key={header.name}
-                            className={cn(
-                                " text-white",
-                                header?.className || ""
-                            )}
+                            className={cn(" text-white", header?.className)}
                         >
                             {header.name}
                         </TableHead>

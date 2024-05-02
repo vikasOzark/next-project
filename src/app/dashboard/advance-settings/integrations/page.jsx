@@ -1,27 +1,46 @@
 "use client";
 
-import IntegrationCard from "@/components/IntegrationsComponent/IntegrationOptionCard";
-import Image from "next/image";
+import { createContext, Suspense } from "react";
 import GitlabIntegration from "./integration/gitlab";
-import Modal from "@/components/Modal";
-import { useState } from "react";
-import GitlabIntegrationForm from "./integration/GitlabForm";
+import { useQuery } from "react-query";
+import { useSession } from "next-auth/react";
+import { getRequest } from "@/app/apiFunctions/api";
+
+export const IntegrationContext = createContext({});
 
 export default function IntegrationPage() {
+    const { data } = useSession();
+    const { uniqueCompanyId } = data?.user?.userData || {};
+
+    const { data: integrations = [], isLoading } = useQuery({
+        queryFn: () =>
+            getRequest({ url: `integration/webhook/${uniqueCompanyId}` }),
+        retry: 0,
+        select: (data) => data?.data || [],
+    });
+
     return (
         <>
-            <main>
-                <div className="mb-3">
-                    <p className="text-3xl font-bold ">Integrations </p>
-                </div>
-                <section>
-                    <div className="grid grid-cols-4 gap-3">
-                        <GitlabIntegration>
-                            <GitlabIntegrationForm />
-                        </GitlabIntegration>
+            <IntegrationContext.Provider value={{ integrations, isLoading }}>
+                <main>
+                    <div className="mb-3">
+                        <p className="text-3xl font-bold ">Integrations </p>
                     </div>
-                </section>
-            </main>
+                    <section>
+                        <div className="grid grid-cols-4 gap-3">
+                            <Suspense>
+                                <GitlabIntegration />
+                            </Suspense>
+                        </div>
+                    </section>
+                </main>
+            </IntegrationContext.Provider>
         </>
     );
 }
+
+export const getIntegrationData = (integrations, provider) =>
+    integrations.find(
+        (integration) =>
+            integration.providerName.toLowerCase() === provider.toLowerCase()
+    );

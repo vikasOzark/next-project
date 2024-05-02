@@ -12,16 +12,16 @@ export default function CustomPagination() {
     const searchParam = useSearchParams();
     const page = searchParam.get("page");
     return (
-        <Pagination className={"text-gray-400"}>
+        <Pagination className={"text-gray-400 text-lg"}>
             <PaginationContent>
                 <PaginationItem>
-                    <PaginationPrevious />
+                    <PaginationPrevious className={"hover:text-white"} />
                 </PaginationItem>
                 <PaginationItem>
                     <PaginationLink>{page}</PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
-                    <PaginationNext />
+                    <PaginationNext className={"hover:text-white"} />
                 </PaginationItem>
             </PaginationContent>
         </Pagination>
