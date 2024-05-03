@@ -37,7 +37,7 @@ export const NotesNavBarTab = ({ className }) => {
                 <div
                     onClick={() => setShowList((pre) => !pre)}
                     className={cn(
-                        "mx-[-0.65rem] cursor-pointer flex items-center gap-4 rounded-xl px-3 py-2 soft-bg-hover",
+                        "mx-[-0.65rem] cursor-pointer justify-between flex items-center gap-4 rounded-xl px-3 py-2 soft-bg-hover",
                         className
                     )}
                 >

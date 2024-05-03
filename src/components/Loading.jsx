@@ -21,7 +21,7 @@ export const LoadingState = ({ message, className, loadingProps }) => (
 export const PageLoader = () => (
     <div className="h-screen grid place-content-center justify-center items-center">
         <div className="flex gap-2 flex-row items-center justify-center">
-            <div class="loader-new"></div>
+            <div className="loader-new"></div>
             <p className="text-2xl text-white font-bold">
                 Loading <span className=" animate-pulse delay-600">.</span>
                 <span className=" animate-pulse delay-700">.</span>

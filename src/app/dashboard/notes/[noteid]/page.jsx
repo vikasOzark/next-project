@@ -40,17 +40,13 @@ export default function NotesPage({ params }) {
         content = [];
     }
 
+    let timeoutId;
     const handleChange = (event) => {
-        const { value } = event.target;
-        if (typingTimeout) {
-            clearTimeout(typingTimeout);
-        }
-
-        setTypingTimeout(
-            setTimeout(() => {
-                mutate({ title: value });
-            }, 1000)
-        );
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            const { value } = event.target;
+            mutate({ title: value });
+        }, 500);
     };
 
     return (

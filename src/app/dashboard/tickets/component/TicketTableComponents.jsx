@@ -79,7 +79,7 @@ export const TicketTitle = ({
                         )}
                     </div>
                     <TableFlag ticketData={ticket} />
-                    <p className="text-wrap truncate">
+                    <div className="text-wrap truncate">
                         <Link
                             href={`${urlRoutes.TICKETS}/${ticket.id}`}
                             className="font-medium  text-gray-300 dark:text-white hover:underline"
@@ -100,7 +100,7 @@ export const TicketTitle = ({
                                     <Image
                                         title="This ticket is created by gitlab event."
                                         alt="gitlab"
-                                        loading="eager"
+                                        loading="lazy"
                                         width={15}
                                         height={15}
                                         src={"/svg/gitlab.svg"}
@@ -108,7 +108,7 @@ export const TicketTitle = ({
                                 </>
                             )}
                         </div>
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>

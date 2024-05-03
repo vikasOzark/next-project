@@ -23,16 +23,20 @@ export default function AdvanceOptionsNav() {
         <>
             <div
                 onClick={() => setOptionOpen(!optionOpen)}
-                className="mx-[-0.65rem] cursor-pointer flex items-center gap-4 rounded-xl px-3 py-2 soft-bg-hover "
+                className="mx-[-0.65rem] cursor-pointer justify-between flex items-center gap-4 rounded-xl px-3 py-2 soft-bg-hover "
             >
-                <VscSymbolMethod size={20} />
-                Advance options
-                <VscChevronUp
-                    className={`${
-                        optionOpen ? "rotate-180" : " rotate-0 "
-                    } transition-all duration-500`}
-                    size={20}
-                />
+                <span className="flex items-center gap-4 ">
+                    <VscSymbolMethod size={20} />
+                    Advance options
+                </span>
+                <span className="p-1">
+                    <VscChevronUp
+                        className={`${
+                            optionOpen ? "rotate-180" : " rotate-0 "
+                        } transition-all duration-500`}
+                        size={20}
+                    />
+                </span>
             </div>
             <div
                 data-state={optionOpen}

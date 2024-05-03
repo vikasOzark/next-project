@@ -49,9 +49,11 @@ export default function TicketDetailSection() {
                             />
                         </>
                     )}
-                    <div className="">
-                        <p>{details}</p>
-                    </div>
+                    {isWebhookCreate && (
+                        <div className="p-2 border border-gray-700/60 h-[15rem] min-h-[10rem]  max-h-[20rem] rounded-md">
+                            <p>{details}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

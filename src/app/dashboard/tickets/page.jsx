@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { TicketActionDropdown } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
 import CreateTicketButton from "./component/forms/TicketCreateButton";
@@ -89,7 +89,9 @@ export default function Tickets({ searchParams }) {
                                 selectedTickets={selectedTickets}
                                 setSelectedTickets={setSelectedTickets}
                             />
-                            <TicketSearch searchName={"q"} />
+                            <Suspense>
+                                <TicketSearch searchName={"q"} />
+                            </Suspense>
                             <TicketFilter />
                         </div>
                         <div className="flex items-center gap-2">

@@ -46,7 +46,7 @@ export default function GitlabIntegration() {
                 cardHeader={
                     <Image
                         alt="gitlab"
-                        loading="eager"
+                        loading="lazy"
                         width={50}
                         height={50}
                         src={"/svg/gitlab.svg"}
@@ -69,7 +69,7 @@ export default function GitlabIntegration() {
                 icon={
                     <Image
                         alt="gitlab"
-                        loading="eager"
+                        loading="lazy"
                         width={40}
                         height={40}
                         src={"/svg/gitlab.svg"}

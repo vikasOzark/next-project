@@ -11,12 +11,14 @@ import handleTimeFormat from "@/utils/dateTimeFormat";
 import getMentionedUser from "@/utils/getMentionedUsersData";
 import { cn } from "@/lib/utils";
 import { TicketDataContext } from "../page";
+import Image from "next/image";
 
 export default function ActivitySection() {
     const { isLoading, ticketData } = useContext(TicketDataContext);
     const MentionedUsers = getMentionedUser(ticketData.ticketDetil);
 
     const hasTimeFrame = ticketData?.endDate || ticketData?.startDate;
+    const isWebhookTicket = ticketData?.webhook_event_id;
 
     return (
         <>
@@ -28,22 +30,27 @@ export default function ActivitySection() {
                         type={"Created ticket"}
                         dateTimeString={ticketData?.createdAt}
                     >
-                        <>
-                            {ticketData?.createdById?.first_name}{" "}
-                            {ticketData?.createdById?.last_name}
-                        </>
+                        {!isWebhookTicket && (
+                            <>
+                                {ticketData?.createdById?.first_name}{" "}
+                                {ticketData?.createdById?.last_name}
+                            </>
+                        )}
+                        {isWebhookTicket && <GitlabCreatedActivityPill />}
                     </ActivityFragment>
-                    <ActivityFragment
-                        className={"mb-1"}
-                        icon={<VscPerson size={20} />}
-                        type={"Assigned"}
-                        key={ticketData?.createdById.id}
-                    >
-                        <>
-                            {ticketData?.assingedUser?.first_name}{" "}
-                            {ticketData?.assingedUser?.last_name}
-                        </>
-                    </ActivityFragment>
+                    {ticketData?.assingedUser && (
+                        <ActivityFragment
+                            className={"mb-1"}
+                            icon={<VscPerson size={20} />}
+                            type={"Assigned"}
+                            key={ticketData?.createdById.id}
+                        >
+                            <>
+                                {ticketData?.assingedUser?.first_name}{" "}
+                                {ticketData?.assingedUser?.last_name}
+                            </>
+                        </ActivityFragment>
+                    )}
                     {MentionedUsers.map((user) => (
                         <ActivityFragment
                             className={"mb-1"}
@@ -94,6 +101,21 @@ const ActivityFragment = ({
                         dateTime: true,
                     })}
             </span>
+        </div>
+    );
+};
+
+const GitlabCreatedActivityPill = () => {
+    const { isLoading, ticketData } = useContext(TicketDataContext);
+    return (
+        <div className="">
+            <Image
+                alt="This ticket is created by gitlab issue event."
+                loading="lazy"
+                width={15}
+                height={15}
+                src={"/svg/gitlab.svg"}
+            />
         </div>
     );
 };

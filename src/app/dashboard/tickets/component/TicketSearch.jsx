@@ -22,10 +22,14 @@ export default function TicketSearch({ searchName }) {
         handlerClear();
     }
 
-    const handleQuery = (event) => {
-        const query = event.target.value;
-        queryParams.set(searchName, query);
-        router.push("?" + queryParams.toString());
+    let timeoutId;
+    const handleInputChange = (event) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            const query = event.target.value;
+            queryParams.set(searchName, query);
+            router.push("?" + queryParams.toString());
+        }, 500);
     };
 
     return (
@@ -37,7 +41,7 @@ export default function TicketSearch({ searchName }) {
                         ref={searchRef}
                         type="text"
                         defaultValue={searchValue || ""}
-                        onChange={handleQuery}
+                        onChange={handleInputChange}
                         className="w-full p-2 px-3 text-white focus:outline-none bg-transparent rounded-full"
                         placeholder="Search"
                     />
