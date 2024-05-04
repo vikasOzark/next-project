@@ -2,10 +2,10 @@
     "object_kind": "issue",
     "event_type": "issue",
     "user": {
-        "id": 44,
-        "name": "vikas kumar",
-        "username": "vikas.kumar",
-        "avatar_url": "https://gitlab.skylus.local/uploads/-/system/user/avatar/44/avatar.png",
+        "id": 71,
+        "name": "sudheesh",
+        "username": "sudheesh.u",
+        "avatar_url": "https://secure.gravatar.com/avatar/5f2ed5ee847788250520acc009d18f37f60a11c945f9b14d2125134e87b337b0?s=80&d=identicon",
         "email": "[REDACTED]"
     },
     "project": {
@@ -27,45 +27,45 @@
         "http_url": "https://gitlab.skylus.local/tka/core-app.git"
     },
     "object_attributes": {
-        "author_id": 6,
-        "closed_at": "2024-04-30T18:23:00.319+05:30",
+        "author_id": 71,
+        "closed_at": null,
         "confidential": false,
-        "created_at": "2024-04-30T18:22:19.910+05:30",
-        "description": "",
+        "created_at": "2024-05-03 15:04:11 +0530",
+        "description": "create a script for generating x api keys for all services",
         "discussion_locked": null,
         "due_date": null,
-        "id": 1898,
-        "iid": 519,
+        "id": 1913,
+        "iid": 530,
         "last_edited_at": null,
         "last_edited_by_id": null,
         "milestone_id": null,
         "moved_to_id": null,
         "duplicated_to_id": null,
         "project_id": 130,
-        "relative_position": 265221,
-        "state_id": 2,
+        "relative_position": null,
+        "state_id": 1,
         "time_estimate": 0,
-        "title": "Design/useridentity searchbar",
-        "updated_at": "2024-04-30T18:23:00.427+05:30",
+        "title": "create a script for generating x api keys for all services",
+        "updated_at": "2024-05-03 15:04:11 +0530",
         "updated_by_id": null,
         "weight": null,
         "health_status": null,
-        "url": "https://gitlab.skylus.local/tka/core-app/-/issues/519",
+        "url": "https://gitlab.skylus.local/tka/core-app/-/issues/530",
         "total_time_spent": 0,
         "time_change": 0,
         "human_total_time_spent": null,
         "human_time_change": null,
         "human_time_estimate": null,
-        "assignee_ids": [15],
-        "assignee_id": 15,
+        "assignee_ids": [71],
+        "assignee_id": 71,
         "labels": [
             {
-                "id": 269,
-                "title": "service: frontend-ui",
-                "color": "#eee600",
+                "id": 267,
+                "title": "service: identity-management",
+                "color": "#c21e56",
                 "project_id": 130,
-                "created_at": "2024-02-19T13:30:48.948+05:30",
-                "updated_at": "2024-02-19T13:30:48.948+05:30",
+                "created_at": "2024-02-19 12:31:03 +0530",
+                "updated_at": "2024-02-19 12:31:03 +0530",
                 "template": false,
                 "description": null,
                 "type": "ProjectLabel",
@@ -73,12 +73,12 @@
                 "lock_on_merge": false
             },
             {
-                "id": 263,
-                "title": "status: finished",
-                "color": "#009966",
+                "id": 261,
+                "title": "status: under review",
+                "color": "#330066",
                 "project_id": 130,
-                "created_at": "2024-02-06T11:46:30.019+05:30",
-                "updated_at": "2024-02-06T11:46:30.019+05:30",
+                "created_at": "2024-02-06 11:45:31 +0530",
+                "updated_at": "2024-02-06 11:45:31 +0530",
                 "template": false,
                 "description": "",
                 "type": "ProjectLabel",
@@ -86,31 +86,32 @@
                 "lock_on_merge": false
             },
             {
-                "id": 250,
-                "title": "type: design",
-                "color": "#6699cc",
+                "id": 252,
+                "title": "type: enhancement",
+                "color": "#c21e56",
                 "project_id": 130,
-                "created_at": "2024-02-06T11:36:37.174+05:30",
-                "updated_at": "2024-02-06T11:36:37.174+05:30",
+                "created_at": "2024-02-06 11:39:34 +0530",
+                "updated_at": "2024-02-06 11:39:34 +0530",
                 "template": false,
-                "description": "Describes issues that are pertaining to the design of UI/UX of the application",
+                "description": "Describes an issue that builds over (or add additional functionality) an existing feature",
                 "type": "ProjectLabel",
                 "group_id": null,
                 "lock_on_merge": false
             }
         ],
-        "state": "closed",
+        "state": "opened",
         "severity": "unknown",
-        "customer_relations_contacts": []
+        "customer_relations_contacts": [],
+        "action": "open"
     },
     "labels": [
         {
-            "id": 269,
-            "title": "service: frontend-ui",
-            "color": "#eee600",
+            "id": 267,
+            "title": "service: identity-management",
+            "color": "#c21e56",
             "project_id": 130,
-            "created_at": "2024-02-19T13:30:48.948+05:30",
-            "updated_at": "2024-02-19T13:30:48.948+05:30",
+            "created_at": "2024-02-19 12:31:03 +0530",
+            "updated_at": "2024-02-19 12:31:03 +0530",
             "template": false,
             "description": null,
             "type": "ProjectLabel",
@@ -118,12 +119,12 @@
             "lock_on_merge": false
         },
         {
-            "id": 263,
-            "title": "status: finished",
-            "color": "#009966",
+            "id": 261,
+            "title": "status: under review",
+            "color": "#330066",
             "project_id": 130,
-            "created_at": "2024-02-06T11:46:30.019+05:30",
-            "updated_at": "2024-02-06T11:46:30.019+05:30",
+            "created_at": "2024-02-06 11:45:31 +0530",
+            "updated_at": "2024-02-06 11:45:31 +0530",
             "template": false,
             "description": "",
             "type": "ProjectLabel",
@@ -131,20 +132,57 @@
             "lock_on_merge": false
         },
         {
-            "id": 250,
-            "title": "type: design",
-            "color": "#6699cc",
+            "id": 252,
+            "title": "type: enhancement",
+            "color": "#c21e56",
             "project_id": 130,
-            "created_at": "2024-02-06T11:36:37.174+05:30",
-            "updated_at": "2024-02-06T11:36:37.174+05:30",
+            "created_at": "2024-02-06 11:39:34 +0530",
+            "updated_at": "2024-02-06 11:39:34 +0530",
             "template": false,
-            "description": "Describes issues that are pertaining to the design of UI/UX of the application",
+            "description": "Describes an issue that builds over (or add additional functionality) an existing feature",
             "type": "ProjectLabel",
             "group_id": null,
             "lock_on_merge": false
         }
     ],
-    "changes": {},
+    "changes": {
+        "author_id": {
+            "previous": null,
+            "current": 71
+        },
+        "created_at": {
+            "previous": null,
+            "current": "2024-05-03 15:04:11 +0530"
+        },
+        "description": {
+            "previous": null,
+            "current": "create a script for generating x api keys for all services"
+        },
+        "id": {
+            "previous": null,
+            "current": 1913
+        },
+        "iid": {
+            "previous": null,
+            "current": 530
+        },
+        "project_id": {
+            "previous": null,
+            "current": 130
+        },
+        "time_estimate": {
+            "previous": null,
+            "current": 0
+        },
+        "title": {
+            "previous": null,
+            "current": "create a script for generating x api keys for all services"
+        },
+        "updated_at": {
+            "previous": null,
+            "current": "2024-05-03 15:04:11 +0530"
+        }
+    },
     "repository": {
         "name": "core-application",
         "url": "git@gitlab.skylus.local:tka/core-app.git",
@@ -153,10 +191,10 @@
     },
     "assignees": [
         {
-            "id": 15,
-            "name": "sajan jha",
-            "username": "SajanJha",
-            "avatar_url": "https://secure.gravatar.com/avatar/ed4f6d636881d8161a0d715dc9f3cb580a0527b710a8fa9be46971a001763682?s=80&d=identicon",
+            "id": 71,
+            "name": "sudheesh",
+            "username": "sudheesh.u",
+            "avatar_url": "https://secure.gravatar.com/avatar/5f2ed5ee847788250520acc009d18f37f60a11c945f9b14d2125134e87b337b0?s=80&d=identicon",
             "email": "[REDACTED]"
         }
     ]

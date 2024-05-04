@@ -4,6 +4,9 @@ import handleTimeFormat from "@/utils/dateTimeFormat";
 import { urlRoutes } from "@/utils/urlRoutes";
 import Image from "next/image";
 import { TICKET_CREATOR_TYPE } from "@prisma/client";
+import { TicketDeleteButton } from "../ticketActionUtils";
+import { QUERY_KEYS } from "@/queryKeys";
+import { BulkTicketDeleteButton } from "./builkActions/BulkTicketDelete";
 
 const {
     VscChromeClose,
@@ -15,19 +18,28 @@ const {
 export const SelectedDataInfo = ({ selectedTickets, setSelectedTickets }) => {
     if (selectedTickets.length) {
         return (
-            <span className="temp-bg flex gap-2 text-white items-center rounded-full px-4 py-1">
-                <div className="flex gap-2">
-                    <span>Selected ticket</span>
-                    <span className="text-blue-500 font-bold">
-                        {selectedTickets.length}
+            <div className="flex items-center gap-2">
+                <span className="temp-bg flex gap-2 text-white items-center rounded-full px-4 py-1">
+                    <div className="flex gap-2">
+                        <span>Selected ticket</span>
+                        <span className="text-blue-500 font-bold">
+                            {selectedTickets.length}
+                        </span>
+                    </div>
+                    <span className="hover:bg-gray-700 rounded-full cursor-pointer p-1">
+                        <VscChromeClose
+                            size={20}
+                            onClick={() => setSelectedTickets([])}
+                        />
                     </span>
-                </div>
-                <VscChromeClose
-                    size={20}
-                    onClick={() => setSelectedTickets([])}
-                    className="hover:bg-gray-700 rounded-full cursor-pointer"
+                </span>
+                <BulkTicketDeleteButton
+                    key={`delete-bulk-ticket-key`}
+                    ticketIds={selectedTickets.map((ticket) => ticket.id)}
+                    revalidateKey={QUERY_KEYS.TICKET_LIST}
+                    className={"delete-btn"}
                 />
-            </span>
+            </div>
         );
     }
     return null;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import { TicketActionDropdown } from "./component/TicketTableGlobleAction";
 import MergeTickets from "./component/MergeTickets";
 import CreateTicketButton from "./component/forms/TicketCreateButton";
@@ -16,6 +16,7 @@ import { TicketEmptyState } from "@/components/EmptyState";
 import { useSearchQuery } from "@/hooks/setQueryParam";
 import TableDataProvider from "./component/tableDataProvider";
 import { SelectedDataInfo } from "./component/TicketTableComponents";
+import { VscPass, VscPassFilled } from "react-icons/vsc";
 
 export const SelectContext = React.createContext();
 
@@ -66,7 +67,7 @@ export default function Tickets({ searchParams }) {
         });
 
     const headers = [
-        { name: "Name" },
+        { name: <SelectAllHeader header={"Header"} /> },
         { name: "Ticket status" },
         { name: "Department" },
         { name: "Tags" },
@@ -80,24 +81,29 @@ export default function Tickets({ searchParams }) {
                     selectedTickets,
                     setSelectedTickets,
                     searchParams,
+                    filteredTickets,
                 }}
             >
                 <main>
                     <div className="flex justify-between items-center mb-1">
                         <div className="flex items-center gap-2">
-                            <SelectedDataInfo
-                                selectedTickets={selectedTickets}
-                                setSelectedTickets={setSelectedTickets}
-                            />
                             <Suspense>
                                 <TicketSearch searchName={"q"} />
                             </Suspense>
                             <TicketFilter />
+                            <SelectedDataInfo
+                                selectedTickets={selectedTickets}
+                                setSelectedTickets={setSelectedTickets}
+                            />
                         </div>
                         <div className="flex items-center gap-2">
                             <MergeTickets />
-                            <CreateTicketButton />
-                            <TicketActionDropdown />
+                            {selectedTickets.length === 0 && (
+                                <>
+                                    <CreateTicketButton />
+                                    <TicketActionDropdown />
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="mt-2 h-auto w-full">
@@ -129,3 +135,35 @@ export default function Tickets({ searchParams }) {
         </>
     );
 }
+
+const SelectAllHeader = ({ header }) => {
+    const { selectedTickets, setSelectedTickets, filteredTickets } =
+        useContext(SelectContext);
+
+    const handleSelectAll = () => {
+        setSelectedTickets([...filteredTickets]);
+    };
+    const handleUnSelectAll = () => {
+        setSelectedTickets([]);
+    };
+    const isAllSelected =
+        selectedTickets.length === filteredTickets.length &&
+        filteredTickets.length > 0;
+
+    return (
+        <>
+            <span className=" flex items-center gap-2">
+                {isAllSelected ? (
+                    <VscPassFilled
+                        className="text-green-500"
+                        onClick={handleUnSelectAll}
+                        size={20}
+                    />
+                ) : (
+                    <VscPass onClick={handleSelectAll} size={20} />
+                )}
+                {header}
+            </span>
+        </>
+    );
+};

@@ -23,6 +23,7 @@ export const authOptions = {
             parent_user: response.data.parent_user,
             uniqueCompanyId: response.data.uniqueCompanyId,
             role: response.data.role,
+            departmentMemberId: response.data?.departmentMemberId
           };
         }
 

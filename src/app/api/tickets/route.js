@@ -1,10 +1,11 @@
+import { bulkTicketDelete } from "@/app/validators/ticketsValidators";
 import prismaInstance from "@/lib/dbController";
 import ErrorResponseHandler, {
   ErrorResponse,
 } from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
-import { PrismaClient, Status } from "@prisma/client";
+import { PrismaClient, Role, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 /**
@@ -59,25 +60,31 @@ export async function POST(request) {
 export async function GET(request) {
 
   const sortByTitle = request.nextUrl.searchParams.get("sort");
-  const orderCreated = request.nextUrl.searchParams.get("order");
+  const orderCreated = request.nextUrl.searchParams.get("order") || "desc";
   const filterByStatus = request.nextUrl.searchParams.get("status");
   const queryTicketTitle = request.nextUrl.searchParams.get("q");
   const page = request.nextUrl.searchParams.get("page");
+  const size = request.nextUrl.searchParams.get("size") || 10;
+  const page_size = Number(size)
 
-  const size = 10
-  const skip = (Number(page) - 1) * size
+  const skip = (Number(page) - 1) * page_size
 
   try {
     const userObjectId = await getUserId(true);
-
+    const user = await prisma.user.findFirst({ where: { id: userObjectId.userData?.id } })
     const filtering = {
       createdById: {
-        uniqueCompanyId: userObjectId.uniqueCompanyId,
+        uniqueCompanyId: user.uniqueCompanyId,
       },
-      department: {
-        id: userObjectId?.departmentMemberId
-      }
     };
+
+    if (!user.isSuperuser) {
+      filtering.AND = {
+        department: {
+          id: user?.departmentMemberId
+        }
+      }
+    }
 
     if (queryTicketTitle) {
       filtering.taskTitle = {
@@ -98,13 +105,9 @@ export async function GET(request) {
       order_filters.push({ createdAt: orderCreated })
     }
 
-    if (userObjectId?.isSuperuser) {
-      delete filtering.department
-    }
-
     const ticketsData = await prisma.tickets.findMany({
       where: filtering,
-      take: size,
+      take: page_size,
       skip: skip,
       include: {
         department: true,
@@ -135,34 +138,29 @@ export async function GET(request) {
   }
 }
 
-export async function PATCH(request) {
+export async function DELETE(request) {
   const requestBody = await request.json();
-
   try {
-    const createdTicket = await prisma.tickets.update({
+    const validate = bulkTicketDelete.safeParse(requestBody)
+    if (!validate.success) {
+      return ErrorResponse({ message: validate.error });
+    }
+
+    await prisma.tickets.deleteMany({
       where: {
-        id: requestBody?.ticketId,
-      },
-      data: {
-        taskTitle: requestBody.taskTitle,
-        ticketDetil: requestBody.ticketDetil,
-        department: {
-          connect: {
-            id: requestBody.department,
-          },
-        },
-        tags: {
-          connect: requestBody.tags?.map((tag) => ({ id: tag.id })),
+        id: {
+          in: requestBody?.ticketIds || [],
         },
       },
     });
 
     return NextResponse.json({
       success: true,
-      message: "Ticket is updated successfully.",
-      data: [createdTicket],
+      message: "Tickets has been deleted successfully.",
+      data: null,
     });
   } catch (error) {
+    console.log(error.message);
     return ErrorResponse({ error: error });
   }
 }

@@ -94,7 +94,7 @@ const createTicket = async (body, params, { userId }) => {
             ticketDetil: description,
             uniqueCompanyId: companyId,
             webhook_event_id: iid.toString(),
-            createdAt: created_at
+            createdAt: new Date(created_at).toISOString()
         }
     })
 
@@ -105,7 +105,6 @@ const updateStatus = async ({ object_attributes }, params) => {
     const { companyId, departmentId } = params
 
     const issueId = source_branch.match(/\d+/)[0]
-    console.log(issueId);
     if (state === event_issue_state.MERGED) {
         return await prisma.tickets.update({
             where: {
