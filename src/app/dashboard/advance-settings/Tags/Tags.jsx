@@ -37,7 +37,7 @@ export default function ManageTags() {
                 {tags.data?.data?.sort().map((item) => (
                     <div
                         key={item.id}
-                        className={`text-center text-ellipsis text-accent text-sm group cursor-pointer mb-2 peer rounded-full px-3 p-1 flex items-center text-white justify-between ${item.color}`}
+                        className={`px-2 mb-1 w-fit flex items-center justify-between gap-3 cursor-pointer group hover:border-gray-200 transition-all hover:border-2 border-2 border-transparent rounded-full ${item.color}`}
                     >
                         <p>{item.title}</p>
                         <DeleteTagButton tagId={item.id} />

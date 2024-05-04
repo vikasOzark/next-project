@@ -3,6 +3,8 @@
 import { LoadingState } from "@/components/Buttons";
 import { InfoMessage } from "@/components/Messages/NotificationMessage";
 import { SimpleInfoMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import { TagComponent } from "@/components/TagComponent";
+import TagsCardComponent from "@/components/TagsCardComponent";
 import Link from "next/link";
 import { useQuery } from "react-query";
 
@@ -42,14 +44,11 @@ export default function Page({ params }) {
             )}
             <div className="grid grid-cols-12 gap-2">
                 {tagsData?.map((tag) => (
-                    <>
-                        <div
-                            key={tag.id}
-                            className={` col-span-4 text-center cursor-pointer mb-2 peer rounded-full px-3 p-1 flex items-center text-white justify-center ${tag.color}`}
-                        >
-                            <p>{tag.title}</p>
-                        </div>
-                    </>
+                    <TagComponent
+                        key={tag.id}
+                        color={tag.color}
+                        title={tag.title}
+                    />
                 ))}
             </div>
         </div>

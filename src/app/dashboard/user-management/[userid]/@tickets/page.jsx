@@ -3,6 +3,7 @@
 import { LoadingState } from "@/components/Buttons";
 import { InfoMessage } from "@/components/Messages/NotificationMessage";
 import { SimpleInfoMessage } from "@/components/SimpleErrorMessage/SimpleNotifyMessages";
+import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "react-query";
 
@@ -19,6 +20,7 @@ export default function Page({ params }) {
         refetchOnWindowFocus: false,
     });
     const ticketData = ticketResponse.data?.data || [];
+    console.log(ticketData);
 
     return (
         <div className=" ">
@@ -45,16 +47,24 @@ export default function Page({ params }) {
                 {ticketData?.map((ticket) => (
                     <div key={ticket.id} className="col-span-6">
                         <Link href={`/dashboard/tickets/${ticket.id}`}>
-                            <div className="bg-white flex gap-2 rounded-lg px-3 py-1 mb-2">
-                                <div className="h-100 w-2 bg-blue-400 rounded-xl"></div>
+                            <div className="temp-card-bg text-white flex gap-2 rounded-lg px-3 py-1 mb-2">
                                 <div className="w-full">
-                                    <div className="text-xs text-gray-600">
+                                    <div className="text-xs text-gray-400">
                                         2/3/2024
                                     </div>
-                                    <div className=" flex justify-between text-gray-600">
-                                        <div className="text-sm">
+                                    <div className=" flex justify-between text-white">
+                                        <p className="text-sm truncate">
+                                            {ticket?.webhook_event_id && (
+                                                <Image
+                                                    alt="This ticket is created by gitlab issue event."
+                                                    loading="lazy"
+                                                    width={20}
+                                                    height={20}
+                                                    src={"/svg/gitlab.svg"}
+                                                />
+                                            )}
                                             {ticket.taskTitle}
-                                        </div>
+                                        </p>
                                         <div className="text-xs">
                                             {ticket.status}
                                         </div>

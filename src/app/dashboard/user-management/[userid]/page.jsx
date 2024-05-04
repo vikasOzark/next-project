@@ -41,7 +41,7 @@ export default function User({ params }) {
 
     return (
         <>
-            <div className="border rounded-xl p-5 mb-2 border-gray-600 text-white">
+            <div className="border border-gray-700 rounded-xl p-5 mb-2 temp-bg text-white">
                 <div className="grid grid-cols-12 gap-2">
                     <div className="col-span-3 font-bold text-gray-400">
                         <p>User Name</p>
@@ -63,10 +63,12 @@ export default function User({ params }) {
                         <p>User Role</p>
                         <p className="text-gray-200">{userData?.role}</p>
                     </div>
-                    <div className="col-span-3 font-bold text-gray-400">
-                        <p>User Department</p>
-                        <p className="text-gray-200">{department?.data}</p>
-                    </div>
+                    {department?.data && (
+                        <div className="col-span-3 font-bold text-gray-400">
+                            <p>User Department</p>
+                            <p className="text-gray-200">{department?.data}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

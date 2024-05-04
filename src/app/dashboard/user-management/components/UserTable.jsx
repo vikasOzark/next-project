@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import { VscCircleFilled, VscGear, VscTrash } from "react-icons/vsc";
+import { VscCircleFilled, VscGear, VscLink, VscTrash } from "react-icons/vsc";
 import {
     SimpleErrorMessage,
     SimpleInfoMessage,
@@ -68,12 +68,13 @@ const usersTableData = (users) => {
                         href={`/dashboard/user-management/${user.id}`}
                         className="inline-flex items-center hover:underline gap-x-3"
                     >
-                        <div className="flex items-center gap-x-2">
-                            <div>
-                                <h2 className="  font-bold text-lg dark: ">
-                                    {user?.first_name}
-                                </h2>
+                        <div className="flex hover:underline hover:text-blue-500 items-center gap-x-2">
+                            <div className=" text-blue-500">
+                                <VscLink size={20} />
                             </div>
+                            <h2 className="  font-bold text-lg dark: ">
+                                {user?.first_name}
+                            </h2>
                         </div>
                     </Link>
                 ),
