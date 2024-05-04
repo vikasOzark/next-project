@@ -6,12 +6,13 @@ import {
     VscPerson,
     VscVerified,
 } from "react-icons/vsc";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 import getMentionedUser from "@/utils/getMentionedUsersData";
 import { cn } from "@/lib/utils";
 import { TicketDataContext } from "../page";
 import Image from "next/image";
+import { GitlabCreatedActivityPill } from "./InfoComponent/GitInfo";
 
 export default function ActivitySection() {
     const { isLoading, ticketData } = useContext(TicketDataContext);
@@ -36,7 +37,18 @@ export default function ActivitySection() {
                                 {ticketData?.createdById?.last_name}
                             </>
                         )}
-                        {isWebhookTicket && <GitlabCreatedActivityPill />}
+                        {isWebhookTicket && (
+                            <>
+                                <GitlabCreatedActivityPill />{" "}
+                                <Image
+                                    alt="This ticket is created by gitlab issue event."
+                                    loading="lazy"
+                                    width={20}
+                                    height={20}
+                                    src={"/svg/gitlab.svg"}
+                                />
+                            </>
+                        )}
                     </ActivityFragment>
                     {ticketData?.assingedUser && (
                         <ActivityFragment
@@ -101,21 +113,6 @@ const ActivityFragment = ({
                         dateTime: true,
                     })}
             </span>
-        </div>
-    );
-};
-
-const GitlabCreatedActivityPill = () => {
-    const { isLoading, ticketData } = useContext(TicketDataContext);
-    return (
-        <div className="">
-            <Image
-                alt="This ticket is created by gitlab issue event."
-                loading="lazy"
-                width={15}
-                height={15}
-                src={"/svg/gitlab.svg"}
-            />
         </div>
     );
 };

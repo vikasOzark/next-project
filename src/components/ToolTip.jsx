@@ -10,7 +10,7 @@ export function TooltipComponent({ children, message }) {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>{children}</TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className={"bg-gray-600"}>
                     <p>{message}</p>
                 </TooltipContent>
             </Tooltip>
