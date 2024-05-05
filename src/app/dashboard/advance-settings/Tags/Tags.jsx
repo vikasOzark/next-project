@@ -33,11 +33,11 @@ export default function ManageTags() {
                     </div>
                 </>
             )}
-            <div className="grid gap-2 grid-cols-2">
+            <div className="grid gap-2 grid-flow-row">
                 {tags.data?.data?.sort().map((item) => (
                     <div
                         key={item.id}
-                        className={`px-2 mb-1 w-fit flex items-center justify-between gap-3 cursor-pointer group hover:border-gray-200 transition-all hover:border-2 border-2 border-transparent rounded-full ${item.color}`}
+                        className={`px-2 mb-1 w-fit flex flex-wrap items-center justify-between gap-3 cursor-pointer group hover:border-gray-200 transition-all hover:border-2 border-2 border-transparent rounded-full ${item.color}`}
                     >
                         <p>{item.title}</p>
                         <DeleteTagButton tagId={item.id} />

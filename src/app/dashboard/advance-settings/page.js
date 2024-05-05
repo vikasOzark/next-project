@@ -10,20 +10,18 @@ import { ActionButton } from "@/components/Buttons";
 export default function AdvancedSettings() {
   return (
     <>
-      <div className="">
-        <div className="grid mt-5 gap-4 grid-cols-1 md:grid-cols-12 lg:grid-cols-12">
-          <BaseAdvancedCardLayout
-            title={"Department"}
-            icon={<MdOutlineContactEmergency />}
-            ActionButton={<CreateDepartment />}
-          >
-            <Departments />
-          </BaseAdvancedCardLayout>
+      <div className="grid mt-5 gap-4 grid-cols-1 md:grid-cols-12 lg:grid-cols-12">
+        <BaseAdvancedCardLayout
+          title={"Department"}
+          icon={<MdOutlineContactEmergency />}
+          ActionButton={<CreateDepartment />}
+        >
+          <Departments />
+        </BaseAdvancedCardLayout>
 
-          <BaseAdvancedCardLayout title="Manage Tags" icon={<AiOutlineTag />} ActionButton={<CreateTag />}>
-            <ManageTags />
-          </BaseAdvancedCardLayout>
-        </div>
+        <BaseAdvancedCardLayout title="Manage Tags" icon={<AiOutlineTag />} ActionButton={<CreateTag />}>
+          <ManageTags />
+        </BaseAdvancedCardLayout>
       </div>
     </>
   );
