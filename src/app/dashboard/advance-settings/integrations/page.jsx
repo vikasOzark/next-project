@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { useSession } from "next-auth/react";
 import { getRequest } from "@/app/apiFunctions/api";
 import { QUERY_KEYS } from "@/queryKeys";
+import GithubIntegration from "./integration/Github";
 
 export const IntegrationContext = createContext({});
 
@@ -33,10 +34,13 @@ export default function IntegrationPage() {
                             <Suspense>
                                 <GitlabIntegration />
                             </Suspense>
+                            <Suspense>
+                                <GithubIntegration />
+                            </Suspense>
                         </div>
                     </section>
                 </main>
-            </IntegrationContext.Provider>
+            </IntegrationContext.Provider>{" "}
         </>
     );
 }

@@ -1,21 +1,24 @@
-import { LineChart } from "lucide-react";
 import { useState } from "react";
-import { LinkComponent, LinkComponentLg } from "./Sidenavbar";
-import { CursorArrowRaysIcon } from "@heroicons/react/20/solid";
+import { LinkComponentLg } from "./Sidenavbar";
 import { urlRoutes } from "@/utils/urlRoutes";
-import { VscChevronUp, VscSymbolMethod } from "react-icons/vsc";
+import {
+    VscChevronUp,
+    VscExtensions,
+    VscGear,
+    VscSymbolMethod,
+} from "react-icons/vsc";
 
 export default function AdvanceOptionsNav() {
     const [optionOpen, setOptionOpen] = useState(false);
     const route = [
         {
             title: "Advance Settings",
-            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+            icon: <VscGear className="h-5 w-5" title="hello" />,
             route: urlRoutes.ADVANCE_SETTINGS,
         },
         {
             title: "Integrations",
-            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+            icon: <VscExtensions className="h-5 w-5" title="hello" />,
             route: urlRoutes.INTEGRATIONS,
         },
     ];

@@ -4,14 +4,13 @@ import Modal from "@/components/Modal";
 import Image from "next/image";
 import { Suspense, useContext, useState } from "react";
 import { VscCircleSmallFilled, VscSaveAll } from "react-icons/vsc";
-import GitlabIntegrationForm from "./forms/GitlabForm";
 import { INTEGRATION_PROVIDER } from "@prisma/client";
 import { getIntegrationData, IntegrationContext } from "../page";
 import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { SiGithub } from "react-icons/si";
 import {
     Form,
     FormControl,
@@ -28,13 +27,14 @@ import toast from "react-hot-toast";
 import { QUERY_KEYS } from "@/queryKeys";
 import DateTime from "@/components/DateTime";
 import handleTimeFormat from "@/utils/dateTimeFormat";
+import GithubIntegrationForm from "./forms/GithubForm";
 
-export default function GitlabIntegration() {
+export default function GithubIntegration() {
     const { integrations, isLoading } = useContext(IntegrationContext);
-    const [gitlabModal, setGitlabModal] = useState(false);
+    const [gitlabModal, setGithubModal] = useState(false);
     const integrationData = getIntegrationData(
         integrations,
-        INTEGRATION_PROVIDER.GITLAB
+        INTEGRATION_PROVIDER.GITHUB
     );
 
     return (
@@ -42,22 +42,14 @@ export default function GitlabIntegration() {
             {" "}
             <IntegrationCard
                 connected={integrationData}
-                onClick={() => setGitlabModal(true)}
-                cardHeader={
-                    <Image
-                        alt="gitlab"
-                        loading="lazy"
-                        width={50}
-                        height={50}
-                        src={"/svg/gitlab.svg"}
-                    />
-                }
+                onClick={() => setGithubModal(true)}
+                cardHeader={<SiGithub size={40} />}
                 content={
                     <>
                         {/* {integrationData && (
                             <ConnectionInfoAndUpdate integrationData={integrationData} />
                         )} */}
-                        Streamline your engineering workflow with Gitlab
+                        Streamline your engineering workflow with Github
                         integration and keep in sync with issues and merge
                         requests.
                     </>
@@ -66,18 +58,10 @@ export default function GitlabIntegration() {
             <Modal
                 isLoading={isLoading}
                 dialogClass={"w-[13rem]"}
-                icon={
-                    <Image
-                        alt="gitlab"
-                        loading="lazy"
-                        width={40}
-                        height={40}
-                        src={"/svg/gitlab.svg"}
-                    />
-                }
-                modalTitle={"Connect to Gitlab"}
+                icon={<SiGithub color="white" size={30} />}
+                modalTitle={"Connect to Github"}
                 open={gitlabModal}
-                setOpen={setGitlabModal}
+                setOpen={setGithubModal}
             >
                 <div className="mt-2">
                     {integrationData ? (
@@ -87,7 +71,7 @@ export default function GitlabIntegration() {
                     ) : (
                         <Suspense>
                             <ConnectionGuide />
-                            <GitlabIntegrationForm />
+                            <GithubIntegrationForm />
                         </Suspense>
                     )}
                 </div>
@@ -216,7 +200,7 @@ export function SwitchForm({ integrationData }) {
             <form onSubmit={form.handleSubmit(mutate)} className="w-full mt-2">
                 <div className="space-y-4 ">
                     <h3 className="text-lg font-medium">
-                        Gitlab connection configurations
+                        Github connection configurations
                     </h3>
                     <div className="space-y-4">
                         <FormField

@@ -1,26 +1,30 @@
 "use client";
-import { Toaster } from "react-hot-toast";
+import { CircleUser, HomeIcon, Menu, Package2 } from "lucide-react";
 import Link from "next/link";
-import { CircleUser, HomeIcon, LineChart, Menu, Package2 } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 
+import { NotesNavBarTab } from "@/components/SideNavNotesTab";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { urlRoutes } from "@/utils/urlRoutes";
-import { cn } from "@/lib/utils";
-import { CursorArrowRaysIcon, LifebuoyIcon } from "@heroicons/react/20/solid";
-import { NotesNavBarTab } from "@/components/SideNavNotesTab";
+import { LifebuoyIcon } from "@heroicons/react/20/solid";
 
-import { QueryClient, QueryClientProvider } from "react-query";
-import DropdownNew from "@/components/Dropdown/DropdownNew";
-import { signOut, useSession } from "next-auth/react";
 import { ButtonComponent } from "@/components/Buttons";
-import { VscSignOut } from "react-icons/vsc";
+import DropdownNew from "@/components/Dropdown/DropdownNew";
 import { PageLoader } from "@/components/Loading";
+import AdvanceOptionsNav from "@/components/Navbars/AdvancedSettingNav";
 import {
     LinkComponent,
     LinkComponentLg,
 } from "@/components/Navbars/Sidenavbar";
-import AdvanceOptionsNav from "@/components/Navbars/AdvancedSettingNav";
+import { signOut, useSession } from "next-auth/react";
+import {
+    VscBook,
+    VscOrganization,
+    VscOutput,
+    VscSignOut,
+} from "react-icons/vsc";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function Layout({ children }) {
     const queryClient = new QueryClient();
@@ -59,17 +63,17 @@ export function MainLayout({ children }) {
         },
         {
             title: "User Management",
-            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+            icon: <VscOrganization className="h-5 w-5" title="hello" />,
             route: urlRoutes.PERMISSIONS,
         },
         {
             title: "Billing",
-            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+            icon: <VscOutput className="h-5 w-5" title="hello" />,
             route: urlRoutes.BILLING,
         },
         {
             title: "Tasks",
-            icon: <CursorArrowRaysIcon className="h-5 w-5" title="hello" />,
+            icon: <VscBook className="h-5 w-5" title="hello" />,
             route: urlRoutes.TASKS,
         },
     ];
