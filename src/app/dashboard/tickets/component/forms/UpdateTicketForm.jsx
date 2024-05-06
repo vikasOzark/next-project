@@ -1,12 +1,13 @@
 import { LoadingButton, SubmitButton } from "../../../../../components/Buttons";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
-import { TagsOptions } from "./TagsDropDownOptions";
-import dynamic from "next/dynamic";
 import CustomEditor from "@/components/Editor";
 import { isJSONString } from "@/utils/validateJsonString";
 import { useUpdateTicket } from "@/hooks/updateTicket.hook";
 import { useGetDepartments } from "@/hooks/getDepartments";
+import GitlabParser from "../parser/gitlabDescriptionParser";
+import TagsCardComponent from "@/components/TagsCardComponent";
+import { TagComponentWithRemove } from "@/components/TagComponent";
 
 export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
     const formElement = useRef();
@@ -22,6 +23,18 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
         ticketDataUpdate.id
     );
 
+    const getTag = (tag) => {
+        setSelectedTag((pre) => {
+            const isAvailable = pre.find(
+                (selectedTag) => selectedTag.id === tag.id
+            );
+            if (isAvailable) {
+                return pre.filter((selectedTag) => selectedTag.id !== tag.id);
+            }
+            return [...pre, tag];
+        });
+    };
+
     useEffect(() => {
         if (mutation.data?.data?.success) {
             setTicketUpdateModal(false);
@@ -31,9 +44,7 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
     useEffect(() => {
         if (ticketDataUpdate.tags) {
             const tagsSelected = ticketDataUpdate?.tags.map((tag) => ({
-                name: tag.title,
-                id: tag.id,
-                color: tag.color,
+                ...tag,
                 isSelected: true,
             }));
             setSelectedTag(tagsSelected);
@@ -45,7 +56,7 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
     if (isJsonString) {
         details = JSON.parse(ticketData?.ticketDetil);
     } else {
-        details = ticketData?.ticketDetil;
+        details = GitlabParser(ticketData?.ticketDetil);
     }
 
     return (
@@ -122,11 +133,23 @@ export default function UpdateTicketForm({ ticketData, setTicketUpdateModal }) {
                     Assign tags
                 </label>
 
-                <div className="mt-2 relative flex items-center gap-2">
-                    <TagsOptions
-                        setSelectedTag={setSelectedTag}
-                        selectedTag={selectedTag}
-                    />
+                <div className="mt-2 relative flex-row items-center gap-2">
+                    <div className="min-w-[10em] max-w-[13em]">
+                        <TagsCardComponent
+                            className={"!border"}
+                            selectedIds={selectedTag.map((tag) => tag.id)}
+                            onClick={getTag}
+                        />
+                    </div>
+                    <div className=" flex gap-2 flex-wrap">
+                        {selectedTag.map((tag) => (
+                            <TagComponentWithRemove
+                                handler={getTag}
+                                key={tag.id}
+                                tag={tag}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
 

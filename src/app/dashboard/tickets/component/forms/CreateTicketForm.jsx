@@ -6,12 +6,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { getDepartmentData } from "./utils";
 import dynamic from "next/dynamic";
-import CustomEditor from "@/components/Editor";
 import { QUERY_KEYS } from "@/queryKeys";
 import TagsCardComponent from "@/components/TagsCardComponent";
-import Tag from "@/components/TagComponent";
+import { TagComponentWithRemove } from "@/components/TagComponent";
 
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+const CustomEditor = dynamic(() => import("@/components/Editor"), {
+    ssr: false,
+});
 
 export default function CreateTicketForm({ modalClose }) {
     const formElement = useRef();
@@ -79,12 +80,6 @@ export default function CreateTicketForm({ modalClose }) {
             }
             return [...pre, tag];
         });
-    };
-
-    const handleTagClicks = (tag) => {
-        setSelectedTag((pre) =>
-            pre.filter((selectedTag) => selectedTag.id !== tag.id)
-        );
     };
 
     return (
@@ -168,8 +163,8 @@ export default function CreateTicketForm({ modalClose }) {
                     </div>
                     <div className=" flex gap-2 flex-wrap">
                         {selectedTag.map((tag) => (
-                            <Tag
-                                onClick={handleTagClicks}
+                            <TagComponentWithRemove
+                                handler={getTag}
                                 key={tag.id}
                                 tag={tag}
                             />

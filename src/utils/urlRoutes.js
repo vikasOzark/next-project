@@ -1,18 +1,18 @@
-const dashboard_prifix = "/dashboard";
+const dashboard_prefix = "/dashboard";
 
 export const urlRoutes = {
-  DASHBOARD: dashboard_prifix + "/-",
-  CREATE_TICKET: dashboard_prifix + "/tickets",
-  PERMISSIONS: dashboard_prifix + "/user-management",
-  PROFILE: dashboard_prifix + "/profile",
-  TICKETS: dashboard_prifix + "/tickets",
-  ADVANCE_SETTINGS: dashboard_prifix + "/advance-settings",
-  BILLING: dashboard_prifix + "/billing",
+  DASHBOARD: dashboard_prefix + "/-",
+  CREATE_TICKET: dashboard_prefix + "/tickets",
+  PERMISSIONS: dashboard_prefix + "/user-management",
+  PROFILE: dashboard_prefix + "/profile",
+  TICKETS: dashboard_prefix + "/tickets?page=1",
+  ADVANCE_SETTINGS: dashboard_prefix + "/advance-settings",
+  BILLING: dashboard_prefix + "/billing",
   PAYMENT: "/payment",
   SELECT_PLAN: "/plan-select",
   LOGIN_IN: "/login",
   REGISTER: "/singup",
-  NOTES: dashboard_prifix + "/notes",
-  TASKS: dashboard_prifix + "/tasks",
-  INTEGRATIONS: dashboard_prifix + "/advance-settings/integrations"
+  NOTES: dashboard_prefix + "/notes",
+  TASKS: dashboard_prefix + "/tasks",
+  INTEGRATIONS: dashboard_prefix + "/advance-settings/integrations"
 };

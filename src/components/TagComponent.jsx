@@ -68,3 +68,23 @@ export const TagComponent = ({ title, color }) => {
         </div>
     );
 };
+
+export const TagComponentWithRemove = ({ tag, handler, className }) => {
+    return (
+        <div
+            className={cn(
+                "px-2 mb-1 w-fit flex items-center justify-between gap-3 cursor-pointer group hover:border-gray-200 transition-all hover:border-2 border-2 border-transparent rounded-full ",
+                tag.color,
+                className
+            )}
+        >
+            {tag.title}{" "}
+            <span
+                onClick={() => handler(tag)}
+                className="hover:bg-gray-500 hover:bg-text-700 rounded-full p-1 "
+            >
+                {handler && <VscChromeClose size={15} />}
+            </span>
+        </div>
+    );
+};

@@ -13,7 +13,6 @@ import TableComponent from "@/components/TableComponent";
 import CustomPagination from "@/components/Pagination";
 import { LoadingState } from "@/components/Buttons";
 import { TicketEmptyState } from "@/components/EmptyState";
-import { useSearchQuery } from "@/hooks/setQueryParam";
 import TableDataProvider from "./component/tableDataProvider";
 import { SelectedDataInfo } from "./component/TicketTableComponents";
 import { VscPass, VscPassFilled } from "react-icons/vsc";
@@ -25,12 +24,6 @@ export default function Tickets({ searchParams }) {
     const searchParam = useSearchParams();
     const query = searchParam.get("q");
     const status = searchParam.get("status");
-    const setQuery = useSearchQuery();
-
-    const pa = null;
-    useEffect(() => {
-        setQuery("page", 1);
-    }, [pa]);
 
     const ticketResponse = useQuery({
         queryKey: [QUERY_KEYS.TICKET_LIST, searchParam.toString()],

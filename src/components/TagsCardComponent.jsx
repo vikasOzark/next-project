@@ -42,7 +42,7 @@ export default function TagsCardComponent({
             <div
                 onClick={() => setState((pre) => !pre)}
                 className={cn(
-                    "rounded-lg my-2 hover:border-gray-700 border border-transparent transition-all temp-bg",
+                    "rounded-lg my-2 hover:border-gray-700 border border-transparent transition-all temp-card-bg",
                     className
                 )}
             >
@@ -57,7 +57,7 @@ export default function TagsCardComponent({
                 <Card>
                     <div
                         data-state={isOpenState ? "open" : "close"}
-                        className=" max-h-[15em] mt-2 overflow-hidden overflow-y-auto rounded-md p-2 data-[state=close]:hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                        className=" max-h-[15em] mt-2 temp-card-bg overflow-hidden overflow-y-auto rounded-md p-2 data-[state=close]:hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
                     >
                         {filtered_tags.map((tag) => {
                             return (
