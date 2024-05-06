@@ -42,7 +42,7 @@ export default function Page({ params }) {
                     <SimpleInfoMessage message={"No tags found."} />
                 </div>
             )}
-            <div className="grid grid-cols-12 gap-2">
+            <div className="flex flex-1 gap-2">
                 {tagsData?.map((tag) => (
                     <TagComponent
                         key={tag.id}
