@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LinkComponentLg } from "./Sidenavbar";
+import { LinkComponentLg, useNavActive } from "./Sidenavbar";
 import { urlRoutes } from "@/utils/urlRoutes";
 import {
     VscChevronUp,
@@ -7,19 +7,25 @@ import {
     VscGear,
     VscSymbolMethod,
 } from "react-icons/vsc";
+import { usePathname } from "next/navigation";
 
 export default function AdvanceOptionsNav() {
     const [optionOpen, setOptionOpen] = useState(false);
+    const path = usePathname().split("/");
+    const current = path[path.length - 1];
+
     const route = [
         {
             title: "Advance Settings",
             icon: <VscGear className="h-5 w-5" title="hello" />,
             route: urlRoutes.ADVANCE_SETTINGS,
+            active: current === "advance-settings",
         },
         {
             title: "Integrations",
             icon: <VscExtensions className="h-5 w-5" title="hello" />,
             route: urlRoutes.INTEGRATIONS,
+            active: current === "integrations",
         },
     ];
     return (

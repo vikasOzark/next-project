@@ -16,6 +16,7 @@ import AdvanceOptionsNav from "@/components/Navbars/AdvancedSettingNav";
 import {
     LinkComponent,
     LinkComponentLg,
+    useNavActive,
 } from "@/components/Navbars/Sidenavbar";
 import { signOut, useSession } from "next-auth/react";
 import {
@@ -25,6 +26,7 @@ import {
     VscSignOut,
 } from "react-icons/vsc";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { usePathname } from "next/navigation";
 
 export default function Layout({ children }) {
     const queryClient = new QueryClient();
@@ -45,6 +47,8 @@ export default function Layout({ children }) {
 
 export function MainLayout({ children }) {
     const { data, status } = useSession();
+    const isActive = useNavActive();
+
     if (status === "unauthenticated") {
         location.href = urlRoutes.LOGIN_IN;
         return;
@@ -55,26 +59,31 @@ export function MainLayout({ children }) {
             title: "Dashboard",
             icon: <HomeIcon className="h-5 w-5" title="Dashboard" />,
             route: urlRoutes.DASHBOARD,
+            active: isActive(urlRoutes.DASHBOARD),
         },
         {
             title: "Tickets",
             icon: <LifebuoyIcon className="h-5 w-" title="create ticket" />,
             route: urlRoutes.TICKETS,
+            active: isActive(urlRoutes.TICKETS),
         },
         {
             title: "User Management",
             icon: <VscOrganization className="h-5 w-5" title="hello" />,
             route: urlRoutes.PERMISSIONS,
+            active: isActive(urlRoutes.PERMISSIONS),
         },
         {
             title: "Billing",
             icon: <VscOutput className="h-5 w-5" title="hello" />,
             route: urlRoutes.BILLING,
+            active: isActive(urlRoutes.BILLING),
         },
         {
             title: "Tasks",
             icon: <VscBook className="h-5 w-5" title="hello" />,
             route: urlRoutes.TASKS,
+            active: isActive(urlRoutes.TASKS),
         },
     ];
 
