@@ -5,7 +5,7 @@ export const urlRoutes = {
   CREATE_TICKET: dashboard_prefix + "/tickets",
   PERMISSIONS: dashboard_prefix + "/user-management",
   PROFILE: dashboard_prefix + "/profile",
-  TICKETS: dashboard_prefix + "/tickets?page=1",
+  TICKETS: dashboard_prefix + "/tickets",
   ADVANCE_SETTINGS: dashboard_prefix + "/advance-settings",
   BILLING: dashboard_prefix + "/billing",
   PAYMENT: "/payment",

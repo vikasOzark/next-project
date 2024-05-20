@@ -7,5 +7,6 @@ export const QUERY_KEYS = {
     USERS: "user-list",
     TAGS: "tags-list",
     NOTES: "notes",
-    INTEGRATIONS: "integrations-list"
+    INTEGRATIONS: "integrations-list",
+    DEPARTMENT_LIST: "departments"
 }

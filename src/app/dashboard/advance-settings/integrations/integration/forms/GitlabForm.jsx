@@ -15,7 +15,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import gitlabIntegrate, { getIntegrations } from "@/app/actions/integration";
 import { ButtonComponent } from "@/components/Buttons";
 import { VscAdd, VscCopy } from "react-icons/vsc";
 import { useMemo } from "react";

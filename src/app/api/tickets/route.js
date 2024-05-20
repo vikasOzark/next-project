@@ -7,6 +7,7 @@ import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
 import { PrismaClient, Role, Status } from "@prisma/client";
 import { NextResponse } from "next/server";
+import createWorkPackage from "../integration/_integrationHandlers/createWorkPackage";
 
 /**
  * @type {PrismaClient}
@@ -63,7 +64,7 @@ export async function GET(request) {
   const orderCreated = request.nextUrl.searchParams.get("order") || "desc";
   const filterByStatus = request.nextUrl.searchParams.get("status");
   const queryTicketTitle = request.nextUrl.searchParams.get("q");
-  const page = request.nextUrl.searchParams.get("page");
+  const page = request.nextUrl.searchParams.get("page") || 1;
   const size = request.nextUrl.searchParams.get("size") || 10;
   const page_size = Number(size)
 

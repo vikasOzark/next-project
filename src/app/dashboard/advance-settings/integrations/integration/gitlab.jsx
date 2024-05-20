@@ -26,7 +26,6 @@ import { useMutation, useQueryClient } from "react-query";
 import { patchRequest } from "@/app/apiFunctions/api";
 import toast from "react-hot-toast";
 import { QUERY_KEYS } from "@/queryKeys";
-import DateTime from "@/components/DateTime";
 import handleTimeFormat from "@/utils/dateTimeFormat";
 
 export default function GitlabIntegration() {
@@ -54,9 +53,6 @@ export default function GitlabIntegration() {
                 }
                 content={
                     <>
-                        {/* {integrationData && (
-                            <ConnectionInfoAndUpdate integrationData={integrationData} />
-                        )} */}
                         Streamline your engineering workflow with Gitlab
                         integration and keep in sync with issues and merge
                         requests.

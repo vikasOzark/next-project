@@ -88,7 +88,7 @@ const PaginationNext = ({ className, ...props }) => {
     const searchParam = useSearchParams();
 
     const handleNext = () => {
-        const page = searchParam.get("page");
+        const page = searchParam.get("page") || 1;
         setQuery("page", Number(page) + 1);
     };
     return (

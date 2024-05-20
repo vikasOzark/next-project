@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { getRequest } from "@/app/apiFunctions/api";
 import { QUERY_KEYS } from "@/queryKeys";
 import GithubIntegration from "./integration/Github";
+import OpenProjectIntegration from "./integration/openproject";
 
 export const IntegrationContext = createContext({});
 
@@ -36,6 +37,9 @@ export default function IntegrationPage() {
                             </Suspense>
                             <Suspense>
                                 <GithubIntegration />
+                            </Suspense>
+                            <Suspense>
+                                <OpenProjectIntegration />
                             </Suspense>
                         </div>
                     </section>

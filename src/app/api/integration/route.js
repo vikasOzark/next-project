@@ -1,15 +1,9 @@
 import prismaInstance from "@/lib/dbController";
-import {
-    ErrorResponse,
-} from "@/utils/ErrorResponseHandler";
+import { ErrorResponse } from "@/utils/ErrorResponseHandler";
 import httpStatus from "@/utils/httpStatus";
 import getUserId from "@/utils/userByToken";
-import { PrismaClient } from "@prisma/client";
-
-/**
- * @type {PrismaClient}
- */
-const prisma = prismaInstance;
+import { INTEGRATION_PROVIDER, PrismaClient } from "@prisma/client";
+import openProjectHandler from "./openProjectHandler";
 
 export async function POST(request) {
     const requestBody = await request.json();
@@ -17,13 +11,20 @@ export async function POST(request) {
         const userObject = await getUserId(true);
 
         if (!userObject) {
-            return ErrorResponse({ message: "Not authorized." }, httpStatus.HTTP_403_FORBIDDEN)
+            return ErrorResponse(
+                { message: "Not authorized." },
+                httpStatus.HTTP_403_FORBIDDEN
+            );
         }
 
-        const hashedSecret = await bcrypt.hash(
-            requestBody.access_token,
-            process.env.SALT
-        );
+        if (requestBody.provider === INTEGRATION_PROVIDER.OPEN_PROJECT) {
+            return await openProjectHandler(requestBody)
+        }
+
+        /**
+         * @type {PrismaClient}
+         */
+        const prisma = prismaInstance;
 
         const data = await prisma.integrations.create({
             data: {
@@ -32,7 +33,7 @@ export async function POST(request) {
                 webhookurl: requestBody.webhookUrl,
                 webhookSecret: requestBody.webhook_secret,
                 uniqueCompanyId: userObject.userData.uniqueCompanyId,
-                secrets: { access_token: hashedSecret },
+                secrets: { access_token: requestBody.access_token },
                 createdBy: {
                     connect: {
                         id: userObject.userData.id
@@ -40,8 +41,12 @@ export async function POST(request) {
                 }
             }
         })
-        return SuccessResponseHandler(data, `${body.provider} connection created successfully.`)
+
+        return SuccessResponseHandler(
+            data,
+            `${body.provider} connection created successfully.`
+        );
     } catch (error) {
-        return ErrorResponse({ error })
+        return ErrorResponse({ error });
     }
 }
