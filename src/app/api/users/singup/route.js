@@ -64,7 +64,7 @@ export async function POST(request) {
     return NextResponse.json({
       success: false,
       message:
-        error?.message || "Something went wrong, Please chck the details.",
+        error?.message || "Something went wrong, Please check the details.",
       data: {},
     });
   }
