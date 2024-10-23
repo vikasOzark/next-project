@@ -128,3 +128,42 @@ export const ButtonComponent = (props) => {
         </Button>
     );
 };
+
+/**
+ * @param {import("@/types/button").ButtonNewPropType} props
+ * @returns
+ */
+export const ButtonNew = (props) => {
+    const { className, icon, title, onClick, isLoading, children } = props;
+    return (
+        <Button
+            onClick={onClick?.()}
+            {...props}
+            disabled={isLoading}
+            className={cn(
+                "px-4 flex gap-2 border-gray-700 hover:border-transparent rounded-md items-center font-bold hover:bg-gray-600 text-white",
+                className
+            )}
+        >
+            {isLoading && (
+                <>
+                    <div className=" flex justify-center items-center gap-2">
+                        <VscLoading size={20} className=" animate-spin" />{" "}
+                        Processing...
+                    </div>
+                </>
+            )}
+            {!isLoading && (
+                <>
+                    {icon}
+                    {title && (
+                        <span className="hidden md:block lg:block">
+                            {title}
+                        </span>
+                    )}
+                    {children}
+                </>
+            )}
+        </Button>
+    );
+};
